@@ -1,0 +1,30 @@
+{
+  "name": "tomato-server",
+  "version": "1.0.0",
+  "description": "tomabang server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomatobang/tomato-server.git"
+  },
+  "keywords": [
+    "tomato",
+    "Pomodoro"
+  ],
+  "author": "yipeng.info",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/tomatobang/tomato-server/issues"
+  },
+  "homepage": "https://github.com/tomatobang/tomato-server#readme",
+  "dependencies": {
+    "koa": "^2.2.0"
+  },
+  "dependencies": {
+    "babel-preset-env": "^1.3.3",
+    "babel-register": "^6.24.1"
+  }
+}
