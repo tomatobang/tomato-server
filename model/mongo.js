@@ -20,11 +20,36 @@ db.once('open', () => {
 
 const Schema = mongoose.Schema
 
-let post = new Schema({
-  type: { type: String, default: '' },
-  status: { type: Number, default: 0 },
+let tasks = new Schema({
+  // 标题
   title: String,
-  pathName: { type: String, default: '' },
+  // 描述
+  description: { type: String, default: '' },
+  // 番茄个数
+  num:{ type: Number, default: 0 },
+});
+
+let activeTasks = new Schema({
+  // 标题
+  taskid: String,
+  // 描述
+  description: { type: String, default: '' },
+  // 番茄个数
+  num:{ type: Number, default: 0 },
+});
+
+
+let tomato = new Schema({
+  // 开始时间
+  startTime: { type: String, default: '' },
+  // 结束时间
+  endTime: { type: String, default: '' },
+  // 标题
+  title: String,
+  // 描述
+  description: { type: String, default: '' },
+
+
   summary: { type: String },
   markdownContent: { type: String },
   content: { type: String },
@@ -62,6 +87,9 @@ let theme = new Schema({
   option: Schema.Types.Mixed
 })
 
+/**
+ * 用户
+ */
 let user = new Schema({
   name: String,
   displayName: String,
