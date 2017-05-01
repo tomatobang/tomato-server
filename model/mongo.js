@@ -20,26 +20,23 @@ db.once('open', () => {
 
 const Schema = mongoose.Schema
 
-let tasks = new Schema({
+let task = new Schema({
+  // 用户编号
+  userid:String,
   // 标题
   title: String,
   // 描述
   description: { type: String, default: '' },
   // 番茄个数
   num:{ type: Number, default: 0 },
-});
-
-let activeTasks = new Schema({
-  // 标题
-  taskid: String,
-  // 描述
-  description: { type: String, default: '' },
-  // 番茄个数
-  num:{ type: Number, default: 0 },
+  // 是否激活
+  isActive:{ type:boolean, default:false}
 });
 
 
 let tomato = new Schema({
+  // 用户编号
+  userid:String,
   // 开始时间
   startTime: { type: String, default: '' },
   // 结束时间
@@ -48,43 +45,9 @@ let tomato = new Schema({
   title: String,
   // 描述
   description: { type: String, default: '' },
+  // 任务编号，可空
+  taskid:{ type: String },
 
-
-  summary: { type: String },
-  markdownContent: { type: String },
-  content: { type: String },
-  markdownToc: { type: String, default: '' },
-  toc: { type: String, default: '' },
-  allowComment: { type: Boolean, default: true },
-  createdAt: { type: String, default: '' },
-  updatedAt: { type: String, default: '' },
-  isPublic: { type: Boolean, default: true },
-  commentNum: Number,
-  options: Object,
-  category: String,
-  tags: Array
-})
-
-let category = new Schema({
-  name: String,
-  pathName: String
-})
-
-let tag = new Schema({
-  name: String,
-  pathName: String
-})
-
-let option = new Schema({
-  key: String,
-  value: Schema.Types.Mixed,
-  desc: String
-})
-
-let theme = new Schema({
-  name: String,
-  author: String,
-  option: Schema.Types.Mixed
 })
 
 /**
@@ -97,18 +60,12 @@ let user = new Schema({
   email: String
 })
 
-post = mongoose.model('post', post)
-category = mongoose.model('category', category)
-option = mongoose.model('option', option)
-theme = mongoose.model('theme', theme)
-tag = mongoose.model('tag', tag)
+task = mongoose.model('task', task)
+tomato = mongoose.model('tomato', tomato)
 user = mongoose.model('user', user)
 
 module.exports = {
   post,
-  category,
-  option,
-  tag,
+  tomato,
   user,
-  theme
 }
