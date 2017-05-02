@@ -1,3 +1,7 @@
+/**
+ * 创建默认用户
+ */
+
 const log = require('../../utils/log')
 const config = require('../../conf/config')
 const models = require('../../model/mongo')

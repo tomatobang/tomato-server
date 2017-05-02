@@ -10,7 +10,7 @@ const LogTimePlugin = require(`${useRoutesPrefix}/logTime`)
 const RestcPlugin = require(`${useRoutesPrefix}/restc`)
 
 const InitOptionPlugin = require(`${serverStartPrefix}/initOption`)
-const InstallThemePlugin = require(`${serverStartPrefix}/installTheme`)
+// const InstallThemePlugin = require(`${serverStartPrefix}/installTheme`)
 const InitUserPlugin = require(`${serverStartPrefix}/initUser`)
 
 const CheckAuthPlugin = require('../plugins/beforeRestful/checkAuth')
@@ -41,7 +41,7 @@ config.plugins.push(
 
   // beforeServerStart
   new InitUserPlugin(),
-  new InstallThemePlugin(),
+  // new InstallThemePlugin(),
   new InitOptionPlugin()
 )
 
