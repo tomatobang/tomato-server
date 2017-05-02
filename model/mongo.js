@@ -54,18 +54,36 @@ let tomato = new Schema({
  * 用户
  */
 let user = new Schema({
-  name: String,
-  displayName: String,
+  // 用户名
+  username: String,
+  // 密码
   password: String,
+  // 显示名称
+  displayName: String,
+  // 邮箱
   email: String
+})
+
+/**
+ * 网站说明
+ */
+let option = new Schema({
+  // 键
+  key: String,
+  // 值
+  value: Schema.Types.Mixed,
+  // 描述
+  desc: String
 })
 
 task = mongoose.model('task', task)
 tomato = mongoose.model('tomato', tomato)
 user = mongoose.model('user', user)
+option = mongoose.model('option', option)
 
 module.exports = {
-  post,
+  task,
   tomato,
   user,
+  option
 }

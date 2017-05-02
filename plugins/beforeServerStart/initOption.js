@@ -1,3 +1,7 @@
+/**
+ * 创建网站描述表
+ */
+
 const log = require('../../utils/log')
 const options = require('../../conf/option')
 const models = require('../../model/mongo')
