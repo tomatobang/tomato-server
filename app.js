@@ -42,6 +42,7 @@ const router = koaRouter()
     }
 
     Object.keys(models).map(name => models[name]).forEach(model => {
+      // 路由，实体模型，前缀，中间件
       mongoRest(router, model, '/api', {
         beforeRestfulRoutes,
         afterRestfulRoutes

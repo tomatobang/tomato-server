@@ -30,7 +30,7 @@ let task = new Schema({
   // 番茄个数
   num:{ type: Number, default: 0 },
   // 是否激活
-  isActive:{ type:boolean, default:false}
+  isActive:{ type:Boolean, default:false}
 });
 
 

@@ -1,3 +1,6 @@
+/**
+ * 路由生产者
+ */
 
 const generateRoutes = require('./routes')
 const generateActions = require('./actions')

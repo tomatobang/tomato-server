@@ -1,8 +1,6 @@
 /**
  * 接口请求前验证
  */
-
-
 const redis = require('../../model/redis')
 const tokenService = require('../../service/token')
 
