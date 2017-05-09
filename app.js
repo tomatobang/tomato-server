@@ -42,6 +42,7 @@ const router = koaRouter()
     }
 
     Object.keys(models).map(name => models[name]).forEach(model => {
+      // 生成 restful 路由
       // 路由，实体模型，前缀，中间件
       mongoRest(router, model, '/api', {
         beforeRestfulRoutes,
@@ -51,6 +52,10 @@ const router = koaRouter()
 
     app.use(router.routes())
 
+
+    /**
+     * 执行中间件
+     */
     const beforeServerStartArr = lifecycle.getBeforeServerStartFuncs()
 
     for (const middleware of beforeServerStartArr) {

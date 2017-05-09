@@ -6,6 +6,8 @@ const tokenService = require('../../service/token')
 
 module.exports = class {
   async beforeRestful(ctx, next) {
+    // 临时默认验证通过
+    return next()
     const isGettingUser = ctx.url.startsWith('/api/user')
     const isNotGet = ctx.url.startsWith('/api/') && ctx.method !== 'GET'
     if (!isGettingUser && !isNotGet) {
