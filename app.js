@@ -3,6 +3,7 @@ global.Promise = require('bluebird')
 const log = require('./utils/log')
 const Koa = require('koa')
 const koaRouter = require('koa-router')
+var cors = require('koa-cors')
 const mongoRest = require('./mongoRest')
 const models = require('./model/mongo')
 const redis = require('./model/redis')
@@ -17,7 +18,7 @@ const lifecycle = global.lifecycle = new Blogpack(blogpackConfig)
 
 const app = new Koa()
 const router = koaRouter()
-
+app.use(cors());
 ;(async () => {
   try {
     await lifecycle.beforeUseRoutes({
