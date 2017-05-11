@@ -36,17 +36,17 @@ let task = new Schema({
 
 let tomato = new Schema({
   // 用户编号
-  userid:String,
+  userid: { type: String, default: '' },
   // 开始时间
   startTime: { type: String, default: '' },
   // 结束时间
   endTime: { type: String, default: '' },
   // 标题
-  title: String,
+  title:  { type: String, default: '' },
   // 描述
   description: { type: String, default: '' },
   // 任务编号，可空
-  taskid:{ type: String },
+  taskid:{ type: String, default: '' },
 
 })
 
