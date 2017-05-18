@@ -19,6 +19,7 @@ const lifecycle = global.lifecycle = new Blogpack(blogpackConfig)
 const app = new Koa()
 const router = koaRouter()
 app.use(cors());
+app.use(require('koa-static')(__dirname + '/public'));
 ;(async () => {
   try {
     await lifecycle.beforeUseRoutes({
