@@ -25,6 +25,8 @@ let task = new Schema({
   userid:String,
   // 标题
   title: String,
+  // 目标
+  target: String,
   // 描述
   description: { type: String, default: '' },
   // 番茄个数
@@ -43,11 +45,17 @@ let tomato = new Schema({
   endTime: { type: String, default: '' },
   // 标题
   title:  { type: String, default: '' },
+  // 目标
+  target: String,
   // 描述
   description: { type: String, default: '' },
   // 任务编号，可空
   taskid:{ type: String, default: '' },
-
+  // 是否成功 1:成功 0:失败
+  succeed:{ type: Number, default: 1 },
+  // 中断原因
+  breakReason:  { type: String, default: '' },
+  
 })
 
 /**
