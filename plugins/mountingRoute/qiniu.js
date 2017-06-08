@@ -46,7 +46,7 @@ module.exports = class {
   async mountingRoute() {
     return {
       method: 'post',
-      path: '/admin/qiniu',
+      path: '/api/qiniu',
       needBeforeRoutes: true,
       middleware: [
         function({ request, response }, next) {

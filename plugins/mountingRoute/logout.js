@@ -5,7 +5,7 @@ module.exports = class {
   async mountingRoute() {
     return {
       method: 'post',
-      path: '/admin/logout',
+      path: '/api/logout',
       middleware: [middleware]
     }
   }
