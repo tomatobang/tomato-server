@@ -12,7 +12,7 @@ module.exports = {
   redisPassword: env.redisPassword || '',
 
   tokenSecret: env.tokenSecret || 'test',
-  tokenExpiresIn: env.tokenExpiresIn || 3600,
+  tokenExpiresIn: env.tokenExpiresIn || '7d',
 
   defaultAdminName: env.defaultAdminName || 'admin',
   defaultAdminPassword: env.defaultAdminPassword || '123456'
