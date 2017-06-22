@@ -16,9 +16,9 @@ async function middleware(ctx, next) {
   let users, user
 
   try {
-    users = await model.find({ name: ctx.request.body.name }).exec()
+    users = await model.find({ username: ctx.request.body.username }).exec()
     user = {
-      name: users[0].name,
+      username: users[0].username,
       timestamp: (new Date()).valueOf()
     }
 
