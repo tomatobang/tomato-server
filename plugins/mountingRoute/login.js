@@ -27,8 +27,10 @@ async function middleware(ctx, next) {
     if (password === ctx.request.body.password) {
       let token = tokenService.createToken(user)
 
-      redis.set('token', token, 'EX', tokenService.expiresIn, () => {
+      // redis.set('token', token, 'EX', tokenService.expiresIn, () => {
+      // })
 
+      redis.set(token, JSON.stringify(user), 'EX', tokenService.expiresIn, () => {
       })
 
       return ctx.body = {
