@@ -53,6 +53,8 @@ module.exports = class {
     let reply = await redis.getAsync(token);
     console.log("当前用户:", reply);
     if (reply) {
+      let currentUser = JSON.parse(reply);
+      ctx.request.currentUser = currentUser;
       return next();
     } else {
       return (ctx.body = {
