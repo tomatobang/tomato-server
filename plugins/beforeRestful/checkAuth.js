@@ -15,6 +15,10 @@ module.exports = class {
     //   return next()
     // }
 
+    if(ctx.url.startsWith('/api/user')  && ctx.method !== 'GET' && !ctx.url.startsWith('/api/user/')){
+      return next();
+    }
+
     const headers = ctx.request.headers;
     let token;
     try {
@@ -41,15 +45,6 @@ module.exports = class {
       });
     }
 
-    // let reply = await redis.getAsync('token')
-    //  if (reply === token) {
-    //   return next();
-    // } else {
-    //   return (ctx.body = {
-    //     status: "fail",
-    //     description: "Token invalid"
-    //   });
-    // }
     let reply = await redis.getAsync(token);
     console.log("当前用户:", reply);
     if (reply) {
