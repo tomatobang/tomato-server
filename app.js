@@ -1,30 +1,34 @@
-global.Promise = require('bluebird')
+global.Promise = require("bluebird");
 
-const log = require('./utils/log')
-const Koa = require('koa')
-const koaRouter = require('koa-router')
-var cors = require('koa-cors')
-const mongoRest = require('./mongoRest')
-const models = require('./model/mongo')
-const redis = require('./model/redis')
-const config = require('./conf/config')
+const log = require("./utils/log");
+const Koa = require("koa");
+const koaRouter = require("koa-router");
+var cors = require("koa-cors");
+const mongoRest = require("./mongoRest");
+const models = require("./model/mongo");
+const redis = require("./model/redis");
+const config = require("./conf/config");
 
-const configName = process.env.NODE_ENV === '"development"' ? 'dev' : 'prod'
-const blogpackConfig = require(`./build/blogpack.${configName}.config`)
-blogpackConfig.models = models
-blogpackConfig.redis = redis
-const Blogpack = require('./blogpack')
-const lifecycle = global.lifecycle = new Blogpack(blogpackConfig)
+const configName = process.env.NODE_ENV === '"development"' ? "dev" : "prod";
+const blogpackConfig = require(`./build/blogpack.${configName}.config`);
+blogpackConfig.models = models;
+blogpackConfig.redis = redis;
+const Blogpack = require("./blogpack");
+const lifecycle = (global.lifecycle = new Blogpack(blogpackConfig));
 
-const app = new Koa()
+const app = new Koa();
 
 /**
  * Router 封装
  */
-const router = koaRouter()
+// 一般路由
+const indexRoute = require("./router/index");
+
+// Restful 路由
+const router = koaRouter();
 app.use(cors());
-app.use(require('koa-static')(__dirname + '/public'));
-;(async () => {
+app.use(require("koa-static")(__dirname + "/public"));
+(async () => {
   try {
     await lifecycle.beforeUseRoutes({
       config: lifecycle.config,
@@ -32,46 +36,46 @@ app.use(require('koa-static')(__dirname + '/public'));
       router,
       models,
       redis
-    })
+    });
 
-    const beforeRestfulRoutes = lifecycle.getBeforeRestfulRoutes()
-    const afterRestfulRoutes = lifecycle.getAfterRestfulRoutes()
+    const beforeRestfulRoutes = lifecycle.getBeforeRestfulRoutes();
+    const afterRestfulRoutes = lifecycle.getAfterRestfulRoutes();
 
-    const middlewareRoutes = await lifecycle.getMiddlewareRoutes()
+    const middlewareRoutes = await lifecycle.getMiddlewareRoutes();
 
     for (const item of middlewareRoutes) {
-      const middlewares = [...item.middleware]
-      item.needBeforeRoutes && middlewares.unshift(...beforeRestfulRoutes)
-      item.needAfterRoutes && middlewares.push(...afterRestfulRoutes)
+      const middlewares = [...item.middleware];
+      item.needBeforeRoutes && middlewares.unshift(...beforeRestfulRoutes);
+      item.needAfterRoutes && middlewares.push(...afterRestfulRoutes);
 
-      router[item.method](item.path, ...middlewares)
+      router[item.method](item.path, ...middlewares);
     }
 
     Object.keys(models).map(name => models[name]).forEach(model => {
       // 生成 restful 路由
       // 路由，实体模型，前缀，中间件
-      mongoRest(router, model, '/api', {
+      mongoRest(router, model, "/api", {
         beforeRestfulRoutes,
         afterRestfulRoutes
-      })
-    })
+      });
+    });
 
-    app.use(router.routes())
-
+    indexRoute.init(router);
+    app.use(router.routes());
 
     /**
      * 执行中间件
      */
-    const beforeServerStartArr = lifecycle.getBeforeServerStartFuncs()
+    const beforeServerStartArr = lifecycle.getBeforeServerStartFuncs();
 
     for (const middleware of beforeServerStartArr) {
-      await middleware()
+      await middleware();
     }
 
     app.listen(config.serverPort, () => {
-      log.info(`Koa2 is running at ${config.serverPort}`)
-    })
+      log.info(`Koa2 is running at ${config.serverPort}`);
+    });
   } catch (err) {
-    log.error(err)
+    log.error(err);
   }
-})()
+})();
