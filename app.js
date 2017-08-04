@@ -18,14 +18,6 @@ const lifecycle = (global.lifecycle = new Blogpack(blogpackConfig));
 
 const app = new Koa();
 
-/*
-* setup socket.io, and socket-session
-*/
-const socketIO = require('socket.io');
-let io = socketIO(app);
-// chat 监听事件
-const chatEvt = require('./chat_io');
-chatEvt(io);
 
 /**
  * Router 封装
@@ -36,6 +28,9 @@ const indexRoute = require("./router/index");
 // Restful 路由
 const router = koaRouter();
 app.use(cors());
+
+
+
 app.use(require("koa-static")(__dirname + "/public"));
 (async () => {
   try {
@@ -81,10 +76,26 @@ app.use(require("koa-static")(__dirname + "/public"));
       await middleware();
     }
 
-    app.listen(config.serverPort, () => {
+    let server=  app.listen(config.serverPort, () => {
       log.info(`Koa2 is running at ${config.serverPort}`);
     });
+
+    /*
+    * setup socket.io, and socket-session
+    */
+    //let server = require('http').Server(app.callback());
+    // const socketIO = require('socket.io');
+    // let io = socketIO(server);
+    var io = require('socket.io').listen(server);
+
+    //io.set('transports', ['websocket', 'xhr-polling', 'jsonp-polling', 'htmlfile', 'flashsocket']);
+    //io.set('origins', '*:*');
+    // chat 监听事件
+    const chatEvt = require('./chat_io');
+    chatEvt(io);
   } catch (err) {
     log.error(err);
   }
 })();
+
+
