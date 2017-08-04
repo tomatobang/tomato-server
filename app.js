@@ -18,6 +18,15 @@ const lifecycle = (global.lifecycle = new Blogpack(blogpackConfig));
 
 const app = new Koa();
 
+/*
+* setup socket.io, and socket-session
+*/
+const socketIO = require('socket.io');
+let io = socketIO(app);
+// chat 监听事件
+const chatEvt = require('./chat_io');
+chatEvt(io);
+
 /**
  * Router 封装
  */

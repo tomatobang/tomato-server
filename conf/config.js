@@ -15,5 +15,8 @@ module.exports = {
   tokenExpiresIn: env.tokenExpiresIn || '7d',
 
   defaultAdminName: env.defaultAdminName || 'admin',
-  defaultAdminPassword: env.defaultAdminPassword || '123456'
+  defaultAdminPassword: env.defaultAdminPassword || '123456',
+
+  rongyun_key: 'lmxuhwagxgt9d',
+  rongyun_secret: 'NpbRLWPxB79',
 }
