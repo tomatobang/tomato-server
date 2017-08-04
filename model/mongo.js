@@ -161,8 +161,8 @@ usermodel = mongoose.model("user", user);
 optionmodel = mongoose.model("option", option);
 
 module.exports = {
-	taskmodel,
-	tomatomodel,
-	usermodel,
-	optionmodel
+	task:taskmodel,
+	tomato:tomatomodel,
+	user:usermodel,
+	option:optionmodel
 };

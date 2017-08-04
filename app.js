@@ -88,10 +88,8 @@ app.use(require("koa-static")(__dirname + "/public"));
     // let io = socketIO(server);
     var io = require('socket.io').listen(server);
 
-    //io.set('transports', ['websocket', 'xhr-polling', 'jsonp-polling', 'htmlfile', 'flashsocket']);
-    //io.set('origins', '*:*');
     // chat 监听事件
-    const chatEvt = require('./chat_io');
+    const chatEvt = require('./chat.io');
     chatEvt(io);
   } catch (err) {
     log.error(err);
