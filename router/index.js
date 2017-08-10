@@ -64,7 +64,9 @@ module.exports.init = function(router) {
 	});
 
 	// 解散群组
+	// 解散群组
 	router.post("/tool/dismissgroup", async function(ctx, next) {
+    console.log("/tool/dismissgroup");
 		let userid = ctx.request.body.userid;
 		let groupid = ctx.request.body.groupid;
 		if (!userid || !groupid) {
@@ -74,8 +76,11 @@ module.exports.init = function(router) {
 				msg: "userid与groupid 必填！"
 			};
 			return;
-		}
-		let ret = rongyunUtil.dissmissgroup(userid, groupid);
+    }
+    console.log("userid",userid);
+    console.log("groupid",groupid);
+    let ret = await rongyunUtil.dissmissgroup(userid, groupid);
+    console.log("ret",ret);
 		if (ret) {
 			ctx.status = 200;
 			ctx.body = {
