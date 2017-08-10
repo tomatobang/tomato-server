@@ -1,4 +1,10 @@
-var RongAPI = require('co-rongcloud-api');
+const RongAPI = require('co-rongcloud-api');
+const api = new RongAPI(appid, appsecret);
 
-var api = new RongAPI(appid, appsecret);
-var token = await api.getToken('nick-ma');
+const dissmissgroup = (userid,groupid)=>{
+    let ret = await api.groupDismiss(userid,groupid);
+}
+
+module.export = {
+    dissmissgroup
+}
