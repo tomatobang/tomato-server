@@ -66,7 +66,6 @@ module.exports.init = function(router) {
 	});
 
 	// 解散群组
-	// 解散群组
 	router.post("/tool/dismissgroup", async function(ctx, next) {
     console.log("/tool/dismissgroup");
 		let userid = ctx.request.body.userid;
