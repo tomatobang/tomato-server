@@ -1,15 +1,7 @@
 // 缓存 {id:{name:////}}
 let cahce = {};
-
-// 登录则建立连接，初始化 cache
-
-// 创建:则插入cache，并推送至另一端
-
-// 中断:插入数据库
-
-// 结束:插入数据库
-
-// 断开连接，则删除cache
+const util = require('util');
+const setTimeoutPromise = util.promisify(setTimeout);
 
 let dataModels = require("./model/mongo.js");
 let tomatomodel = dataModels.tomatomodel;
@@ -19,6 +11,7 @@ let toamato_hash = {};
 */
 module.exports = io => {
 	io.of("/tomato").on("connection", socket => {
+		
 		/**
          * 加载已有番茄钟
          */
@@ -40,6 +33,16 @@ module.exports = io => {
 			hash.end = endname;
 			let socketList = hash.socketList;
 			hash.tomato = tomato;
+			// 设定番茄钟任务
+			TIME_OUT_ID = setTimeoutPromise(1000*60*25,userid).then((userid) => {
+				let thash = toamato_hash[userid];
+				let tomato = thash.tomato;
+				tomato.endTime = new Date();
+				tomato.succeed = 1;
+				await model.create(tomato);
+				thash.tomato = null;
+			});
+			hash.TIME_OUT_ID= TIME_OUT_ID;
 			for (let so of socketList) {
 				if (so != socket.id) {
 					io
@@ -53,12 +56,14 @@ module.exports = io => {
 		/**
          * 番茄钟中断
          */
-		socket.on("break_tomato", async (userid, endname, tomato) => {
+		socket.on("break_tomato", async (userid, endname) => {
 			let hash = toamato_hash[userid];
 			hash.end = endname;
 			let socketList = hash.socketList;
-			hash.tomato = tomato;
-
+			let tomato = hash.tomato;
+			tomato.endTime = new Date();
+			tomato.succeed = 0;
+			clearTimeout(hash.TIME_OUT_ID);
 			// 保存当前番茄钟
 			const result = await model.create(tomato);
 			if (result) {
@@ -72,14 +77,7 @@ module.exports = io => {
 				}
 			}
 		});
-
-		/**
-         * 番茄钟完成
-         */
-		// socket.on("finish", (userid, tomato) => {
-
-        // });
-
+		
 		/**
 		 * 离线处理
 		 */
@@ -93,5 +91,12 @@ module.exports = io => {
                 }
 			}
 		});
+
+		/**
+         * 番茄钟完成
+         */
+		// socket.on("finish", (userid, tomato) => {
+        // });
+
 	});
 };
