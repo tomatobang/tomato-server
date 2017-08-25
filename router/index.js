@@ -6,11 +6,11 @@ let models = require("../model/mongo");
 let rongyunUtil = require("../utils/rongyun_co");
 
 
-module.exports.init = function(router) {
+module.exports.init = function (router) {
 	/**
-   * 邮箱验证 getTodayTomatos
-  */
-	router.post("/email_username/verify", async function(ctx, next) {
+	 * 邮箱验证 
+	 */
+	router.post("/email_username/verify", async function (ctx, next) {
 		let usermodel = models.user;
 		let email = ctx.request.body.email;
 		let username = ctx.request.body.username;
@@ -37,7 +37,10 @@ module.exports.init = function(router) {
 		}
 	});
 
-	router.get("/filter/tomatotoday", async function(ctx, next) {
+	/**
+	 * 今日番茄钟
+	 */
+	router.get("/filter/tomatotoday", async function (ctx, next) {
 		let tomatomodel = models.tomato;
 		let datenow = new Date();
 		let date =
@@ -65,9 +68,11 @@ module.exports.init = function(router) {
 		}
 	});
 
-	// 解散群组
-	router.post("/tool/dismissgroup", async function(ctx, next) {
-    console.log("/tool/dismissgroup");
+	/**
+	 * 解散群组
+	 */
+	router.post("/tool/dismissgroup", async function (ctx, next) {
+		console.log("/tool/dismissgroup");
 		let userid = ctx.request.body.userid;
 		let groupid = ctx.request.body.groupid;
 		if (!userid || !groupid) {
@@ -77,11 +82,11 @@ module.exports.init = function(router) {
 				msg: "userid与groupid 必填！"
 			};
 			return;
-    }
-    console.log("userid",userid);
-    console.log("groupid",groupid);
-    let ret = await rongyunUtil.dissmissgroup(userid, groupid);
-    console.log("ret",ret);
+		}
+		console.log("userid", userid);
+		console.log("groupid", groupid);
+		let ret = await rongyunUtil.dissmissgroup(userid, groupid);
+		console.log("ret", ret);
 		if (ret) {
 			ctx.status = 200;
 			ctx.body = {
@@ -96,4 +101,39 @@ module.exports.init = function(router) {
 			};
 		}
 	});
+
+	/**
+	 * 上传音频
+	 */
+	const formidable = require("formidable");
+	const fs = require('fs');
+	const os = require('os');
+	const path = require('path');
+	router.post("/upload/voicefile",async function (ctx, next) {
+		var form = new formidable.IncomingForm();
+		await form.parse(ctx.req, async function (err, fields, files) {
+			if (err) { throw err; return; }
+			const file = files.files;
+			const reader = fs.createReadStream(file.path);
+			// 设置保存路径
+			let rootDir = path.resolve(__dirname, "..");
+			let savePath = rootDir + "/uploadfile/voices/" + file.name;
+			// path.join(os.tmpdir()
+			const stream = fs.createWriteStream(savePath, {
+				flags: 'w',
+				defaultEncoding: 'utf8',
+				fd: null,
+				mode: 0o666,
+				autoClose: true
+			});
+			reader.pipe(stream);
+			console.log('uploading %s -> %s', file.name, stream.path);
+		});
+
+		ctx.status = 200;
+		ctx.body = {
+			success: true,
+			msg: "上传成功"
+		};
+	})
 };

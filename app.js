@@ -19,6 +19,8 @@ const lifecycle = (global.lifecycle = new Blogpack(blogpackConfig));
 const app = new Koa();
 
 
+
+
 /**
  * Router 封装
  */
