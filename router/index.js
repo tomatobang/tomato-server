@@ -112,12 +112,18 @@ module.exports.init = function (router) {
 	router.post("/upload/voicefile",async function (ctx, next) {
 		var form = new formidable.IncomingForm();
 		await form.parse(ctx.req, async function (err, fields, files) {
+			const taskid = fields.taskid;
+			const userid = fields.userid;
+			if (!taskid || userid){
+				throw new Error("taskid或userid为空！");
+				return;
+			}
 			if (err) { throw err; return; }
 			const file = files.files;
 			const reader = fs.createReadStream(file.path);
 			// 设置保存路径
 			let rootDir = path.resolve(__dirname, "..");
-			let savePath = rootDir + "/uploadfile/voices/" + file.name;
+			let savePath = rootDir + "/uploadfile/voices/" + (userid+"_"+taskid);// +"_"+file.name
 			// path.join(os.tmpdir()
 			const stream = fs.createWriteStream(savePath, {
 				flags: 'w',
