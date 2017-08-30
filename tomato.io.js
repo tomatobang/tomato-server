@@ -45,6 +45,7 @@ module.exports = io => {
 			}
 			hash.end = endname;
 			let socketList = hash.socketList? hash.socketList:[];
+			tomato.startTime = new Date();
 			hash.tomato = tomato;
 			// 设定番茄钟任务：只支持 NODEJS 8
 			// TIME_OUT_ID = setTimeoutPromise(1000*60*25,userid).then(async (userid) => {
