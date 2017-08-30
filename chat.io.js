@@ -6,7 +6,7 @@ let socket_hash = {};
  * 视频聊天中转服务器
 */
 module.exports = io => {
-	io.of("/chat").on("connection", function(socket) {
+	io.of("/tomatobang").on("connection", function(socket) {
 		// socket.on("login", function(userid, username, headImg) {
 		// 	if (user_hash[userid]) {
 		// 		console.log(userid + " 在其他地方登陆！");
@@ -117,7 +117,7 @@ module.exports = io => {
 			}
 			// console.log("send pos to(finded):" + to_userid + " from:" + send_userid);
 			io
-				.of("/chat")
+				.of("/tomatobang")
 				.to(user_hash[to_userid])
 				.emit("please_post_pos", {send_userid});
 		});
@@ -140,7 +140,7 @@ module.exports = io => {
 			}
 			// console.log("post pos to(finded):" + to_userid + " from:" + send_userid);
 			io
-				.of("/chat")
+				.of("/tomatobang")
 				.to(user_hash[to_userid])
 				.emit("received_other_pos", {send_userid, pos });
 		});
@@ -168,7 +168,7 @@ module.exports = io => {
 			);
 
 			io
-				.of("/chat")
+				.of("/tomatobang")
 				.to(contact.socket)
 				.emit("messageReceived", currentUser.send_userid, message);
 		});

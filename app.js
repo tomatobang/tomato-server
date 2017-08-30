@@ -93,6 +93,9 @@ app.use(require("koa-static")(__dirname + "/public"));
     // chat 监听事件
     const chatEvt = require('./chat.io');
     chatEvt(io);
+    // chat 监听事件
+    const tomatoEvt = require('./tomato.io');
+    tomatoEvt(io);
   } catch (err) {
     log.error(err);
   }

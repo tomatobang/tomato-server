@@ -109,6 +109,7 @@ module.exports.init = function (router) {
 	const fs = require('fs');
 	const os = require('os');
 	const path = require('path');
+	const baseUrl = "http://115.29.51.196:5555";
 	router.post("/upload/voicefile",async function (ctx, next) {
 		var form = new formidable.IncomingForm();
 		await form.parse(ctx.req, async function (err, fields, files) {
@@ -119,15 +120,15 @@ module.exports.init = function (router) {
 				return;
 			}
 			if (err) { throw err; return; }
-			console.log(files);
 			let file = files.files;
-			if (!file){
+			if (!file){ // 兼容 ionic file transfer 插件
 				file = files.file;
 			}
 			const reader = fs.createReadStream(file.path);
 			// 设置保存路径
 			let rootDir = path.resolve(__dirname, "..");
-			let savePath = rootDir + "/uploadfile/voices/" + (userid+"_"+taskid+"_"+file.name);
+			let relateUrl = "/uploadfile/voices/" + (userid+"_"+taskid+"_"+file.name);
+			let savePath = rootDir + relateUrl;
 			// path.join(os.tmpdir()
 			const stream = fs.createWriteStream(savePath, {
 				flags: 'w',
@@ -138,6 +139,8 @@ module.exports.init = function (router) {
 			});
 			reader.pipe(stream);
 			console.log('uploading %s -> %s', file.name, stream.path);
+			let taskmodel = models.task;
+			await taskmodel.updateOne({_id:taskid}, {voiceUrl:baseUrl+relateUrl}, {});
 		});
 
 		ctx.status = 200;

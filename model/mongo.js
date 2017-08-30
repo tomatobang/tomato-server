@@ -39,7 +39,9 @@ let task = new Schema({
 	// 番茄个数
 	num: { type: Number, default: 0 },
 	// 是否激活
-	isActive: { type: Boolean, default: false }
+	isActive: { type: Boolean, default: false },
+	// 语音路径
+	voiceUrl:{type: String, default: "" }
 });
 
 /**
