@@ -65,7 +65,9 @@ let tomato = new Schema({
 	// 是否成功 1:成功 0:失败
 	succeed: { type: Number, default: 1 },
 	// 中断原因
-	breakReason: { type: String, default: "" }
+	breakReason: { type: String, default: "" },
+	// 语音路径
+	voiceUrl:{type: String, default: "" }
 });
 
 /**

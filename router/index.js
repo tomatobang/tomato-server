@@ -109,7 +109,7 @@ module.exports.init = function (router) {
 	const fs = require('fs');
 	const os = require('os');
 	const path = require('path');
-	const baseUrl = "http://115.29.51.196:5555";
+	//const baseUrl = "http://115.29.51.196:5555";
 	router.post("/upload/voicefile",async function (ctx, next) {
 		var form = new formidable.IncomingForm();
 		await form.parse(ctx.req, async function (err, fields, files) {
@@ -140,7 +140,7 @@ module.exports.init = function (router) {
 			reader.pipe(stream);
 			console.log('uploading %s -> %s', file.name, stream.path);
 			let taskmodel = models.task;
-			await taskmodel.updateOne({_id:taskid}, {voiceUrl:baseUrl+relateUrl}, {});
+			await taskmodel.updateOne({_id:taskid}, {voiceUrl:relateUrl}, {});
 		});
 
 		ctx.status = 200;
