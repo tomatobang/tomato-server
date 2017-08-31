@@ -4,8 +4,9 @@ const util = require("util");
 //const setTimeoutPromise = util.promisify(setTimeout);
 
 let dataModels = require("./model/mongo.js");
-let tomatomodel = dataModels.tomatomodel;
+let tomatomodel = dataModels.tomato;
 let toamato_hash = {};
+
 /**
  * 视频聊天中转服务器
 */
@@ -63,7 +64,7 @@ module.exports = io => {
 					let tomato = thash.tomato;
 					tomato.endTime = new Date();
 					tomato.succeed = 1;
-					await model.create(tomato);
+					await tomatomodel.create(tomato);
 					thash.tomato = null;
 				},
 				1000 * 60 * 25,
@@ -84,8 +85,12 @@ module.exports = io => {
 		/**
          * 番茄钟中断
          */
-		socket.on("break_tomato", async (userid, endname) => {
+		socket.on("break_tomato", async (obj) => {
+			let {userid, endname} = obj;
 			let hash = toamato_hash[userid];
+			if(!hash){
+				return;
+			}
 			hash.end = endname;
 			let socketList = hash.socketList;
 			let tomato = hash.tomato;
@@ -93,7 +98,9 @@ module.exports = io => {
 			tomato.succeed = 0;
 			clearTimeout(hash.TIME_OUT_ID);
 			// 保存当前番茄钟
-			const result = await model.create(tomato);
+			const result = await tomatomodel.create(tomato);
+			hash.tomato = null;
+			console.log(result,socketList)
 			if (result) {
 				for (let so of socketList) {
 					if (so != socket.id) {
