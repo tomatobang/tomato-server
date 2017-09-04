@@ -149,4 +149,21 @@ module.exports.init = function (router) {
 			msg: "上传成功"
 		};
 	})
+
+	/**
+	 * 下载文件
+	 * 通过 query 参数获取相关内容
+	 */
+	const send = require('koa-send');
+	router.get("/download/voicefile/:path",async function (ctx, next) {
+		if (!ctx.request.currentUser) {
+			ctx.status = 500;
+			ctx.body = "请先登录!!!";
+			return;
+		}
+		let relateUrl = ctx.params.path;
+		let savePath ="/uploadfile/voices/"+relateUrl;
+		// 默认会加上本服务器地址
+		await send(ctx,savePath);
+	})
 };

@@ -51,9 +51,9 @@ let tomato = new Schema({
 	// 用户编号
 	userid: { type: String, default: "" },
 	// 开始时间
-	startTime: { type: String, default: "" },
+	startTime: { type: Date },
 	// 结束时间
-	endTime: { type: String, default: "" },
+	endTime: { type: Date },
 	// 标题
 	title: { type: String, default: "" },
 	// 目标
