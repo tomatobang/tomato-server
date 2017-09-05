@@ -7,6 +7,22 @@ let rongyunUtil = require("../utils/rongyun_co");
 
 
 module.exports.init = function (router) {
+
+	/**
+	 * 获取融云token 
+	 */
+	router.post("/getRongyunToken", async function (ctx, next) {
+		let userid = ctx.request.body._id;
+		let username = ctx.request.body.username;
+
+		let token = await models.user.getRongyunToken(userid, username, "");
+		ctx.status = 200;
+		ctx.body = {
+			success: true,
+			msg: token
+		};
+	});
+
 	/**
 	 * 邮箱验证 
 	 */
@@ -110,24 +126,24 @@ module.exports.init = function (router) {
 	const os = require('os');
 	const path = require('path');
 	//const baseUrl = "http://115.29.51.196:5555";
-	router.post("/upload/voicefile",async function (ctx, next) {
+	router.post("/upload/voicefile", async function (ctx, next) {
 		var form = new formidable.IncomingForm();
 		await form.parse(ctx.req, async function (err, fields, files) {
 			const taskid = fields.taskid;
 			const userid = fields.userid;
-			if (!taskid || !userid){
+			if (!taskid || !userid) {
 				throw new Error("taskid或userid为空！");
 				return;
 			}
 			if (err) { throw err; return; }
 			let file = files.files;
-			if (!file){ // 兼容 ionic file transfer 插件
+			if (!file) { // 兼容 ionic file transfer 插件
 				file = files.file;
 			}
 			const reader = fs.createReadStream(file.path);
 			// 设置保存路径
 			let rootDir = path.resolve(__dirname, "..");
-			let relateUrl = "/uploadfile/voices/" + (userid+"_"+taskid+"_"+file.name);
+			let relateUrl = "/uploadfile/voices/" + (userid + "_" + taskid + "_" + file.name);
 			let savePath = rootDir + relateUrl;
 			// path.join(os.tmpdir()
 			const stream = fs.createWriteStream(savePath, {
@@ -140,7 +156,7 @@ module.exports.init = function (router) {
 			reader.pipe(stream);
 			console.log('uploading %s -> %s', file.name, stream.path);
 			let taskmodel = models.task;
-			await taskmodel.updateOne({_id:taskid}, {voiceUrl:relateUrl}, {});
+			await taskmodel.updateOne({ _id: taskid }, { voiceUrl: relateUrl }, {});
 		});
 
 		ctx.status = 200;
@@ -155,15 +171,15 @@ module.exports.init = function (router) {
 	 * 通过 query 参数获取相关内容
 	 */
 	const send = require('koa-send');
-	router.get("/download/voicefile/:path",async function (ctx, next) {
+	router.get("/download/voicefile/:path", async function (ctx, next) {
 		if (!ctx.request.currentUser) {
 			ctx.status = 500;
 			ctx.body = "请先登录!!!";
 			return;
 		}
 		let relateUrl = ctx.params.path;
-		let savePath ="/uploadfile/voices/"+relateUrl;
+		let savePath = "/uploadfile/voices/" + relateUrl;
 		// 默认会加上本服务器地址
-		await send(ctx,savePath);
+		await send(ctx, savePath);
 	})
 };

@@ -41,7 +41,7 @@ let task = new Schema({
 	// 是否激活
 	isActive: { type: Boolean, default: false },
 	// 语音路径
-	voiceUrl:{type: String, default: "" }
+	voiceUrl: { type: String, default: "" }
 });
 
 /**
@@ -67,7 +67,7 @@ let tomato = new Schema({
 	// 中断原因
 	breakReason: { type: String, default: "" },
 	// 语音路径
-	voiceUrl:{type: String, default: "" }
+	voiceUrl: { type: String, default: "" }
 });
 
 /**
@@ -86,65 +86,70 @@ let user = new Schema({
 	rongyun_token: String
 });
 
-// 融云toke
-user.statics.getRongyunToken = (userid, username, headImg, cb) => {
-	let that = this;
-	that.find({ _id: userid }, (err, user) => {
-		console.log("当前用户:", user);
-		if (!user || user.length == 0) {
-		} else {
-			if (!user.rongyun_token) {
-				rongcloudSDK.user.getToken(
-					user._id,
-					user.username,
-					headImg,
-					(err, reponse) => {
-						if (err) {
-							cb("获取融云token err:" + err, null);
-						} else {
-							let result = JSON.parse(reponse);
-							if (result.code === 200) {
-								console.log(
-									"获取融云token suceess:" + result.token
-								);
-								let conditions = { _id: userid },
-									update = {
-										$set: { rongyun_token: result.token }
-									};
-								updateUser(conditions, update, {});
+// 融云toke (未验证)
+user.statics.getRongyunToken = (userid, username, headImg) => {
+	return new Promise((resolve, reject) => {
+		let that = this;
+		that.find({ _id: userid }, (err, user) => {
+			if (!user || user.length == 0) {
+				reject("用户不存在");
+			} else {
+				if (!user[0].rongyun_token) {
+					rongcloudSDK.user.getToken(
+						user._id,
+						user.username,
+						headImg,
+						(err, reponse) => {
+							if (err) {
+								reject("获取融云token err:" + err);
+							} else {
+								let result = JSON.parse(reponse);
+								if (result.code === 200) {
+									console.log(
+										"获取融云token suceess:" + result.token
+									);
+									let conditions = { _id: userid },
+										update = {
+											$set: { rongyun_token: result.token }
+										};
+									
+									updateUser(conditions, update, {});
+									resolve(result.token)
+								}
 							}
 						}
-					}
-				);
-			} else {
-				// 用户名有更改
-				if (username != user[0].username) {
-					rongcloudSDK.user.refresh(
-						userid,
-						username,
-						user[0].headimg,
-						"json",
-						() => {
-							let conditions = { _id: userid },
-								update = { $set: { username: username } };
-							updateUser(conditions, update, {});
-						}
 					);
+				} else {
+					// 用户名有更改
+					if (username != user[0].username) {
+						rongcloudSDK.user.refresh(
+							userid,
+							username,
+							user[0].headimg,
+							"json",
+							() => {
+								let conditions = { _id: userid },
+									update = { $set: { username: username } };
+								updateUser(conditions, update, {});
+							}
+						);
+					}
+					resolve(user[0].rongyun_token);
 				}
 			}
-			cb(null, user[0]);
+		});
+
+		function updateUser(conditions, update, option) {
+			that.update(conditions, update, options, function (err, docs) {
+				if (err) {
+					console.log("update user err:" + err);
+				} else {
+					console.log("update user suc:" + docs.username);
+				}
+			});
 		}
 	});
 
-	function updateUser(conditions, update, option) {
-		that.update(conditions, update, options, function(err, docs) {
-			if (err) {
-				console.log("update user err:" + err);
-			} else {
-				console.log("update user suc:" + docs.username);
-			}
-		});
-	}
 };
 
 /**
@@ -165,8 +170,8 @@ usermodel = mongoose.model("user", user);
 optionmodel = mongoose.model("option", option);
 
 module.exports = {
-	task:taskmodel,
-	tomato:tomatomodel,
-	user:usermodel,
-	option:optionmodel
+	task: taskmodel,
+	tomato: tomatomodel,
+	user: usermodel,
+	option: optionmodel
 };
