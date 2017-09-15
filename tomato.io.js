@@ -4,6 +4,8 @@ const util = require("util");
 //const setTimeoutPromise = util.promisify(setTimeout);
 
 let dataModels = require("./model/mongo.js");
+let jpushService = require("./service/jpush.js")
+
 let tomatomodel = dataModels.tomato;
 let toamato_hash = {};
 
@@ -66,6 +68,8 @@ module.exports = io => {
 					tomato.succeed = 1;
 					await tomatomodel.create(tomato);
 					thash.tomato = null;
+
+					jpushService.pushMessage(userid,"你完成了一个番茄钟",tomato.title);
 				},
 				1000 * 60 * 25,
 				userid
