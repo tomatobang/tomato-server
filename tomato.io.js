@@ -104,6 +104,7 @@ module.exports = io => {
 			clearTimeout(hash.TIME_OUT_ID);
 			// 保存当前番茄钟
 			const result = await tomatomodel.create(_tomato);
+			jpushService.pushMessage(userid,"你中断来一个番茄钟",tomato.title);
 			hash.tomato = null;
 			console.log(result,socketList)
 			if (result) {
