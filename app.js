@@ -18,9 +18,6 @@ const lifecycle = (global.lifecycle = new Blogpack(blogpackConfig));
 
 const app = new Koa();
 
-
-
-
 /**
  * Router 封装
  */
@@ -30,8 +27,6 @@ const indexRoute = require("./router/index");
 // Restful 路由
 const router = koaRouter();
 app.use(cors());
-
-
 
 app.use(require("koa-static")(__dirname + "/public"));
 (async () => {

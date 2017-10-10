@@ -38,3 +38,5 @@ jspm_packages
 public/
 !public/tool.html
 uploadfile/
+.vscode/
+run/
