@@ -18,17 +18,16 @@ const lifecycle = (global.lifecycle = new Blogpack(blogpackConfig));
 
 const app = new Koa();
 
-/**
- * Router 封装
- */
+
 // 一般路由
 const indexRoute = require("./router/index");
-
 // Restful 路由
 const router = koaRouter();
+// 跨域访问
 app.use(cors());
-
+// 指定静态文件目录
 app.use(require("koa-static")(__dirname + "/public"));
+
 (async () => {
   try {
     await lifecycle.beforeUseRoutes({

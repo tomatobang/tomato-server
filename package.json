@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node entry.js",
     "lint": "eslint --ext .js *.js */*.js",
-    "dev": "egg-bin dev"
+    "dev": "egg-bin dev",
+    "test": "egg-bin test"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "bluebird": "^3.5.0",
     "co-rongcloud-api": "^1.1.1",
     "egg": "^1.9.0",
+    "egg-view-nunjucks": "^2.1.4",
     "jpush-sdk": "*",
     "jsonwebtoken": "^7.1.9",
     "koa": "^2.0.0-alpha.5",
@@ -48,6 +50,7 @@
     "babel-eslint": "^7.1.1",
     "babel-plugin-transform-runtime": "^6.15.0",
     "egg-bin": "^4.3.5",
+    "egg-mock": "^3.13.0",
     "eslint": "^3.17.0",
     "eslint-config-standard": "^7.0.0",
     "eslint-friendly-formatter": "^2.0.7",
