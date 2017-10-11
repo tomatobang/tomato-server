@@ -5,7 +5,8 @@ module.exports = app => {
         const ctx = this.ctx;
         const page = ctx.query.page || 1;
         const newsList = yield ctx.service.news.list(page);
-        yield ctx.render('news/list.tpl', { list: newsList });
+        console.log("newsList",newsList);
+        yield ctx.render('news/list.tpl', { list: newsList.data });
       }
     }
     return NewsController;

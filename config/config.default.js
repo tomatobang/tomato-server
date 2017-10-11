@@ -13,5 +13,5 @@ exports.view = {
 // 添加 news 的配置项
 exports.news = {
   pageSize: 5,
-  serverUrl: 'https://hacker-news.firebaseio.com/v0',
+  serverUrl: 'http://countdown.yipeng.info/countdown/all',
 };
