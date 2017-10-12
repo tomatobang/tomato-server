@@ -1,7 +1,8 @@
-module.exports = mongoose => {
+module.exports = app => {
     /**
      * 用户
     */
+    const mongoose = app.mongoose;
     let user = new mongoose.Schema({
         // 用户名
         username: String,

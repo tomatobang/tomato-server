@@ -1,7 +1,8 @@
-module.exports = mongoose => {
+module.exports = app => {
     /**
      * 任务
      */
+    const mongoose = app.mongoose;
     let task = new mongoose.Schema({
         // 用户编号
         userid: String,

@@ -1,7 +1,8 @@
-module.exports = mongoose => {
+module.exports = app => {
     /**
      * 番茄钟
      */
+    const mongoose = app.mongoose;
     let tomato = new mongoose.Schema({
         // 用户编号
         userid: { type: String, default: "" },
