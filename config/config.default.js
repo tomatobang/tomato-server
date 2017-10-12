@@ -2,6 +2,11 @@
 
 exports.keys = "此处改为你自己的 Cookie 安全字符串";
 
+exports.mongoose = {
+  url: 'mongodb://127.0.0.1:27017/blog',
+  options: {}
+};
+
 // 添加 view 配置
 exports.view = {
   defaultViewEngine: 'nunjucks',
@@ -15,3 +20,26 @@ exports.news = {
   pageSize: 5,
   serverUrl: 'http://countdown.yipeng.info/countdown/all',
 };
+
+const env = process.env
+
+exports.dataconfig = {
+  serverPort: env.serverPort || 3000,
+
+  mongoHost: env.mongoHost || '127.0.0.1',
+  mongoDatabase: env.mongoDatabase || 'blog',
+  mongoPort: env.mongoPort || 27017,
+
+  redisHost: env.redisHost || '127.0.0.1',
+  redisPort: env.redisPort || 6379,
+  redisPassword: env.redisPassword || '',
+
+  tokenSecret: env.tokenSecret || 'test',
+  tokenExpiresIn: env.tokenExpiresIn || '7d',
+
+  defaultAdminName: env.defaultAdminName || 'admin',
+  defaultAdminPassword: env.defaultAdminPassword || '123456',
+
+  rongyun_key: 'lmxuhwagxgt9d',
+  rongyun_secret: 'NpbRLWPxB79',
+}

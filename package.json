@@ -29,6 +29,7 @@
     "bluebird": "^3.5.0",
     "co-rongcloud-api": "^1.1.1",
     "egg": "^1.9.0",
+    "egg-mongoose": "^2.1.1",
     "egg-view-nunjucks": "^2.1.4",
     "jpush-sdk": "*",
     "jsonwebtoken": "^7.1.9",
