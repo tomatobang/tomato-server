@@ -31,21 +31,85 @@ exports.news = {
   serverUrl: 'http://countdown.yipeng.info/countdown/all',
 };
 
-
-exports.dataconfig = {
-  serverPort: env.serverPort || 3000,
-
-  mongoHost: env.mongoHost || '127.0.0.1',
-  mongoDatabase: env.mongoDatabase || 'blog',
-  mongoPort: env.mongoPort || 27017,
-
-
+// 添加 token 配置
+exports.token = {
   tokenSecret: env.tokenSecret || 'test',
-  tokenExpiresIn: env.tokenExpiresIn || '7d',
+  tokenExpiresIn: env.tokenExpiresIn || '7d'
+};
 
+
+// 添加 融云 配置
+exports.rongyun = {
+  rongyun_key: 'lmxuhwagxgt9d',
+  rongyun_secret: 'NpbRLWPxB79'
+};
+
+exports.admin = {
   defaultAdminName: env.defaultAdminName || 'admin',
   defaultAdminPassword: env.defaultAdminPassword || '123456',
-
-  rongyun_key: 'lmxuhwagxgt9d',
-  rongyun_secret: 'NpbRLWPxB79',
 }
+
+exports.serverPort = {
+  serverPort: env.serverPort || 3000
+}
+
+
+exports.options = [
+  {
+    'key': 'analyzeCode',
+    'value': ''
+  },
+  {
+    'key': 'commentType',
+    'value': 'disqus'
+  },
+  {
+    'key': 'commentName',
+    'value': ''
+  },
+  {
+    'key': 'description',
+    'value': ''
+  },
+  {
+    'key': 'faviconUrl',
+    'value': '/static/favicon.ico'
+  },
+  {
+    'key': 'logoUrl',
+    'value': '/static/logo.png'
+  },
+  {
+    'key': 'githubUrl',
+    'value': ''
+  },
+  {
+    'key': 'keywords',
+    'value': '',
+    'desc': '网站关键字'
+  },
+  {
+    'key': 'miitbeian',
+    'value': ''
+  },
+  {
+    'key': 'numPerPage',
+    'value': ''
+  },
+  {
+    'key': 'siteUrl',
+    'value': ''
+  },
+  {
+    'key': 'title',
+    'value': ''
+  },
+  {
+    'key': 'weiboUrl',
+    'value': ''
+  },
+  {
+    'key': 'twoFactorAuth',
+    'value': ''
+  }
+]
