@@ -11,8 +11,8 @@ module.exports = app => {
             if (query.conditions) {
                 conditions = JSON.parse(query.conditions);
             }
-            const options = await ctx.service.options.findAll(query, conditions);
-            console.log("options", options);
+            const result = await ctx.service.options.findAll(query, conditions);
+            console.log("options", result);
 
             // 设置响应体和状态码
             ctx.body = result;

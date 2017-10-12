@@ -1,8 +1,8 @@
 module.exports = app => {
     class OptionsService extends app.Service {
         async findAll(query, conditions) {
-            let model = await this.ctx.model.options;
-            let builder = model.find(conditions);
+            let model =  this.ctx.model.Options;
+            let builder =  model.find(conditions);
             if (query.select) {
                 select = JSON.parse(query.select);
                 builder = builder.select(select);

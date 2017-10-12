@@ -1,8 +1,10 @@
 module.exports = app => {
     class UserService extends app.Service {
         async findAll(query, conditions) {
-            let model = await this.ctx.model.user;
-            let builder = model.find(conditions);
+            let model =  this.ctx.model.User;
+           
+            let builder =  model.find(conditions);
+            console.log(this.builder);
             if (query.select) {
                 select = JSON.parse(query.select);
                 builder = builder.select(select);
@@ -26,9 +28,9 @@ module.exports = app => {
         }
 
         async findById(query, id) {
-            let model = await this.ctx.model.user;
+            let model =  this.ctx.model.User;
             let select = {};
-            let builder = model.findById(id);
+            let builder =  model.findById(id);
             if (query.select) {
                 select = JSON.parse(query.select);
                 builder = builder.select(select);
@@ -38,19 +40,19 @@ module.exports = app => {
         }
 
         async create(body) {
-            let model = await this.ctx.model.user;
+            let model =  this.ctx.model.User;
             const result = await model.create(body);
             return result;
         }
 
         async delete(id) {
-            let model = await this.ctx.model.user;
+            let model =  this.ctx.model.User;
             const result = await model.findByIdAndRemove(id).exec();
             return result;
         }
 
         async updateById(id, body) {
-            let model = await this.ctx.model.user;
+            let model =  this.ctx.model.User;
             const result = await model
                 .findByIdAndUpdate(id, body, {
                     new: true
@@ -60,7 +62,7 @@ module.exports = app => {
         }
 
         async updateById(id, body) {
-            let model = await this.ctx.model.user;
+            let model =  this.ctx.model.User;
             const result = await model
                 .findByIdAndUpdate(id, body, {
                     new: true
@@ -70,7 +72,7 @@ module.exports = app => {
         }
 
         async replaceById(id, newDocument) {
-            let model = await this.ctx.model.user;
+            let model = await this.ctx.model.User;
             await model.findByIdAndRemove(id).exec();
             const result = await model.create(newDocument);
             return result;
