@@ -20,7 +20,7 @@ module.exports = app => {
                 ctx.status = 200;
                 ctx.body = [];
             }
-            const result = await ctx.service.tomato.findAll({}, conditions);
+            const ret = await ctx.service.tomato.findAll({}, conditions);
             if (ret.length) {
                 ctx.status = 200;
                 ctx.body = ret;

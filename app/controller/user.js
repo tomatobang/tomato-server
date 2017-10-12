@@ -1,7 +1,71 @@
 // app/controller/news.js
 module.exports = app => {
     class UserController extends app.Controller {
+        /**
+         * 登录
+         */
+        async login(){
+            const { ctx } = this;
+            let users = await ctx.service.user.findAll({}, { username: ctx.request.body.username });
+            let user = {
+              username: users[0].username,
+              timestamp: (new Date()).valueOf()
+            };
+            let password = users[0].password;
+           
+            if (password === ctx.request.body.password) {
+              let token = ctx.helper.tokenService.createToken(user);
+              app.redis.set(token, JSON.stringify(user), 'EX', ctx.helper.tokenService.expiresIn, () => {})
+              return ctx.body = {
+                status: 'success',
+                token: token
+              };
+            } else {
+              return ctx.body = {
+                status: 'fail',
+                description: 'Get token failed. Check the password'
+              };
+            }
+        }
 
+        /**
+         * 登出
+         */
+        async logout(){
+            const { ctx } = this;
+            const headers = ctx.request.headers
+            let token
+            try {
+              token = headers['authorization']
+            } catch (err) {
+              return ctx.body = {
+                status: 'fail',
+                description: err
+              }
+            }
+          
+            if (!token) {
+              return ctx.body = {
+                status: 'fail',
+                description: 'Token not found'
+              }
+            }
+          
+            const result = ctx.helper.tokenService.verifyToken(token)
+          
+            if (result === false) {
+              return ctx.body = {
+                status: 'fail',
+                description: 'Token verify failed'
+              }
+            } else {
+              await app.redis.del('token')
+              return ctx.body = {
+                status: 'success',
+                description: 'Token deleted'
+              }
+            }
+        }
         /**
          * 获取融云token 
          */

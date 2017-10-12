@@ -14,6 +14,9 @@ module.exports = app => {
     app.del('/api/user/:id', app.controller.user.deleteById);
     app.post('/getRongyunToken', app.controller.user.getRongyunToken);
     app.post('/email_username/verify', app.controller.user.emailUserNameVerify);
+    app.post('/api/login', app.controller.user.login);
+    app.post('/api/logout', app.controller.user.logout);
+    
     //app.put('/api/user', app.controller.user.create);
     //app.put('/api/user/:id', app.controller.user.replaceById);
     //app.patch('/api/user/:id', app.controller.user.updateById);
@@ -36,7 +39,6 @@ module.exports = app => {
     app.post('/api/task', app.controller.task.create);
     app.post('/api/task/:id', app.controller.task.updateById);
     app.del('/api/task/:id', app.controller.task.deleteById);
-
 
     /**
      * 配置类

@@ -3,6 +3,12 @@ const env = process.env
 
 exports.keys = "此处改为你自己的 Cookie 安全字符串";
 
+exports.security={
+  csrf: {
+    enable: false // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
+  }
+};
+
 exports.mongoose = {
   url: 'mongodb://127.0.0.1:27017/blog',
   options: {}
@@ -52,7 +58,11 @@ exports.admin = {
 exports.serverPort = {
   serverPort: env.serverPort || 3000
 }
-
+exports.cors = {
+  origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+  credentials:true
+};
 
 exports.options = [
   {
