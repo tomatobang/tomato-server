@@ -69,7 +69,6 @@ module.exports = app => {
             ctx.body = result;
         }
 
-
         /**
          * 按 id 替换
          */

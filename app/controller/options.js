@@ -12,6 +12,7 @@ module.exports = app => {
                 conditions = JSON.parse(query.conditions);
             }
             const result = await ctx.service.options.findAll(query, conditions);
+            
             console.log("options", result);
 
             // 设置响应体和状态码

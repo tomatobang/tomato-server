@@ -70,7 +70,7 @@ module.exports = app => {
             });
 
             function updateUser(conditions, update, option) {
-                that.update(conditions, update, options, function (err, docs) {
+                that.update(conditions, update, options,  (err, docs) =>{
                     if (err) {
                         console.log("update user err:" + err);
                     } else {

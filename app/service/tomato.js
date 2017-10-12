@@ -1,5 +1,6 @@
 module.exports = app => {
     class TomatoService extends app.Service {
+        
       async findAll(query, conditions) {
         let model =  this.ctx.model.Tomato;
         let builder =  model.find(conditions);

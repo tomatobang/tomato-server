@@ -1,6 +1,56 @@
 // app/controller/news.js
 module.exports = app => {
     class UserController extends app.Controller {
+
+        /**
+         * 获取融云token 
+         */
+        async getRongyunToken() {
+            const { ctx } = this;
+            let userid = ctx.request.body._id;
+            let username = ctx.request.body.username;
+            const token = await ctx.service.user.getRongyunToken(userid, username);
+            ctx.status = 200;
+            ctx.body = {
+                success: true,
+                msg: token
+            };
+        }
+
+        /**
+         * 邮箱验证 
+         */
+        async emailUserNameVerify() {
+            const { ctx } = this;
+            let email = ctx.request.body.email;
+            let username = ctx.request.body.username;
+            let {
+                emailRet,
+                usernameRet
+            } = await ctx.service.user.emailUserNameVerify(email, username);
+
+
+            if (emailRet.length) {
+                ctx.status = 200;
+                ctx.body = {
+                    success: false,
+                    msg: "邮箱已存在！"
+                };
+            } else if (usernameRet.length) {
+                ctx.status = 200;
+                ctx.body = {
+                    success: false,
+                    msg: "用户名已存在！"
+                };
+            } else {
+                ctx.status = 200;
+                ctx.body = {
+                    success: true,
+                    msg: "邮箱可用！"
+                };
+            }
+        }
+
         /**
          * 按条件查找
          */

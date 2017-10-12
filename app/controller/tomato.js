@@ -1,6 +1,36 @@
 module.exports = app => {
     class TomatoController extends app.Controller {
         /**
+         * 筛选今日番茄钟
+         */
+        async tomatoToday() {
+            const { ctx } = this;
+            let datenow = new Date();
+            let date =
+                datenow.getFullYear() +
+                "-" +
+                (datenow.getMonth() + 1) +
+                "-" +
+                datenow.getDate(); // ,"$lte":new Date()
+            // 按用户筛选
+            let conditions = { startTime: { $gte: new Date(date).toISOString() } };
+            if (ctx.request.currentUser) {
+                conditions.userid = ctx.request.currentUser.username;
+            } else {
+                ctx.status = 200;
+                ctx.body = [];
+            }
+            const result = await ctx.service.tomato.findAll({}, conditions);
+            if (ret.length) {
+                ctx.status = 200;
+                ctx.body = ret;
+            } else {
+                ctx.status = 200;
+                ctx.body = [];
+            }
+        }
+
+        /**
          * 按条件查找
          */
         async list() {
