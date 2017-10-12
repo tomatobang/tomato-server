@@ -1,4 +1,5 @@
 'use strict';
+const env = process.env
 
 exports.keys = "此处改为你自己的 Cookie 安全字符串";
 
@@ -7,7 +8,7 @@ exports.mongoose = {
   options: {}
 };
 
-config.redis = {
+exports.redis = {
   client: {
     port: env.redisPort || 6379,
     host: env.mongoHost || '127.0.0.1',
@@ -30,7 +31,6 @@ exports.news = {
   serverUrl: 'http://countdown.yipeng.info/countdown/all',
 };
 
-const env = process.env
 
 exports.dataconfig = {
   serverPort: env.serverPort || 3000,

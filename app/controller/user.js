@@ -4,12 +4,15 @@ module.exports = app => {
         /**
          * 按条件查找
          */
-        async findAll() {
+        async list() {
             const { ctx } = this;
             let conditions = {};
             let select = {};
             let query = ctx.request.query;
-
+            // 按用户筛选
+            if (ctx.request.currentUser) {
+                conditions.userid = ctx.request.currentUser.username;
+            }
             if (query.conditions) {
                 conditions = JSON.parse(query.conditions);
             }
@@ -49,7 +52,7 @@ module.exports = app => {
         /**
          * 删除
          */
-        async delete() {
+        async deleteById() {
             const { ctx } = this;
             let id = ctx.params.id;
             const result = await ctx.service.user.delete(id);

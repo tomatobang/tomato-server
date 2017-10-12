@@ -1,10 +1,7 @@
 module.exports = app => {
     class UserService extends app.Service {
         async findAll(query, conditions) {
-            // 按用户筛选
-            if (ctx.request.currentUser) {
-                conditions.userid = ctx.request.currentUser.username;
-            }
+            let model = await this.ctx.model.user;
             let builder = model.find(conditions);
             if (query.select) {
                 select = JSON.parse(query.select);
@@ -29,6 +26,7 @@ module.exports = app => {
         }
 
         async findById(query, id) {
+            let model = await this.ctx.model.user;
             let select = {};
             let builder = model.findById(id);
             if (query.select) {
@@ -40,16 +38,19 @@ module.exports = app => {
         }
 
         async create(body) {
-            const result = await model.create(ctx.request.body);
+            let model = await this.ctx.model.user;
+            const result = await model.create(body);
             return result;
         }
 
         async delete(id) {
+            let model = await this.ctx.model.user;
             const result = await model.findByIdAndRemove(id).exec();
             return result;
         }
 
         async updateById(id, body) {
+            let model = await this.ctx.model.user;
             const result = await model
                 .findByIdAndUpdate(id, body, {
                     new: true
@@ -59,6 +60,7 @@ module.exports = app => {
         }
 
         async updateById(id, body) {
+            let model = await this.ctx.model.user;
             const result = await model
                 .findByIdAndUpdate(id, body, {
                     new: true
@@ -68,6 +70,7 @@ module.exports = app => {
         }
 
         async replaceById(id, newDocument) {
+            let model = await this.ctx.model.user;
             await model.findByIdAndRemove(id).exec();
             const result = await model.create(newDocument);
             return result;

@@ -1,9 +1,29 @@
 module.exports = app => {
     class OptionsService extends app.Service {
-      async list() {
-        
-        return [];
-      }
+        async findAll(query, conditions) {
+            let model = await this.ctx.model.options;
+            let builder = model.find(conditions);
+            if (query.select) {
+                select = JSON.parse(query.select);
+                builder = builder.select(select);
+            }
+
+            ["limit", "skip", "sort", "count"].forEach(key => {
+                if (query[key]) {
+                    let arg = query[key];
+                    if (key === "limit" || key === "skip") {
+                        arg = parseInt(arg);
+                    }
+                    if (key === "sort" && typeof arg === "string") {
+                        arg = JSON.parse(arg);
+                    }
+                    if (key !== "count") builder[key](arg);
+                    else builder[key]();
+                }
+            });
+            const result = await builder.exec();
+            return result;
+        }
     }
     return OptionsService;
-  };
+};
