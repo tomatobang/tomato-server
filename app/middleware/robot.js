@@ -12,7 +12,6 @@ module.exports = (options, app) => {
       }
     }
   };
-  // config/config.default.js
   // add middleware robot
   exports.middleware = [
     'robot'
