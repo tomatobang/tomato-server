@@ -30,6 +30,7 @@
     "co-rongcloud-api": "^1.1.1",
     "egg": "^1.9.0",
     "egg-mongoose": "^2.1.1",
+    "egg-redis": "^1.0.2",
     "egg-view-nunjucks": "^2.1.4",
     "jpush-sdk": "*",
     "jsonwebtoken": "^7.1.9",
@@ -40,9 +41,7 @@
     "koa-send": "^4.1.0",
     "koa-static": "^2.0.0",
     "log4js": "^0.6.38",
-    "mongoose": "^4.5.9",
     "qiniu": "^6.1.13",
-    "redis": "^2.6.2",
     "restc": "^0.0.4",
     "rongcloud-sdk": "^1.0.3",
     "socket.io": "^2.0.3"

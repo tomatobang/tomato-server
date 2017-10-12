@@ -7,6 +7,15 @@ exports.mongoose = {
   options: {}
 };
 
+config.redis = {
+  client: {
+    port: env.redisPort || 6379,
+    host: env.mongoHost || '127.0.0.1',
+    password: env.redisPassword || '',
+    db: 0,
+  }
+}
+
 // 添加 view 配置
 exports.view = {
   defaultViewEngine: 'nunjucks',
@@ -30,9 +39,6 @@ exports.dataconfig = {
   mongoDatabase: env.mongoDatabase || 'blog',
   mongoPort: env.mongoPort || 27017,
 
-  redisHost: env.redisHost || '127.0.0.1',
-  redisPort: env.redisPort || 6379,
-  redisPassword: env.redisPassword || '',
 
   tokenSecret: env.tokenSecret || 'test',
   tokenExpiresIn: env.tokenExpiresIn || '7d',
