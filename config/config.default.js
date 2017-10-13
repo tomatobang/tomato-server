@@ -20,6 +20,18 @@ exports.static = {
   // maxAge: 31536000,
 };
 
+
+exports.io = {
+  namespace: {
+    '/tomatobang': {
+      connectionMiddleware: [ 'auth' ],
+      packetMiddleware: [ 'chat','tomato' ],
+    }
+  },
+};
+exports.keys = '123';
+
+
 exports.mongoose = {
   url: 'mongodb://127.0.0.1:27017/blog',
   options: {}

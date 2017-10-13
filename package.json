@@ -32,6 +32,7 @@
     "egg-cors": "^1.2.0",
     "egg-mongoose": "^2.1.1",
     "egg-redis": "^1.0.2",
+    "egg-socket.io": "^2.1.0",
     "egg-static": "^1.4.1",
     "egg-view-nunjucks": "^2.1.4",
     "jpush-sdk": "*",
@@ -43,8 +44,7 @@
     "log4js": "^0.6.38",
     "qiniu": "^6.1.13",
     "restc": "^0.0.4",
-    "rongcloud-sdk": "^1.0.3",
-    "socket.io": "^2.0.3"
+    "rongcloud-sdk": "^1.0.3"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

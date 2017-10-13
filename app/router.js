@@ -4,6 +4,9 @@ module.exports = app => {
     app.get('/', app.controller.home.index);
     app.get('/news', app.controller.news.list);
 
+    // socket.io
+    app.io.of('/tomatobang', app.io.controllers.tomatobang);
+
     /**
      * 用户类
      */
