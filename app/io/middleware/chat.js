@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (app) => {
-  return async function (next) {
+  return  function* (next) {
 
     let socket = this.socket;
     let user_hash = {};
@@ -27,7 +27,7 @@ module.exports = (app) => {
 		 * 离线处理
 		 */
     socket.on("disconnect", function () {
-      userid = socket_hash[socket.id];
+      let userid = socket_hash[socket.id];
       if (userid) {
         socket.broadcast.emit("offline", userid);
         console.log(userid + " 失联了！");
@@ -132,7 +132,7 @@ module.exports = (app) => {
         .to(contact.socket)
         .emit("messageReceived", currentUser.send_userid, message);
     });
-    await next;
+    yield* next;
     console.log('packet response!');
   };
 };

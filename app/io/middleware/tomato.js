@@ -2,8 +2,9 @@
 
 const util = require("util");
 let toamato_hash = {};
+let socket_hash = {};
 module.exports = (app) => {
-  return async function (next) {
+  return  function* (next) {
     let socket = this.socket;
 
     /**
@@ -21,6 +22,7 @@ module.exports = (app) => {
       } else {
         toamato_hash[userid] = {};
         toamato_hash[userid].socketList = [socket.id]
+        socket_hash[socket.id] = userid;
         app.io
           .of("/tomatobang")
           .to(socket.id)
@@ -43,7 +45,7 @@ module.exports = (app) => {
       tomato.startTime = new Date();
       hash.tomato = tomato;
 
-      TIME_OUT_ID = setTimeout(
+      let TIME_OUT_ID = setTimeout(
         async userid => {
           let thash = toamato_hash[userid];
           let tomato = thash.tomato;
@@ -102,6 +104,7 @@ module.exports = (app) => {
      * 离线处理
      */
     socket.on("disconnect", () => {
+      let userid = socket_hash[socket.id];
       let hash = toamato_hash[userid];
       if (hash) {
         let socketList = hash.socketList;
@@ -119,7 +122,7 @@ module.exports = (app) => {
      */
     // socket.on("finish", (userid, tomato) => {
     // });
-    await next;
+    yield* next;
     console.log('packet response!');
   };
 };

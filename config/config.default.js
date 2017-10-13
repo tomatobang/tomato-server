@@ -24,7 +24,7 @@ exports.static = {
 exports.io = {
   namespace: {
     '/tomatobang': {
-      connectionMiddleware: [ 'auth' ],
+      connectionMiddleware: [ ],// 'auth' 
       packetMiddleware: [ 'chat','tomato' ],
     }
   },
