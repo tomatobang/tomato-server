@@ -41,9 +41,6 @@ exports.tokenService = {
  */
 const JPush = require("jpush-sdk")
 let jpushClient = JPush.buildClient('f240850b36aea20535b81df8', '189cbc42a1044b1ac2f2ddb1')
-
-// easy push test
-// alias: 6,7
 exports.pushMessage = function (alias, alert, title) {
   client.push().setPlatform(JPush.ALL)
     .setAudience(JPush.alias(alias))
@@ -59,7 +56,9 @@ exports.pushMessage = function (alias, alert, title) {
 };
 
 
-
+/**
+ * 融云:解散群组
+ */
 const RongAPI = require("co-rongcloud-api");
 const api = new RongAPI("", "");
 const co = require("co");
