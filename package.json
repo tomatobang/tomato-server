@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node entry.js",
-    "lint": "eslint --ext .js *.js */*.js"
+    "lint": "eslint --ext .js *.js */*.js",
+    "dev": "egg-bin dev",
+    "test": "egg-bin test"
   },
   "repository": {
     "type": "git",
@@ -26,18 +28,21 @@
     "babel-register": "^6.11.6",
     "bluebird": "^3.5.0",
     "co-rongcloud-api": "^1.1.1",
+    "egg": "^1.9.0",
+    "egg-cors": "^1.2.0",
+    "egg-mongoose": "^2.1.1",
+    "egg-redis": "^1.0.2",
+    "egg-socket.io": "^2.1.0",
+    "egg-static": "^1.4.1",
+    "egg-view-nunjucks": "^2.1.4",
     "jpush-sdk": "*",
     "jsonwebtoken": "^7.1.9",
     "koa": "^2.0.0-alpha.5",
     "koa-bodyparser": "^3.2.0",
-    "koa-cors": "^0.0.16",
     "koa-router": "^7.0.1",
     "koa-send": "^4.1.0",
-    "koa-static": "^2.0.0",
     "log4js": "^0.6.38",
-    "mongoose": "^4.5.9",
     "qiniu": "^6.1.13",
-    "redis": "^2.6.2",
     "restc": "^0.0.4",
     "rongcloud-sdk": "^1.0.3",
     "socket.io": "^2.0.3"
@@ -45,6 +50,8 @@
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "babel-plugin-transform-runtime": "^6.15.0",
+    "egg-bin": "^4.3.5",
+    "egg-mock": "^3.13.0",
     "eslint": "^3.17.0",
     "eslint-config-standard": "^7.0.0",
     "eslint-friendly-formatter": "^2.0.7",
