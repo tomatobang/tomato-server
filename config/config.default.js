@@ -9,6 +9,17 @@ exports.security={
   }
 };
 
+// 默认配置如下
+// prefix: /public/
+// dir: path.join(appInfo.baseDir, 'app/public')
+// dynamic: true
+// preload: false
+// maxAge: 31536000 in prod env, 0 in other envs
+// buffer: true in prod env, false in other envs
+exports.static = {
+  // maxAge: 31536000,
+};
+
 exports.mongoose = {
   url: 'mongodb://127.0.0.1:27017/blog',
   options: {}
