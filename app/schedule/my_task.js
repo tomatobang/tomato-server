@@ -1,7 +1,7 @@
 'use strict';
 
 exports.schedule = {
-  interval: 30000,
+  interval: 30000000,
   type: 'all',
 };
 
