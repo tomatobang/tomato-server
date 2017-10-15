@@ -29,7 +29,7 @@ exports.io = {
     }
   },
 };
-exports.keys = '123';
+exports.keys = 'com.server.tomatobang';
 
 
 exports.mongoose = {
@@ -54,11 +54,6 @@ exports.view = {
   },
 };
 
-// 添加 news 的配置项
-exports.news = {
-  pageSize: 5,
-  serverUrl: 'http://countdown.yipeng.info/countdown/all',
-};
 
 // 添加 token 配置
 exports.token = {
