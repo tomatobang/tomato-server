@@ -2,7 +2,6 @@
 module.exports = app => {
     // 这两个接口用于测试
     app.get('/', app.controller.home.index);
-    app.get('/news', app.controller.news.list);
 
     // socket.io
     app.io.of('/tomatobang', app.io.controllers.tomatobang);
