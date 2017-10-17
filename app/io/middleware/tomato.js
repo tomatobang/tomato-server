@@ -35,7 +35,8 @@ module.exports = (app) => {
      */
     socket.on("start_tomato", async (obj) => {
       console.log('start_tomato', obj);
-      let { userid, endname, tomato } = obj;
+      // conundown 可以自己指定
+      let { userid, endname, tomato,countdown } = obj;
       let hash = toamato_hash[userid];
       if (!hash) {
         hash = {};
@@ -55,7 +56,7 @@ module.exports = (app) => {
           thash.tomato = null;
           this.helper.pushMessage(userid, "你完成了一个番茄钟", tomato.title);
         },
-        1000 * 60 * 25,
+        1000 * 60 * countdown,
         userid
       );
       hash.TIME_OUT_ID = TIME_OUT_ID;
