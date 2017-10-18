@@ -7,6 +7,12 @@ module.exports = (option, app) => {
         if (ctx.url.startsWith('/api/user') && ctx.method !== 'GET' && !ctx.url.startsWith('/api/user/')) {
             return next();
         }
+        
+        // for test
+        // if(ctx.url.startsWith('/api/user/headimg')){
+        //     return next();
+        // }
+
         console.log("i am here~~~~~~~~~~~~~~~~~~~")
         const headers = ctx.request.headers;
         let token;

@@ -18,6 +18,8 @@ module.exports = app => {
     app.post('/email_username/verify', app.controller.user.emailUserNameVerify);
     app.post('/api/login', app.controller.user.login);
     app.post('/api/logout', app.controller.user.logout);
+    app.post('/api/user/headimg', app.controller.user.uploadHeadImg);
+    
     
     //app.put('/api/user', app.controller.user.create);
     //app.put('/api/user/:id', app.controller.user.replaceById);
@@ -53,5 +55,6 @@ module.exports = app => {
     app.post('/tool/dismissgroup', app.controller.other.dismissgroup);
     app.post('/upload/voicefile', app.controller.other.uploadVoiceFile);
     app.post('/download/voicefile/:path', app.controller.other.downloadVoiceFile);
+   
     
   };

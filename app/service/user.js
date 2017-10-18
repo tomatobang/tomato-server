@@ -90,6 +90,17 @@ module.exports = app => {
             return result;
         }
 
+
+        async updateHeadImg(id, imgurl) {
+            let model =  this.ctx.model.User;
+            const result = await model
+                .findByIdAndUpdate(id, {
+                    img:imgurl
+                }, {})
+                .exec();
+            return result;
+        }
+
         async replaceById(id, newDocument) {
             let model = await this.ctx.model.User;
             await model.findByIdAndRemove(id).exec();

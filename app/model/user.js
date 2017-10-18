@@ -10,6 +10,8 @@ module.exports = app => {
         password: String,
         // 显示名称
         displayName: String,
+        // 头像
+        img: String,
         // 邮箱
         email: String,
         // 融云 token

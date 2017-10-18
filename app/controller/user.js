@@ -4,66 +4,66 @@ module.exports = app => {
         /**
          * 登录
          */
-        async login(){
+        async login() {
             const { ctx } = this;
             let users = await ctx.service.user.findAll({}, { username: ctx.request.body.username });
             let user = {
-              username: users[0].username,
-              timestamp: (new Date()).valueOf()
+                username: users[0].username,
+                timestamp: (new Date()).valueOf()
             };
             let password = users[0].password;
-           
+
             if (password === ctx.request.body.password) {
-              let token = ctx.helper.tokenService.createToken(user);
-              app.redis.set(token, JSON.stringify(user), 'EX', ctx.helper.tokenService.expiresIn, () => {})
-              return ctx.body = {
-                status: 'success',
-                token: token
-              };
+                let token = ctx.helper.tokenService.createToken(user);
+                app.redis.set(token, JSON.stringify(user), 'EX', ctx.helper.tokenService.expiresIn, () => { })
+                return ctx.body = {
+                    status: 'success',
+                    token: token
+                };
             } else {
-              return ctx.body = {
-                status: 'fail',
-                description: 'Get token failed. Check the password'
-              };
+                return ctx.body = {
+                    status: 'fail',
+                    description: 'Get token failed. Check the password'
+                };
             }
         }
 
         /**
          * 登出
          */
-        async logout(){
+        async logout() {
             const { ctx } = this;
             const headers = ctx.request.headers
             let token
             try {
-              token = headers['authorization']
+                token = headers['authorization']
             } catch (err) {
-              return ctx.body = {
-                status: 'fail',
-                description: err
-              }
+                return ctx.body = {
+                    status: 'fail',
+                    description: err
+                }
             }
-          
+
             if (!token) {
-              return ctx.body = {
-                status: 'fail',
-                description: 'Token not found'
-              }
+                return ctx.body = {
+                    status: 'fail',
+                    description: 'Token not found'
+                }
             }
-          
+
             const result = ctx.helper.tokenService.verifyToken(token)
-          
+
             if (result === false) {
-              return ctx.body = {
-                status: 'fail',
-                description: 'Token verify failed'
-              }
+                return ctx.body = {
+                    status: 'fail',
+                    description: 'Token verify failed'
+                }
             } else {
-              await app.redis.del('token')
-              return ctx.body = {
-                status: 'success',
-                description: 'Token deleted'
-              }
+                await app.redis.del('token')
+                return ctx.body = {
+                    status: 'success',
+                    description: 'Token deleted'
+                }
             }
         }
         /**
@@ -113,6 +113,38 @@ module.exports = app => {
                     msg: "邮箱可用！"
                 };
             }
+        }
+
+        /**
+         * 上传头像
+         */
+        async uploadHeadImg() {
+            const fs = require("fs");
+            const path = require('path');
+
+            const { ctx } = this;
+            const userid = ctx.request.body.userid;
+            const imgData = ctx.request.body.imgData;
+            console.log('上传中:' + userid);
+
+            // 过滤data:URL
+            let base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
+            let dataBuffer = new Buffer(base64Data, 'base64');
+            let rootDir = path.resolve(__dirname, "../../");
+            let relateUrl = rootDir + '\\uploadfile\\headimg\\' + userid + '.png';
+
+            const imgPath = relateUrl;
+            console.log('上传中(path):' + imgPath);
+            fs.writeFile(imgPath, dataBuffer, async (err) => {
+                if (err) throw err;
+                console.log('The file has been saved!');
+                await ctx.service.user.updateHeadImg(userid, '\\uploadfile\\headimg\\' + userid + '.png');
+            });
+            ctx.status = 200;
+            ctx.body = {
+                success: true,
+                msg: "保存成功！"
+            };
         }
 
         /**
