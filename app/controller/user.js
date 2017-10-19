@@ -18,7 +18,8 @@ module.exports = app => {
                 app.redis.set(token, JSON.stringify(user), 'EX', ctx.helper.tokenService.expiresIn, () => { })
                 return ctx.body = {
                     status: 'success',
-                    token: token
+                    token: token,
+                    userinfo:users[0]
                 };
             } else {
                 return ctx.body = {
@@ -138,13 +139,31 @@ module.exports = app => {
             fs.writeFile(imgPath, dataBuffer, async (err) => {
                 if (err) throw err;
                 console.log('The file has been saved!');
-                await ctx.service.user.updateHeadImg(userid, '\\uploadfile\\headimg\\' + userid + '.png');
+                await ctx.service.user.updateHeadImg(userid, userid + '.png');
             });
             ctx.status = 200;
             ctx.body = {
                 success: true,
                 msg: "保存成功！"
             };
+        }
+
+        /**
+         * 下载头像
+         * 通过 query 参数获取相关内容
+         */
+        async downloadHeadImg() {
+            const { ctx } = this;
+            const send = require('koa-send');
+            if (!ctx.request.currentUser) {
+                ctx.status = 500;
+                ctx.body = "请先登录!!!";
+                return;
+            }
+            let relateUrl = ctx.params.path;
+            let savePath = "/uploadfile/headimg/" + relateUrl;
+            // 默认会加上本服务器地址
+            await send(ctx, savePath);
         }
 
         /**

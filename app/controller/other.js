@@ -88,7 +88,7 @@ module.exports = app => {
 
 
         /**
-         * 下载文件
+         * 下载音频文件
          * 通过 query 参数获取相关内容
          */
         async downloadVoiceFile() {
@@ -104,6 +104,8 @@ module.exports = app => {
             // 默认会加上本服务器地址
             await send(ctx, savePath);
         }
+
+        
     }
     return OtherController;
 };

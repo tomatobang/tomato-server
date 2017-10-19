@@ -19,6 +19,7 @@ module.exports = app => {
     app.post('/api/login', app.controller.user.login);
     app.post('/api/logout', app.controller.user.logout);
     app.post('/api/user/headimg', app.controller.user.uploadHeadImg);
+    app.get('/api/user/headimg/:path', app.controller.user.downloadHeadImg);
     
     
     //app.put('/api/user', app.controller.user.create);
