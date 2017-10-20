@@ -46,7 +46,7 @@ module.exports = app => {
                 conditions = JSON.parse(query.conditions);
             }
             const result = await ctx.service.tomato.findAll(query, conditions);
-            console.log("tomato", result);
+            //console.log("tomato", result);
 
             // 设置响应体和状态码
             ctx.body = result;

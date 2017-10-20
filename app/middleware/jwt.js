@@ -4,7 +4,7 @@
  */
 module.exports = (option, app) => {
     return async function (ctx, next) {
-        if (ctx.url.startsWith('/api/user') && ctx.method !== 'GET' && !ctx.url.startsWith('/api/user/')) {
+        if (ctx.url.startsWith('/api/login') && ctx.method !== 'GET') {
             return next();
         }
         
@@ -13,7 +13,6 @@ module.exports = (option, app) => {
         //     return next();
         // }
 
-        console.log("i am here~~~~~~~~~~~~~~~~~~~")
         const headers = ctx.request.headers;
         let token;
         try {
@@ -32,15 +31,15 @@ module.exports = (option, app) => {
             });
         }
 
-        const result = app.helper.tokenService.verifyToken(token);
+        const result = ctx.helper.tokenService.verifyToken(token);
         if (result === false) {
             return (ctx.body = {
                 status: "fail",
                 description: "Token verify failed"
             });
         }
-
-        let reply = await app.redis.getAsync(token);
+        console.log("当前用户token:", token);
+        let reply = await app.redis.get(token);
         console.log("当前用户:", reply);
         if (reply) {
             let currentUser = JSON.parse(reply);
