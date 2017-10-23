@@ -159,11 +159,13 @@ module.exports = app => {
             if (!ctx.request.currentUser) {
                 ctx.status = 500;
                 ctx.body = "请先登录!!!";
+                console.log("请先登录!!!");
                 return;
             }
             let relateUrl = ctx.params.path;
-            let savePath = "/uploadfile/headimg/" + relateUrl;
+            let savePath = "/uploadfile/headimg/" + relateUrl +".png";
             // 默认会加上本服务器地址
+            console.log("发送中!!!");
             await send(ctx, savePath);
         }
 

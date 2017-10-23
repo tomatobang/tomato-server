@@ -86,7 +86,7 @@ module.exports = (app) => {
       _tomato.succeed = 0;
       _tomato.breakReason = tomato.breakReason;
       clearTimeout(hash.TIME_OUT_ID);
-      const result = await tomatomodel.create(_tomato);
+      const result =  await this.service.tomato.create(_tomato);
       hash.tomato = null;
       console.log(result, socketList)
       if (result) {
