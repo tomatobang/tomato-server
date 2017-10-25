@@ -133,7 +133,7 @@ module.exports = app => {
             let base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
             let dataBuffer = new Buffer(base64Data, 'base64');
             let rootDir = path.resolve(__dirname, "../../");
-            let relateUrl = rootDir + '\\uploadfile\\headimg\\' + userid + '.png';
+            let relateUrl = rootDir + '/uploadfile/headimg/' + userid + '.png';
 
             const imgPath = relateUrl;
             console.log('上传中(path):' + imgPath);
