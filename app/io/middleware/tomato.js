@@ -45,7 +45,9 @@ module.exports = (app) => {
       let socketList = hash.socketList ? hash.socketList : [];
       tomato.startTime = new Date();
       hash.tomato = tomato;
-
+      if(hash.TIME_OUT_ID){
+        clearTimeout(hash.TIME_OUT_ID);
+      }
       let TIME_OUT_ID = setTimeout(
         async userid => {
           let thash = toamato_hash[userid];
