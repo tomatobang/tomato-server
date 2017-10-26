@@ -55,7 +55,7 @@ module.exports = app => {
      */
     app.post('/tool/dismissgroup', app.controller.other.dismissgroup);
     app.post('/upload/voicefile', app.controller.other.uploadVoiceFile);
-    app.post('/download/voicefile/:path', app.controller.other.downloadVoiceFile);
+    app.get('/download/voicefile/:path', app.controller.other.downloadVoiceFile);
    
     
   };
