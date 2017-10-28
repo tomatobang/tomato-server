@@ -56,6 +56,13 @@ module.exports = (app) => {
           tomato.succeed = 1;
           await this.service.tomato.create(tomato);
           thash.tomato = null;
+          // 服务端通知刷新番茄钟列表
+          for (let so of socketList) {
+              app.io
+                .of("/tomatobang")
+                .to(so)
+                .emit("new_tomate_added", tomato);
+          }
           this.helper.pushMessage(userid, "你完成了一个番茄钟", tomato.title);
         },
         1000 * 60 * countdown,
