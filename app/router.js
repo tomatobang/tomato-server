@@ -33,8 +33,11 @@ module.exports = app => {
     app.get('/api/tomato/:id', app.controller.tomato.findById);
     app.post('/api/tomato', app.controller.tomato.create);
     app.post('/api/tomato/:id', app.controller.tomato.updateById);
+    app.post('/api/search', app.controller.tomato.search);
     app.del('/api/tomato/:id', app.controller.tomato.deleteById);
     app.get('/filter/tomatotoday', app.controller.tomato.tomatoToday);
+    
+
     
     /**
      * 任务类
