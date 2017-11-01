@@ -3,7 +3,7 @@ const env = process.env
 
 exports.keys = "此处改为你自己的 Cookie 安全字符串";
 
-exports.security={
+exports.security = {
   csrf: {
     enable: false // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
   }
@@ -24,8 +24,8 @@ exports.static = {
 exports.io = {
   namespace: {
     '/tomatobang': {
-      connectionMiddleware: [ ],// 'auth' 
-      packetMiddleware: [ 'chat','tomato' ],
+      connectionMiddleware: [],// 'auth' 
+      packetMiddleware: ['chat', 'tomato'],
     }
   },
 };
@@ -46,7 +46,14 @@ exports.redis = {
   }
 }
 
-exports.middleware=['jwt'];
+
+exports.middleware = ['errorhandler','robot','jwt'];//
+// robot's configurations
+exports.robot = {
+  ua: [
+    /Baiduspider/i,
+  ]
+};
 
 // 添加 view 配置
 exports.view = {
@@ -81,7 +88,7 @@ exports.serverPort = {
 exports.cors = {
   origin: '*',
   allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
-  credentials:true
+  credentials: true
 };
 
 exports.options = [

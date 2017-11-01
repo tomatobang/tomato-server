@@ -12,13 +12,3 @@ module.exports = (options, app) => {
       }
     }
   };
-  // add middleware robot
-  exports.middleware = [
-    'robot'
-  ];
-  // robot's configurations
-  exports.robot = {
-    ua: [
-      /Baiduspider/i,
-    ]
-  };
