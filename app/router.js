@@ -3,8 +3,12 @@ module.exports = app => {
     // 这两个接口用于测试
     app.get('/', app.controller.home.index);
 
-    // socket.io
-    app.io.of('/tomatobang', app.io.controllers.tomatobang);
+    // 所有请求汇集处理
+    //app.io.of('/tomatobang', app.io.controllers.tomatobang);
+    app.io.of('/tomatobang').route('load_tomato', app.io.controllers.tomatobang.loadTomato);
+    app.io.of('/tomatobang').route('start_tomato', app.io.controllers.tomatobang.startTomato);
+    app.io.of('/tomatobang').route('break_tomato', app.io.controllers.tomatobang.breakTomato);
+    app.io.of('/tomatobang').route('disconnect', app.io.controllers.tomatobang.disconnect);
 
     /**
      * 用户类

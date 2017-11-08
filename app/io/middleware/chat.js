@@ -1,3 +1,7 @@
+/**
+ * 待改造！
+ */
+
 'use strict';
 
 module.exports = (app) => {

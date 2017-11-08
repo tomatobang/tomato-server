@@ -25,9 +25,13 @@ exports.io = {
   namespace: {
     '/tomatobang': {
       connectionMiddleware: [],// 'auth' 
-      packetMiddleware: ['chat', 'tomato'],
+      packetMiddleware: [],//'chat', 'tomato'
     }
   },
+  redis: {
+    host: '127.0.0.1',
+    port: 6379
+  }
 };
 exports.keys = 'com.server.tomatobang';
 
