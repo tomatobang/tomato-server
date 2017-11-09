@@ -1,10 +1,9 @@
 // app/router.js
 module.exports = app => {
-    // 这两个接口用于测试
+    // for test
     app.get('/', app.controller.home.index);
 
-    // 所有请求汇集处理
-    //app.io.of('/tomatobang', app.io.controllers.tomatobang);
+    // socket.io 相关
     app.io.of('/tomatobang').route('load_tomato', app.io.controllers.tomatobang.loadTomato);
     app.io.of('/tomatobang').route('start_tomato', app.io.controllers.tomatobang.startTomato);
     app.io.of('/tomatobang').route('break_tomato', app.io.controllers.tomatobang.breakTomato);
@@ -15,6 +14,7 @@ module.exports = app => {
      */
     app.get('/api/user', app.controller.user.list);
     app.get('/api/user/:id', app.controller.user.findById);
+    app.get('/api/user/headimg/:path', app.controller.user.downloadHeadImg);
     app.post('/api/user', app.controller.user.create);
     app.post('/api/user/:id', app.controller.user.updateById);
     app.del('/api/user/:id', app.controller.user.deleteById);
@@ -23,26 +23,18 @@ module.exports = app => {
     app.post('/api/login', app.controller.user.login);
     app.post('/api/logout', app.controller.user.logout);
     app.post('/api/user/headimg', app.controller.user.uploadHeadImg);
-    app.get('/api/user/headimg/:path', app.controller.user.downloadHeadImg);
-    
-    
-    //app.put('/api/user', app.controller.user.create);
-    //app.put('/api/user/:id', app.controller.user.replaceById);
-    //app.patch('/api/user/:id', app.controller.user.updateById);
-
+   
     /**
      * 番茄钟类
      */
     app.get('/api/tomato', app.controller.tomato.list);
     app.get('/api/tomato/:id', app.controller.tomato.findById);
+    app.get('/filter/tomatotoday', app.controller.tomato.tomatoToday);
     app.post('/api/tomato', app.controller.tomato.create);
     app.post('/api/tomato/:id', app.controller.tomato.updateById);
     app.post('/api/search', app.controller.tomato.search);
     app.del('/api/tomato/:id', app.controller.tomato.deleteById);
-    app.get('/filter/tomatotoday', app.controller.tomato.tomatoToday);
-    
-
-    
+   
     /**
      * 任务类
      */
@@ -60,9 +52,8 @@ module.exports = app => {
     /**
      * 其它
      */
+    app.get('/download/voicefile/:path', app.controller.other.downloadVoiceFile);
     app.post('/tool/dismissgroup', app.controller.other.dismissgroup);
     app.post('/upload/voicefile', app.controller.other.uploadVoiceFile);
-    app.get('/download/voicefile/:path', app.controller.other.downloadVoiceFile);
-   
     
   };

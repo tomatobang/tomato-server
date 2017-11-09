@@ -1,7 +1,7 @@
 module.exports = app => {
     class OtherController extends app.Controller {
         /**
-         * 解散群组
+         * 解散群组（待删）
         */
         async dismissgroup() {
             const { ctx } = this;

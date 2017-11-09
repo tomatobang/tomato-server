@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * for test
+ */
 exports.schedule = {
   interval: 30000000,
   type: 'all',

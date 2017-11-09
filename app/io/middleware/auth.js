@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = (app) => {
-  return  function* (next) {
-    this.socket.emit('res', 'auth!');
-    yield* next;
+  return async function (next) {
+    onsole.log('auth!');
+    await next;
     console.log('disconnect!');
   };
 };

@@ -38,8 +38,9 @@ module.exports = (option, app) => {
                 description: "Token verify failed"
             });
         }
-        //console.log("当前用户token:", token);
+        
         let reply = await app.redis.get(token);
+
         console.log("当前用户:", reply);
         if (reply) {
             let currentUser = JSON.parse(reply);

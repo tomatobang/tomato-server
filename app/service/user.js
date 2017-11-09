@@ -1,13 +1,6 @@
 module.exports = app => {
     class UserService extends app.Service {
 
-
-        async getRongyunToken(userid, username) {
-            let model =  this.ctx.model.User;
-            let token = await model.getRongyunToken(userid, username, "");
-            return token;
-        }
-
         async emailUserNameVerify(email, username) {
             let model =  this.ctx.model.User;
             let emailRet = await model.find({ email: email }).exec();

@@ -3,16 +3,13 @@
 const util = require("util");
 let toamato_hash = {};
 let socket_hash = {};
-// defined as class methods
+
 module.exports = app => {
   class Controller extends app.Controller {
     /**
      * 加载已有番茄钟
      */
     async loadTomato() {
-      // console.info('toamato_hash', toamato_hash);
-      // console.info('this.ctx', this.ctx);
-      // console.info('this.ctx.args', this.ctx.args);
       const obj = this.ctx.args[0];
       let socket = this.ctx.socket;
       let { userid, endname, tomato } = obj;
@@ -33,11 +30,14 @@ module.exports = app => {
       }
     }
 
+    /**
+     * 开启番茄钟
+     */
     async startTomato() {
       const obj = this.ctx.args[0];
       let socket = this.ctx.socket;
       console.log('start_tomato', obj);
-      // conundown 可以自己指定
+      // conundown 长度由客户端指定
       let { userid, endname, tomato, countdown } = obj;
       let hash = toamato_hash[userid];
       if (!hash) {
@@ -58,7 +58,7 @@ module.exports = app => {
           tomato.succeed = 1;
           await this.service.tomato.create(tomato);
           thash.tomato = null;
-          // 服务端通知刷新番茄钟列表
+          // 服务端推送消息
           for (let so of socketList) {
             await app.io
               .of("/tomatobang")
@@ -81,6 +81,9 @@ module.exports = app => {
       }
     }
 
+    /**
+     * 中断番茄钟
+     */
     async breakTomato() {
       const obj = this.ctx.args[0];
       let socket = this.ctx.socket;
@@ -99,7 +102,6 @@ module.exports = app => {
       const result = await this.service.tomato.create(_tomato);
       console.log("创建一个TOMATO!");
       hash.tomato = null;
-      console.log(result, socketList)
       if (result) {
         for (let so of socketList) {
           if (so != socket.id) {
@@ -112,6 +114,9 @@ module.exports = app => {
       }
     }
 
+    /**
+     * 连接中断
+     */
     async disconnect() {
       let socket = this.ctx.socket;
       let userid = socket_hash[socket.id];

@@ -7,7 +7,7 @@
     "start": "egg-scripts start --daemon",
     "stop": "egg-scripts stop",
     "lint": "eslint --ext .js *.js */*.js",
-    "dev": "egg-bin dev",
+    "dev": "egg-bin dev  --cluster --sticky",
     "test": "egg-bin test"
   },
   "repository": {

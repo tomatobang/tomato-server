@@ -24,8 +24,8 @@ exports.static = {
 exports.io = {
   namespace: {
     '/tomatobang': {
-      connectionMiddleware: [],// 'auth' 
-      packetMiddleware: [],//'chat', 'tomato'
+      connectionMiddleware: ['auth'],// 
+      packetMiddleware: [],
     }
   },
   redis: {
@@ -51,7 +51,7 @@ exports.redis = {
 }
 
 
-exports.middleware = ['errorhandler','robot','jwt'];//
+exports.middleware = ['errorhandler','robot','jwt'];
 // robot's configurations
 exports.robot = {
   ua: [

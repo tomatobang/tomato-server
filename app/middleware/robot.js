@@ -1,5 +1,3 @@
-// app/middleware/robot.js
-// options === app.config.robot
 module.exports = (options, app) => {
     return function* robotMiddleware(next) {
       const source = this.get('user-agent') || '';

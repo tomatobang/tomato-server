@@ -15,7 +15,6 @@ describe('test/controller/home.test.js', () => {
     });
 
     it('should status 200 and get the body', () => {
-        // 对 app 发起 `GET /` 请求
         return app.httpRequest()
             .get('/')
             .set('Authorization', token)
