@@ -35,6 +35,43 @@ exports.tokenService = {
 
 }
 
+exports.dateHelper = {
+  getCurrentMonthFirst() {
+    var date = new Date();
+    date.setDate(1);
+    return this.format(date, 'yyyy-MM-dd');
+  },
+  getCurrentMonthLast() {
+    var date = new Date();
+    var currentMonth = date.getMonth();
+    var nextMonth = ++currentMonth;
+    var nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
+    var oneDay = 1000 * 60 * 60 * 24;
+    return this.format(new Date(nextMonthFirstDay - oneDay), 'yyyy-MM-dd');
+  },
+  // https://www.cnblogs.com/tugenhua0707/p/3776808.html
+  format(datetime, fmt) {
+    var o = {
+      "M+": datetime.getMonth() + 1,                 //月份 
+      "d+": datetime.getDate(),                    //日 
+      "h+": datetime.getHours(),                   //小时 
+      "m+": datetime.getMinutes(),                 //分 
+      "s+": datetime.getSeconds(),                 //秒 
+      "q+": Math.floor((datetime.getMonth() + 3) / 3), //季度 
+      "S": datetime.getMilliseconds()             //毫秒 
+    };
+    if (/(y+)/.test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (datetime.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (var k in o) {
+      if (new RegExp("(" + k + ")").test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+      }
+    }
+    return fmt;
+  }
+}
+
 
 /**
  * 极光推送服务

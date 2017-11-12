@@ -1,5 +1,30 @@
 module.exports = app => {
     class TomatoController extends app.Controller {
+        async statistics() {
+            const { ctx } = this;
+            let isSuccess = ctx.request.body.isSuccess;
+            // 按用户筛选
+            let userid = "";
+            if (ctx.request.currentUser) {
+                userid = ctx.request.currentUser.username;
+            } else {
+                ctx.status = 200;
+                ctx.body = [];
+            }
+            // 获取本月的第一天
+            let starDate = ctx.helper.dateHelper.getCurrentMonthFirst();
+            // 获取本月的最后一天
+            let endDte = ctx.helper.dateHelper.getCurrentMonthLast();
+            const ret = await ctx.service.tomato.statistics(userid, starDate, endDte, isSuccess);
+            if (ret.length) {
+                ctx.status = 200;
+                ctx.body = ret;
+            } else {
+                ctx.status = 200;
+                ctx.body = [];
+            }
+        }
+
         /**
          * 筛选今日番茄钟
          */
@@ -34,21 +59,21 @@ module.exports = app => {
          * 关键词查找
          */
 
-         async search(){
+        async search() {
             const { ctx } = this;
             // 对这些关键字得做处理
             let keywords = ctx.request.body.keywords;
-            console.log('keywords1',keywords)
+            console.log('keywords1', keywords)
             keywords = ctx.helper.escape(keywords);
-            console.log('keywords2',keywords)
+            console.log('keywords2', keywords)
             const ret = await ctx.service.tomato.findAll({}, {
-                title:{ $regex: keywords, $options: 'i'} 
-                
+                title: { $regex: keywords, $options: 'i' }
+
             });
             ctx.status = 200;
             ctx.body = ret;
 
-         }
+        }
 
         /**
          * 按条件查找
