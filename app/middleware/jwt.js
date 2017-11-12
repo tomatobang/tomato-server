@@ -4,15 +4,13 @@
  */
 module.exports = (option, app) => {
     return async function (ctx, next) {
-        if (ctx.url.startsWith('/api/login') && ctx.method !== 'GET') {
+        let apiNoAuth = ctx.url.startsWith('/api/login') 
+            || ctx.url.endsWith('/api/user') 
+            || ctx.url.endsWith('/email_username/verify');
+        if (apiNoAuth && ctx.method !== 'GET') {
             return next();
         }
         
-        // for test
-        // if(ctx.url.startsWith('/api/user/headimg')){
-        //     return next();
-        // }
-
         const headers = ctx.request.headers;
         let token;
         try {
