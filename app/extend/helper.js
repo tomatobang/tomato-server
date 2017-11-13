@@ -36,13 +36,13 @@ exports.tokenService = {
 }
 
 exports.dateHelper = {
-  getCurrentMonthFirst() {
-    var date = new Date();
+  getCurrentMonthFirst(date) {
+    var date = new Date(date);
     date.setDate(1);
     return this.format(date, 'yyyy-MM-dd');
   },
-  getCurrentMonthLast() {
-    var date = new Date();
+  getCurrentMonthLast(date) {
+    var date = new Date(date);
     var currentMonth = date.getMonth();
     var nextMonth = ++currentMonth;
     var nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);

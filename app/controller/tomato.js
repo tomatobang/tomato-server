@@ -3,6 +3,7 @@ module.exports = app => {
         async statistics() {
             const { ctx } = this;
             let isSuccess = ctx.request.body.isSuccess;
+            let date = ctx.request.body.date;
             // 按用户筛选
             let userid = "";
             if (ctx.request.currentUser) {
@@ -12,9 +13,9 @@ module.exports = app => {
                 ctx.body = [];
             }
             // 获取本月的第一天
-            let starDate = ctx.helper.dateHelper.getCurrentMonthFirst();
+            let starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
             // 获取本月的最后一天
-            let endDte = ctx.helper.dateHelper.getCurrentMonthLast();
+            let endDte = ctx.helper.dateHelper.getCurrentMonthLast(date);
             const ret = await ctx.service.tomato.statistics(userid, starDate, endDte, isSuccess);
             if (ret.length) {
                 ctx.status = 200;
