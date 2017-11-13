@@ -13,7 +13,7 @@ module.exports = app => {
         // 大小
         size: String,
         // 发布时间
-        datetime: String
+        datetime: { type: Date }
     });
 
     return mongoose.model("version", user);

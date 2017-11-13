@@ -9,6 +9,9 @@ module.exports = app => {
     app.io.of('/tomatobang').route('break_tomato', app.io.controllers.tomatobang.breakTomato);
     app.io.of('/tomatobang').route('disconnect', app.io.controllers.tomatobang.disconnect);
 
+    // 版本管理
+    app.get('/api/version', app.controller.version.findLatestVersion);
+    
     /**
      * 用户类
      */

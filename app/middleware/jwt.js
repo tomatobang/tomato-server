@@ -6,8 +6,9 @@ module.exports = (option, app) => {
     return async function (ctx, next) {
         let apiNoAuth = ctx.url.startsWith('/api/login') 
             || ctx.url.endsWith('/api/user') 
+            || ctx.url.endsWith('/api/version') 
             || ctx.url.endsWith('/email_username/verify');
-        if (apiNoAuth && ctx.method !== 'GET') {
+        if (apiNoAuth) {
             return next();
         }
         
