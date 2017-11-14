@@ -21,7 +21,7 @@ module.exports = app => {
     app.post('/api/user', app.controller.user.create);
     app.post('/api/user/:id', app.controller.user.updateById);
     app.del('/api/user/:id', app.controller.user.deleteById);
-    app.post('/getRongyunToken', app.controller.user.getRongyunToken);
+    //app.post('/getRongyunToken', app.controller.user.getRongyunToken);
     app.post('/email_username/verify', app.controller.user.emailUserNameVerify);
     app.post('/api/login', app.controller.user.login);
     app.post('/api/logout', app.controller.user.logout);

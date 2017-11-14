@@ -13,7 +13,7 @@ module.exports = app => {
             }
             const result = await ctx.service.options.findAll(query, conditions);
             
-            console.log("options", result);
+            ctx.logger.info("options", result);
 
             // 设置响应体和状态码
             ctx.body = result;

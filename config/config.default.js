@@ -9,6 +9,12 @@ exports.security = {
   }
 };
 
+// 日志分为 NONE，DEBUG，INFO，WARN 和 ERROR 5 个级别。
+exports.logger = {
+  level: 'DEBUG',
+  consoleLevel: 'INFO'
+};
+
 // 默认配置如下
 // prefix: /public/
 // dir: path.join(appInfo.baseDir, 'app/public')

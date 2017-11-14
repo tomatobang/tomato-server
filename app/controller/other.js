@@ -15,10 +15,10 @@ module.exports = app => {
                 };
                 return;
             }
-            console.log("userid", userid);
-            console.log("groupid", groupid);
+            ctx.logger.info("userid", userid);
+            ctx.logger.info("groupid", groupid);
             let ret = await app.hepler.rongyunUtil.dissmissgroup(userid, groupid);
-            console.log("ret", ret);
+            ctx.logger.info("ret", ret);
             if (ret) {
                 ctx.status = 200;
                 ctx.body = {
@@ -54,7 +54,7 @@ module.exports = app => {
                 }
                 if (err) { throw err; return; }
                 let file = files.files;
-                console.log(files.name);
+                ctx.logger.info(files.name);
                 if (!file) { // 兼容 ionic file transfer 插件
                     file = files.file;
                 }
@@ -75,7 +75,7 @@ module.exports = app => {
                     autoClose: true
                 });
                 reader.pipe(stream);
-                console.log('uploading %s -> %s', file.name, stream.path);
+                ctx.logger.info('uploading %s -> %s', file.name, stream.path);
                 await ctx.service.task.updateVoiceUrl(taskid, relateUrl);
             });
 

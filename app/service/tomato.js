@@ -2,8 +2,6 @@ module.exports = app => {
     class TomatoService extends app.Service {
 
         async statistics(userid, startTime, endDate, succeed) {
-            console.log("userid",userid);
-            console.log("startTime",startTime);
             let Tomato = this.ctx.model.Tomato;
             let res = await Tomato.aggregate([
                 {
@@ -30,7 +28,6 @@ module.exports = app => {
                     $sort: { _id: 1 }
                 }
             ]);
-            console.log("res",res);
             return res;
         }
 

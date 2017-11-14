@@ -64,9 +64,8 @@ module.exports = app => {
             const { ctx } = this;
             // 对这些关键字得做处理
             let keywords = ctx.request.body.keywords;
-            console.log('keywords1', keywords)
             keywords = ctx.helper.escape(keywords);
-            console.log('keywords2', keywords)
+            ctx.logger.info('keywords2', keywords)
             const ret = await ctx.service.tomato.findAll({}, {
                 title: { $regex: keywords, $options: 'i' }
 
@@ -92,7 +91,7 @@ module.exports = app => {
                 conditions = JSON.parse(query.conditions);
             }
             const result = await ctx.service.tomato.findAll(query, conditions);
-            //console.log("tomato", result);
+            //ctx.logger.info("tomato", result);
 
             // 设置响应体和状态码
             ctx.body = result;

@@ -15,7 +15,7 @@ module.exports = app => {
 
             if (password === ctx.request.body.password) {
                 let token = ctx.helper.tokenService.createToken(user);
-                console.log(user,token);
+                ctx.logger.info(user,token);
                 app.redis.set(token, JSON.stringify(user))// , 'EX', ctx.helper.tokenService.expiresIn, () => { }
                 return ctx.body = {
                     status: 'success',
@@ -68,20 +68,6 @@ module.exports = app => {
                 }
             }
         }
-        /**
-         * 获取融云token 
-         */
-        async getRongyunToken() {
-            const { ctx } = this;
-            let userid = ctx.request.body._id;
-            let username = ctx.request.body.username;
-            const token = await ctx.service.user.getRongyunToken(userid, username);
-            ctx.status = 200;
-            ctx.body = {
-                success: true,
-                msg: token
-            };
-        }
 
         /**
          * 邮箱验证 
@@ -127,7 +113,7 @@ module.exports = app => {
             const { ctx } = this;
             const userid = ctx.request.body.userid;
             const imgData = ctx.request.body.imgData;
-            console.log('上传中:' + userid);
+            ctx.logger.info('上传中:' + userid);
 
             // 过滤data:URL
             let base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
@@ -136,10 +122,10 @@ module.exports = app => {
             let relateUrl = rootDir + '/uploadfile/headimg/' + userid + '.png';
 
             const imgPath = relateUrl;
-            console.log('上传中(path):' + imgPath);
+            ctx.logger.info('上传中(path):' + imgPath);
             fs.writeFile(imgPath, dataBuffer, async (err) => {
                 if (err) throw err;
-                console.log('The file has been saved!');
+                ctx.logger.info('The file has been saved!');
                 await ctx.service.user.updateHeadImg(userid, userid + '.png');
             });
             ctx.status = 200;
@@ -159,13 +145,13 @@ module.exports = app => {
             if (!ctx.request.currentUser) {
                 ctx.status = 500;
                 ctx.body = "请先登录!!!";
-                console.log("请先登录!!!");
+                ctx.logger.info("请先登录!!!");
                 return;
             }
             let relateUrl = ctx.params.path;
             let savePath = "/uploadfile/headimg/" + relateUrl +".png";
             // 默认会加上本服务器地址
-            console.log("发送中!!!");
+            ctx.logger.info("发送中!!!");
             await send(ctx, savePath);
         }
 
@@ -185,7 +171,7 @@ module.exports = app => {
                 conditions = JSON.parse(query.conditions);
             }
             const result = await ctx.service.user.findAll(query, conditions);
-            console.log("users", result);
+            //ctx.logger.info("users", result);
 
             // 设置响应体和状态码
             ctx.body = result;

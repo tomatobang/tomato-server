@@ -36,7 +36,7 @@ module.exports = app => {
     async startTomato() {
       const obj = this.ctx.args[0];
       let socket = this.ctx.socket;
-      console.log('start_tomato', obj);
+      this.ctx.logger.info('start_tomato', obj);
       // conundown 长度由客户端指定
       let { userid, endname, tomato, countdown } = obj;
       let hash = toamato_hash[userid];
@@ -65,7 +65,7 @@ module.exports = app => {
               .to(so)
               .emit("new_tomate_added", tomato);
           }
-          this.helper.pushMessage(userid, "你完成了一个番茄钟", tomato.title);
+          this.ctx.helper.pushMessage(userid, "你完成了一个番茄钟", tomato.title);
         },
         1000 * 60 * countdown,
         userid
@@ -100,7 +100,7 @@ module.exports = app => {
       _tomato.breakReason = tomato.breakReason;
       clearTimeout(hash.TIME_OUT_ID);
       const result = await this.service.tomato.create(_tomato);
-      console.log("创建一个TOMATO!");
+      this.ctx.logger.info("创建一个TOMATO!");
       hash.tomato = null;
       if (result) {
         for (let so of socketList) {

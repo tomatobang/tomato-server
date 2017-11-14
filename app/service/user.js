@@ -14,9 +14,7 @@ module.exports = app => {
 
         async findAll(query, conditions) {
             let model =  this.ctx.model.User;
-           
             let builder =  model.find(conditions);
-            console.log(this.builder);
             if (query.select) {
                 select = JSON.parse(query.select);
                 builder = builder.select(select);

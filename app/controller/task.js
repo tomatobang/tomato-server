@@ -16,7 +16,7 @@ module.exports = app => {
                 conditions = JSON.parse(query.conditions);
             }
             const result = await ctx.service.task.findAll(query, conditions);
-            //console.log("task", result);
+            //ctx.logger.info("task", result);
 
             // 设置响应体和状态码
             ctx.body = result;
