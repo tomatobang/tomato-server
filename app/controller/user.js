@@ -16,7 +16,7 @@ module.exports = app => {
             if (password === ctx.request.body.password) {
                 let token = ctx.helper.tokenService.createToken(user);
                 ctx.logger.info(user,token);
-                app.redis.set(token, JSON.stringify(user))// , 'EX', ctx.helper.tokenService.expiresIn, () => { }
+                await app.redis.set(token, JSON.stringify(user), 'EX', 3*24*60*60);
                 return ctx.body = {
                     status: 'success',
                     token: token,

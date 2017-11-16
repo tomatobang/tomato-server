@@ -77,7 +77,7 @@ exports.view = {
 // 添加 token 配置
 exports.token = {
   tokenSecret: env.tokenSecret || 'test',
-  tokenExpiresIn: env.tokenExpiresIn || '7d'
+  tokenExpiresIn: env.tokenExpiresIn || '3d'
 };
 
 
