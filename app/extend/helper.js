@@ -10,14 +10,12 @@ const config = require('../../config/config.default')
 let secret = config.token.tokenSecret;
 let expiresIn = config.token.tokenExpiresIn;
 exports.tokenService = {
-
   createToken(userinfo) {
     let token = jwt.sign(userinfo, secret, {
       expiresIn
     })
     return token
   },
-
   verifyToken(token) {
     if (!token) {
       return false
@@ -30,11 +28,13 @@ exports.tokenService = {
       return false
     }
   },
-
   expiresIn
-
 }
 
+
+/**
+ * 日期处理 Util
+ */
 exports.dateHelper = {
   getCurrentMonthFirst(date) {
     var date = new Date(date);

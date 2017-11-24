@@ -5,7 +5,8 @@ exports.keys = "此处改为你自己的 Cookie 安全字符串";
 
 exports.security = {
   csrf: {
-    enable: false // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
+    // 不借助 egg 实现
+    enable: false 
   }
 };
 
