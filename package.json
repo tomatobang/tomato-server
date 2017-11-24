@@ -8,7 +8,9 @@
     "stop": "egg-scripts stop",
     "lint": "eslint --ext .js *.js */*.js",
     "dev": "egg-bin dev  --cluster --sticky",
-    "test": "egg-bin test"
+    "test": "egg-bin test",
+    "cov": "egg-bin cov",
+    "debug": "egg-bin debug"
   },
   "repository": {
     "type": "git",
