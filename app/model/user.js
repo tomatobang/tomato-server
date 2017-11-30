@@ -13,7 +13,11 @@ module.exports = app => {
         // 头像
         img: String,
         // 邮箱
-        email: String
+        email: String,
+        // 性别
+        sex: String,
+        // 位置
+        location: String
     });
 
     return mongoose.model("user", user);

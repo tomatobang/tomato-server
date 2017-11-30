@@ -15,12 +15,12 @@ module.exports = app => {
 
             if (password === ctx.request.body.password) {
                 let token = ctx.helper.tokenService.createToken(user);
-                ctx.logger.info(user,token);
-                await app.redis.set(token, JSON.stringify(user), 'EX', 3*24*60*60);
+                ctx.logger.info(user, token);
+                await app.redis.set(token, JSON.stringify(user), 'EX', 3 * 24 * 60 * 60);
                 return ctx.body = {
                     status: 'success',
                     token: token,
-                    userinfo:users[0]
+                    userinfo: users[0]
                 };
             } else {
                 return ctx.body = {
@@ -149,7 +149,7 @@ module.exports = app => {
                 return;
             }
             let relateUrl = ctx.params.path;
-            let savePath = "/uploadfile/headimg/" + relateUrl +".png";
+            let savePath = "/uploadfile/headimg/" + relateUrl + ".png";
             // 默认会加上本服务器地址
             ctx.logger.info("发送中!!!");
             await send(ctx, savePath);
@@ -237,6 +237,49 @@ module.exports = app => {
             ctx.body = result;
         }
 
+        /**
+         * 更新性别
+        */
+        async UpdateSex() {
+            const { ctx } = this;
+            const id = ctx.request.body.userid;
+            const sex = ctx.request.body.sex;
+            const result = await ctx.service.user.UpdateSex(id, sex);
+            ctx.body = result;
+        }
+
+        /**
+         * 更新昵称
+        */
+        async UpdateDisplayName() {
+            const { ctx } = this;
+            const id = ctx.request.body.userid;
+            const displayname = ctx.request.body.displayname;
+            const result = await ctx.service.user.UpdateDisplayName(id, displayname);
+            ctx.body = result;
+        }
+
+        /**
+         * 更新邮箱
+        */
+        async UpdateEmail() {
+            const { ctx } = this;
+            const id = ctx.request.body.userid;
+            const email = ctx.request.body.email;
+            const result = await ctx.service.user.UpdateEmail(id, email);
+            ctx.body = result;
+        }
+
+        /**
+         * 更新位置
+        */
+        async UpdateLocation() {
+            const { ctx } = this;
+            const id = ctx.request.body.userid;
+            const location = ctx.request.body.location;
+            const result = await ctx.service.user.UpdateLocation(id, location);
+            ctx.body = result;
+        }
     }
     return UserController;
 };

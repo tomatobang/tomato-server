@@ -26,6 +26,10 @@ module.exports = app => {
     app.post('/api/login', app.controller.user.login);
     app.post('/api/logout', app.controller.user.logout);
     app.post('/api/user/headimg', app.controller.user.uploadHeadImg);
+    app.post('/api/user/sex', app.controller.user.UpdateSex);
+    app.post('/api/user/displayname', app.controller.user.UpdateDisplayName);
+    app.post('/api/user/email', app.controller.user.UpdateEmail);
+    app.post('/api/user/location', app.controller.user.UpdateLocation);
    
     /**
      * 番茄钟类

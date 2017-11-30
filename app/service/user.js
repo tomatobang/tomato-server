@@ -72,23 +72,13 @@ class UserService extends Service {
         return result;
     }
 
-    async updateById(id, body) {
-        let model = this.ctx.model.User;
-        const result = await model
-            .findByIdAndUpdate(id, body, {
-                new: true
-            })
-            .exec();
-        return result;
-    }
-
 
     async updateHeadImg(id, imgurl) {
         let model = this.ctx.model.User;
         const result = await model
             .findByIdAndUpdate(id, {
                 img: imgurl
-            }, {})
+            }, {new: true})
             .exec();
         return result;
     }
@@ -97,6 +87,45 @@ class UserService extends Service {
         let model = await this.ctx.model.User;
         await model.findByIdAndRemove(id).exec();
         const result = await model.create(newDocument);
+        return result;
+    }
+
+    async UpdateSex(id, sex) {
+        let model = this.ctx.model.User;
+        const result = await model
+            .findByIdAndUpdate(id, {
+                sex: sex
+            }, {new: true})
+            .exec();
+        return result;
+    }
+    async UpdateDisplayName(id, displayName) {
+        let model = this.ctx.model.User;
+        const result = await model
+            .findByIdAndUpdate(id, {
+                displayName: displayName
+            }, {new: true})
+            .exec();
+        return result;
+    }
+
+    async UpdateEmail(id, email) {
+        let model = this.ctx.model.User;
+        const result = await model
+            .findByIdAndUpdate(id, {
+                email: email
+            }, {new: true})
+            .exec();
+        return result;
+    }
+
+    async UpdateLocation(id, location) {
+        let model = this.ctx.model.User;
+        const result = await model
+            .findByIdAndUpdate(id, {
+                location: location
+            }, {new: true})
+            .exec();
         return result;
     }
 }
