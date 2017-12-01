@@ -2,6 +2,7 @@ const Service = require('egg').Service;
 class TomatoService extends Service {
     async statistics(userid, startTime, endDate, succeed) {
         let Tomato = this.ctx.model.Tomato;
+        
         let res = await Tomato.aggregate([
             {
                 $match: {

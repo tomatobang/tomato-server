@@ -15,8 +15,8 @@ module.exports = app => {
             // 获取本月的第一天
             let starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
             // 获取本月的最后一天
-            let endDte = ctx.helper.dateHelper.getCurrentMonthLast(date);
-            const ret = await ctx.service.tomato.statistics(userid, starDate, endDte, isSuccess);
+            let endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
+            const ret = await ctx.service.tomato.statistics(userid, starDate, endDate, isSuccess);
             if (ret.length) {
                 ctx.status = 200;
                 ctx.body = ret;
