@@ -37,12 +37,12 @@ exports.tokenService = {
  */
 exports.dateHelper = {
   getCurrentMonthFirst(date) {
-    let date = new Date(date);
+    date = new Date(date);
     date.setDate(1);
     return this.format(date, 'yyyy-MM-dd');
   },
   getCurrentMonthLast(date) {
-    let date = new Date(date);
+    date = new Date(date);
     let currentMonth = date.getMonth();
     let nextMonth = ++currentMonth;
     let nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
@@ -50,7 +50,7 @@ exports.dateHelper = {
     return this.format(new Date(nextMonthFirstDay - oneDay), 'yyyy-MM-dd');
   },
   getNextMonthFirst(date) {
-    let date = new Date(date);
+    date = new Date(date);
     let currentMonth = date.getMonth();
     let nextMonth = ++currentMonth;
     let nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
