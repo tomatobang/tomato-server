@@ -2,7 +2,7 @@
  * @Author: kobepeng 
  * @Date: 2017-12-06 09:21:23 
  * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-06 09:51:07
+ * @Last Modified time: 2017-12-06 10:21:05
  */
 module.exports = app => {
     /**
@@ -35,12 +35,14 @@ module.exports = app => {
         level: { type: Number, default: 1 },
         // 是否活跃
         active: { type: Boolean, default: false },
+        // 是否已删除
+        deleted: { type: Boolean, default: false },
     });
 
-    user.index({username: 1}, {unique: true});
+    user.index({ username: 1 }, { unique: true });
 
     user.pre('save', function (next) {
-        var now = new Date();
+        let now = new Date();
         this.update_at = now;
         next();
     });
