@@ -1,3 +1,9 @@
+/*
+ * @Author: kobepeng 
+ * @Date: 2017-12-06 09:29:20 
+ * @Last Modified by:   kobepeng 
+ * @Last Modified time: 2017-12-06 09:29:20 
+ */
 module.exports = app => {
     /**
      * 任务
@@ -17,7 +23,20 @@ module.exports = app => {
         // 是否激活
         isActive: { type: Boolean, default: false },
         // 语音路径
-        voiceUrl: { type: String, default: "" }
+        voiceUrl: { type: String, default: "" },
+
+        // 是否已完成
+        finished: { type: Boolean, default: false },
+        // 是否已删除
+        deleted: { type: Boolean, default: false },
+        // 创建时间
+        create_at: { type: Date, default: Date.now },
+        // 更新时间
+        update_at: { type: Date, default: Date.now },
     });
+
+    task.index({ create_at: -1 });
+    task.index({ userid: 1, create_at: -1 });
+
     return mongoose.model("task", task);
 }

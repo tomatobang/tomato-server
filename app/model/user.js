@@ -1,3 +1,9 @@
+/*
+ * @Author: kobepeng 
+ * @Date: 2017-12-06 09:21:23 
+ * @Last Modified by: kobepeng
+ * @Last Modified time: 2017-12-06 09:51:07
+ */
 module.exports = app => {
     /**
      * 用户
@@ -17,7 +23,26 @@ module.exports = app => {
         // 性别
         sex: String,
         // 位置
-        location: String
+        location: String,
+
+        // 是否屏蔽
+        is_block: { type: Boolean, default: false },
+        // 创建时间
+        create_at: { type: Date, default: Date.now },
+        // 更新时间
+        update_at: { type: Date, default: Date.now },
+        // 等级
+        level: { type: Number, default: 1 },
+        // 是否活跃
+        active: { type: Boolean, default: false },
+    });
+
+    user.index({username: 1}, {unique: true});
+
+    user.pre('save', function (next) {
+        var now = new Date();
+        this.update_at = now;
+        next();
     });
 
     return mongoose.model("user", user);

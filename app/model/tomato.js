@@ -23,7 +23,12 @@ module.exports = app => {
         // 中断原因
         breakReason: { type: String, default: "" },
         // 语音路径
-        voiceUrl: { type: String, default: "" }
+        voiceUrl: { type: String, default: "" },
+
+        // 是否已删除
+        deleted: { type: Boolean, default: false },
     });
+
+    tomato.index({ userid: 1, startTime: -1 });
     return mongoose.model("tomato", tomato);
 }
