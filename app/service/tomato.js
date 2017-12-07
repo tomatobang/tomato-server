@@ -2,7 +2,7 @@ const Service = require('egg').Service;
 class TomatoService extends Service {
     async statistics(userid, startTime, endDate, succeed) {
         let Tomato = this.ctx.model.Tomato;
-        
+
         let res = await Tomato.aggregate([
             {
                 $match: {
@@ -33,6 +33,11 @@ class TomatoService extends Service {
 
     async findAll(query, conditions) {
         let model = this.ctx.model.Tomato;
+        if (conditions) {
+            if (!conditions.deleted) {
+                conditions.deleted = false;
+            }
+        }
         let builder = model.find(conditions);
         if (query.select) {
             select = JSON.parse(query.select);
@@ -76,8 +81,8 @@ class TomatoService extends Service {
 
     async delete(id) {
         let model = this.ctx.model.Tomato;
-        const result = await model.findByIdAndRemove(id).exec();
-        return result;
+        await model.updateOne({ _id: id }, { deleted: true }, {});
+        return true;
     }
 
     async updateById(id, body) {

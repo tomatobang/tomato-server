@@ -15,6 +15,11 @@ class UserService extends Service {
 
     async findAll(query, conditions) {
         let model = this.ctx.model.User;
+        if (conditions) {
+            if (!conditions.deleted) {
+                conditions.deleted = false;
+            }
+        }
         let builder = model.find(conditions);
         if (query.select) {
             select = JSON.parse(query.select);
@@ -58,8 +63,8 @@ class UserService extends Service {
 
     async delete(id) {
         let model = this.ctx.model.User;
-        const result = await model.findByIdAndRemove(id).exec();
-        return result;
+        await model.updateOne({ _id: id }, { deleted: true }, {});
+        return true;
     }
 
     async updateById(id, body) {
@@ -78,7 +83,7 @@ class UserService extends Service {
         const result = await model
             .findByIdAndUpdate(id, {
                 img: imgurl
-            }, {new: true})
+            }, { new: true })
             .exec();
         return result;
     }
@@ -95,7 +100,7 @@ class UserService extends Service {
         const result = await model
             .findByIdAndUpdate(id, {
                 sex: sex
-            }, {new: true})
+            }, { new: true })
             .exec();
         return result;
     }
@@ -104,7 +109,7 @@ class UserService extends Service {
         const result = await model
             .findByIdAndUpdate(id, {
                 displayName: displayName
-            }, {new: true})
+            }, { new: true })
             .exec();
         return result;
     }
@@ -114,7 +119,7 @@ class UserService extends Service {
         const result = await model
             .findByIdAndUpdate(id, {
                 email: email
-            }, {new: true})
+            }, { new: true })
             .exec();
         return result;
     }
@@ -124,7 +129,7 @@ class UserService extends Service {
         const result = await model
             .findByIdAndUpdate(id, {
                 location: location
-            }, {new: true})
+            }, { new: true })
             .exec();
         return result;
     }

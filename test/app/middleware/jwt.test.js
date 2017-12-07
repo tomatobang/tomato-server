@@ -21,7 +21,7 @@ describe('test/app/middleware/jwt.test.js', () => {
             .get('/')
             .set('Authorization', "invalidtoken")
             .expect(200)
-            .expect({ status: "fail", description: "Token invalid" });
+            .expect({ status: "fail", description: "Token verify failed" });
     });
 
 });

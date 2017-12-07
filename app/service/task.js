@@ -1,9 +1,14 @@
 const Service = require('egg').Service;
 
 class TaskService extends Service {
-  
+
   async findAll(query, conditions) {
     let model = this.ctx.model.Task;
+    if (conditions) {
+      if (!conditions.deleted) {
+        conditions.deleted = false;
+      }
+    }
     let builder = model.find(conditions);
     if (query.select) {
       select = JSON.parse(query.select);
@@ -47,9 +52,16 @@ class TaskService extends Service {
 
   async delete(id) {
     let model = this.ctx.model.Task;
-    const result = await model.findByIdAndRemove(id).exec();
-    return result;
+    await model.updateOne({ _id: id }, { deleted: true }, {});
+    return true;
   }
+
+  async erase(id) {
+    let model = this.ctx.model.Task;
+    await model.findByIdAndRemove(id).exec();
+    return true;
+  }
+
 
   async updateById(id, body) {
     let model = this.ctx.model.Task;
