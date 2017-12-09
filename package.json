@@ -39,11 +39,6 @@
     "egg-view-nunjucks": "^2.1.4",
     "jpush-sdk": "*",
     "jsonwebtoken": "^7.1.9",
-    "koa": "^2.0.0-alpha.5",
-    "koa-bodyparser": "^3.2.0",
-    "koa-router": "^7.0.1",
-    "koa-send": "^4.1.0",
-    "log4js": "^0.6.38",
     "qiniu": "^6.1.13",
     "restc": "^0.0.4",
     "rongcloud-sdk": "^1.0.3"
@@ -59,7 +54,6 @@
     "eslint-loader": "^1.6.3",
     "eslint-plugin-html": "^2.0.1",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^2.1.1",
-    "koa-ratelimit": "^4.0.0"
+    "eslint-plugin-standard": "^2.1.1"
   }
 }
