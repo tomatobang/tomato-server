@@ -31,7 +31,7 @@ exports.static = {
 exports.io = {
   namespace: {
     '/tomatobang': {
-      connectionMiddleware: ['auth'],// 
+      connectionMiddleware: ['auth'],
       packetMiddleware: [],
     }
   },
@@ -58,7 +58,13 @@ exports.redis = {
 }
 
 
-exports.middleware = ['errorhandler','robot','jwt'];
+exports.middleware = ['ratelimit','errorhandler','robot','jwt'];
+exports.ratelimit= {
+  duration: 60000,
+  throw:true,
+  errorMessage: "请求频率过快！",
+  max: 2,
+},
 // robot's configurations
 exports.robot = {
   ua: [
