@@ -37,6 +37,7 @@
     "egg-socket.io": "^3.0.0",
     "egg-static": "^1.4.1",
     "egg-view-nunjucks": "^2.1.4",
+    "egg-alinode": "^1.1.1",
     "jpush-sdk": "*",
     "jsonwebtoken": "^7.1.9",
     "koa-ratelimit": "^4.0.0",

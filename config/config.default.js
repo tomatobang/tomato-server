@@ -108,6 +108,16 @@ exports.cors = {
   credentials: true
 };
 
+exports.alinode = {
+  server: 'wss://agentserver.node.aliyun.com:8080',
+  appid: '182',
+  secret: '',
+  // logdir: '/tmp/',
+  // error_log: [
+  // '/root/.logs/error.#YYYY#-#MM#-#DD#.log',
+  // ]
+  };
+
 exports.options = [
   {
     'key': 'analyzeCode',

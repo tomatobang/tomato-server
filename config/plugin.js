@@ -24,3 +24,7 @@ exports.io = {
   package: 'egg-socket.io',
 };
 
+exports.alinode = {
+  enable: true,
+  package: 'egg-alinode'
+};
