@@ -1,4 +1,5 @@
 // app/controller/news.js
+const userValidationRule = require('../validate/user');
 module.exports = app => {
     class UserController extends app.Controller {
         /**
@@ -197,6 +198,13 @@ module.exports = app => {
             // 存储用户编号/username
             if (ctx.request.currentUser) {
                 ctx.request.body.userid = ctx.request.currentUser.username;
+            }
+            /**
+             * 验证用户
+             */
+            const invalid = app.validator.validate(userValidationRule, ctx.request.body);
+            if (invalid) {
+                ctx.throw(400);
             }
             const result = await ctx.service.user.create(ctx.request.body);
             ctx.status = 201;

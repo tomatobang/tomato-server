@@ -124,14 +124,6 @@ exports.options = [
     'value': ''
   },
   {
-    'key': 'commentType',
-    'value': 'disqus'
-  },
-  {
-    'key': 'commentName',
-    'value': ''
-  },
-  {
     'key': 'description',
     'value': ''
   },

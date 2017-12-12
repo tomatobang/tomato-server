@@ -14,6 +14,18 @@ describe('test/controller/home.test.js', () => {
         token = loginRes.body.token;
     });
 
+    // 注册失败
+    it('should register failed( 400 )',async () => {
+        let loginRes = await app.httpRequest()
+            .post('/api/user')
+            .type('form')
+            .send({
+                username: 'pengyi',
+                password: '123',
+            });
+        assert(loginRes.status === 400);
+    });
+
     it('should status 200 and get the body', () => {
         return app.httpRequest()
             .get('/')
