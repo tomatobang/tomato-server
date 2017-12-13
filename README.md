@@ -10,10 +10,6 @@
 [david-image]: https://img.shields.io/david/tomatobang/tomato-server.svg?style=flat-square
 [david-url]: https://david-dm.org/tomatobang/tomato-server
 
-
-
-
-[![Build Status](https://www.travis-ci.org/tomatobang/tomato-server.svg?branch=master)](https://www.travis-ci.org/tomatobang/tomato-server)
 > server end for tomatobang 
 
 ## Tech related
