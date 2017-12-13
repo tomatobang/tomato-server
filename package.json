@@ -6,11 +6,12 @@
   "scripts": {
     "start": "egg-scripts start --daemon",
     "stop": "egg-scripts stop",
-    "lint": "eslint --ext .js *.js */*.js",
+    "lint": "eslint app test",
     "dev": "egg-bin dev  --cluster --sticky",
-    "test": "egg-bin test",
+    "test": "npm run lint && egg-bin test",
     "cov": "egg-bin cov",
-    "debug": "egg-bin debug"
+    "debug": "egg-bin debug",
+    "ci": "npm run lint && npm run cov"
   },
   "repository": {
     "type": "git",
@@ -52,11 +53,6 @@
     "egg-bin": "^4.3.5",
     "egg-mock": "^3.13.0",
     "eslint": "^3.17.0",
-    "eslint-config-standard": "^7.0.0",
-    "eslint-friendly-formatter": "^2.0.7",
-    "eslint-loader": "^1.6.3",
-    "eslint-plugin-html": "^2.0.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^2.1.1"
+    "eslint-config-egg": "^5.1.1"
   }
 }

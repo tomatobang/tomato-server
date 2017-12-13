@@ -1,3 +1,4 @@
+'use strict';
 module.exports = app => {
     class OtherController extends app.Controller {
         /**
@@ -5,31 +6,31 @@ module.exports = app => {
         */
         async dismissgroup() {
             const { ctx } = this;
-            let userid = ctx.request.body.userid;
-            let groupid = ctx.request.body.groupid;
+            const userid = ctx.request.body.userid;
+            const groupid = ctx.request.body.groupid;
             if (!userid || !groupid) {
                 ctx.status = 500;
                 ctx.body = {
                     success: false,
-                    msg: "userid与groupid 必填！"
+                    msg: 'userid与groupid 必填！',
                 };
                 return;
             }
-            ctx.logger.info("userid", userid);
-            ctx.logger.info("groupid", groupid);
-            let ret = await app.hepler.rongyunUtil.dissmissgroup(userid, groupid);
-            ctx.logger.info("ret", ret);
+            ctx.logger.info('userid', userid);
+            ctx.logger.info('groupid', groupid);
+            const ret = await app.hepler.rongyunUtil.dissmissgroup(userid, groupid);
+            ctx.logger.info('ret', ret);
             if (ret) {
                 ctx.status = 200;
                 ctx.body = {
                     success: true,
-                    msg: "删除成功"
+                    msg: '删除成功',
                 };
             } else {
                 ctx.status = 500;
                 ctx.body = {
                     success: false,
-                    msg: "删除失败"
+                    msg: '删除失败',
                 };
             }
         }
@@ -39,20 +40,18 @@ module.exports = app => {
          */
         async uploadVoiceFile() {
             const { ctx } = this;
-            const formidable = require("formidable");
+            const formidable = require('formidable');
             const fs = require('fs');
-            const os = require('os');
             const path = require('path');
 
-            var form = new formidable.IncomingForm();
-            await form.parse(ctx.req, async function (err, fields, files) {
+            const form = new formidable.IncomingForm();
+            await form.parse(ctx.req, async (err, fields, files) => {
                 const taskid = fields.taskid;
                 const userid = fields.userid;
                 if (!taskid || !userid) {
-                    throw new Error("taskid或userid为空！");
-                    return;
+                    throw new Error('taskid或userid为空！');
                 }
-                if (err) { throw err; return; }
+                if (err) { throw err; }
                 let file = files.files;
                 ctx.logger.info(files.name);
                 if (!file) { // 兼容 ionic file transfer 插件
@@ -63,16 +62,16 @@ module.exports = app => {
                 }
                 const reader = fs.createReadStream(file.path);
                 // 设置保存路径
-                let rootDir = path.resolve(__dirname, "../../");
-                let relateUrl = "/uploadfile/voices/" + (userid + "_" + taskid + "_" + file.name);
-                let savePath = rootDir + relateUrl;
+                const rootDir = path.resolve(__dirname, '../../');
+                const relateUrl = '/uploadfile/voices/' + (userid + '_' + taskid + '_' + file.name);
+                const savePath = rootDir + relateUrl;
                 // path.join(os.tmpdir()
                 const stream = fs.createWriteStream(savePath, {
                     flags: 'w',
                     defaultEncoding: 'utf8',
                     fd: null,
                     mode: 0o666,
-                    autoClose: true
+                    autoClose: true,
                 });
                 reader.pipe(stream);
                 ctx.logger.info('uploading %s -> %s', file.name, stream.path);
@@ -82,7 +81,7 @@ module.exports = app => {
             ctx.status = 200;
             ctx.body = {
                 success: true,
-                msg: "上传成功"
+                msg: '上传成功',
             };
         }
 
@@ -96,16 +95,14 @@ module.exports = app => {
             const send = require('koa-send');
             if (!ctx.request.currentUser) {
                 ctx.status = 500;
-                ctx.body = "请先登录!!!";
+                ctx.body = '请先登录!!!';
                 return;
             }
-            let relateUrl = ctx.params.path;
-            let savePath = "/uploadfile/voices/" + relateUrl;
+            const relateUrl = ctx.params.path;
+            const savePath = '/uploadfile/voices/' + relateUrl;
             // 默认会加上本服务器地址
             await send(ctx, savePath);
         }
-
-        
     }
     return OtherController;
 };

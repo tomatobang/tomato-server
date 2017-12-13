@@ -1,16 +1,17 @@
+'use strict';
 /*
- * @Author: kobepeng 
- * @Date: 2017-12-06 09:21:23 
+ * @Author: kobepeng
+ * @Date: 2017-12-06 09:21:23
  * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-06 10:48:55
+ * @Last Modified time: 2017-12-13 14:14:20
  */
 module.exports = app => {
     /**
      * 消息
     */
     const mongoose = app.mongoose;
-    var ObjectId = mongoose.Schema.ObjectId;
-    let pub_reply = new mongoose.Schema({
+    const ObjectId = mongoose.Schema.ObjectId;
+    const pub_reply = new mongoose.Schema({
         // 内容
         content: { type: String },
         // 动态编号
@@ -26,12 +27,12 @@ module.exports = app => {
         // 是否为富文本
         content_is_html: { type: Boolean },
         // 点赞数
-        ups: [mongoose.Schema.Types.ObjectId],
+        ups: [ mongoose.Schema.Types.ObjectId ],
         // 删除标识
         deleted: { type: Boolean, default: false },
     });
 
     pub_reply.index({ pub_id: 1 });
     pub_reply.index({ author_id: 1, create_at: -1 });
-    return mongoose.model("pub_reply", pub_reply);
-}
+    return mongoose.model('pub_reply', pub_reply);
+};

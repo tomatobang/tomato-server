@@ -1,4 +1,6 @@
-module.exports = (options, app) => {
+'use strict';
+
+module.exports = options => {
     return function* robotMiddleware(next) {
       const source = this.get('user-agent') || '';
       const match = options.ua.some(ua => ua.test(source));
@@ -8,5 +10,5 @@ module.exports = (options, app) => {
       } else {
         yield next;
       }
-    }
+    };
   };

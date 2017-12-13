@@ -1,3 +1,4 @@
+'use strict';
 // app/controller/news.js
 const userValidationRule = require('../validate/user');
 module.exports = app => {
@@ -7,26 +8,26 @@ module.exports = app => {
          */
         async login() {
             const { ctx } = this;
-            let users = await ctx.service.user.findAll({}, { username: ctx.request.body.username });
-            let user = {
+            const users = await ctx.service.user.findAll({}, { username: ctx.request.body.username });
+            const user = {
                 username: users[0].username,
-                timestamp: (new Date()).valueOf()
+                timestamp: (new Date()).valueOf(),
             };
-            let password = users[0].password;
+            const password = users[0].password;
 
             if (password === ctx.request.body.password) {
-                let token = ctx.helper.tokenService.createToken(user);
+                const token = ctx.helper.tokenService.createToken(user);
                 ctx.logger.info(user, token);
                 await app.redis.set(token, JSON.stringify(user), 'EX', 3 * 24 * 60 * 60);
-                return ctx.body = {
+                ctx.body = {
                     status: 'success',
-                    token: token,
-                    userinfo: users[0]
+                    token,
+                    userinfo: users[0],
                 };
             } else {
-                return ctx.body = {
+                ctx.body = {
                     status: 'fail',
-                    description: 'Get token failed. Check the password'
+                    description: 'Get token failed. Check the password',
                 };
             }
         }
@@ -36,50 +37,50 @@ module.exports = app => {
          */
         async logout() {
             const { ctx } = this;
-            const headers = ctx.request.headers
-            let token
+            const headers = ctx.request.headers;
+            let token;
             try {
-                token = headers['authorization']
+                token = headers.authorization;
             } catch (err) {
-                return ctx.body = {
+                ctx.body = {
                     status: 'fail',
-                    description: err
-                }
+                    description: err,
+                };
             }
 
             if (!token) {
-                return ctx.body = {
+                ctx.body = {
                     status: 'fail',
-                    description: 'Token not found'
-                }
+                    description: 'Token not found',
+                };
             }
 
-            const result = ctx.helper.tokenService.verifyToken(token)
+            const result = ctx.helper.tokenService.verifyToken(token);
 
             if (result === false) {
-                return ctx.body = {
+                ctx.body = {
                     status: 'fail',
-                    description: 'Token verify failed'
-                }
+                    description: 'Token verify failed',
+                };
             } else {
-                await app.redis.del('token')
-                return ctx.body = {
+                await app.redis.del('token');
+                ctx.body = {
                     status: 'success',
-                    description: 'Token deleted'
-                }
+                    description: 'Token deleted',
+                };
             }
         }
 
         /**
-         * 邮箱验证 
+         * 邮箱验证
          */
         async emailUserNameVerify() {
             const { ctx } = this;
-            let email = ctx.request.body.email;
-            let username = ctx.request.body.username;
-            let {
+            const email = ctx.request.body.email;
+            const username = ctx.request.body.username;
+            const {
                 emailRet,
-                usernameRet
+                usernameRet,
             } = await ctx.service.user.emailUserNameVerify(email, username);
 
 
@@ -87,19 +88,19 @@ module.exports = app => {
                 ctx.status = 200;
                 ctx.body = {
                     success: false,
-                    msg: "邮箱已存在！"
+                    msg: '邮箱已存在！',
                 };
             } else if (usernameRet.length) {
                 ctx.status = 200;
                 ctx.body = {
                     success: false,
-                    msg: "用户名已存在！"
+                    msg: '用户名已存在！',
                 };
             } else {
                 ctx.status = 200;
                 ctx.body = {
                     success: true,
-                    msg: "邮箱可用！"
+                    msg: '邮箱可用！',
                 };
             }
         }
@@ -108,7 +109,7 @@ module.exports = app => {
          * 上传头像
          */
         async uploadHeadImg() {
-            const fs = require("fs");
+            const fs = require('fs');
             const path = require('path');
 
             const { ctx } = this;
@@ -117,14 +118,14 @@ module.exports = app => {
             ctx.logger.info('上传中:' + userid);
 
             // 过滤data:URL
-            let base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
-            let dataBuffer = new Buffer(base64Data, 'base64');
-            let rootDir = path.resolve(__dirname, "../../");
-            let relateUrl = rootDir + '/uploadfile/headimg/' + userid + '.png';
+            const base64Data = imgData.replace(/^data:image\/\w+;base64,/, '');
+            const dataBuffer = new Buffer(base64Data, 'base64');
+            const rootDir = path.resolve(__dirname, '../../');
+            const relateUrl = rootDir + '/uploadfile/headimg/' + userid + '.png';
 
             const imgPath = relateUrl;
             ctx.logger.info('上传中(path):' + imgPath);
-            fs.writeFile(imgPath, dataBuffer, async (err) => {
+            fs.writeFile(imgPath, dataBuffer, async err => {
                 if (err) throw err;
                 ctx.logger.info('The file has been saved!');
                 await ctx.service.user.updateHeadImg(userid, userid + '.png');
@@ -132,7 +133,7 @@ module.exports = app => {
             ctx.status = 200;
             ctx.body = {
                 success: true,
-                msg: "保存成功！"
+                msg: '保存成功！',
             };
         }
 
@@ -145,14 +146,14 @@ module.exports = app => {
             const send = require('koa-send');
             if (!ctx.request.currentUser) {
                 ctx.status = 500;
-                ctx.body = "请先登录!!!";
-                ctx.logger.info("请先登录!!!");
+                ctx.body = '请先登录!!!';
+                ctx.logger.info('请先登录!!!');
                 return;
             }
-            let relateUrl = ctx.params.path;
-            let savePath = "/uploadfile/headimg/" + relateUrl + ".png";
+            const relateUrl = ctx.params.path;
+            const savePath = '/uploadfile/headimg/' + relateUrl + '.png';
             // 默认会加上本服务器地址
-            ctx.logger.info("发送中!!!");
+            ctx.logger.info('发送中!!!');
             await send(ctx, savePath);
         }
 
@@ -162,8 +163,7 @@ module.exports = app => {
         async list() {
             const { ctx } = this;
             let conditions = {};
-            let select = {};
-            let query = ctx.request.query;
+            const query = ctx.request.query;
             // 按用户筛选
             if (ctx.request.currentUser) {
                 conditions.userid = ctx.request.currentUser.username;
@@ -172,7 +172,7 @@ module.exports = app => {
                 conditions = JSON.parse(query.conditions);
             }
             const result = await ctx.service.user.findAll(query, conditions);
-            //ctx.logger.info("users", result);
+            // ctx.logger.info('users', result);
 
             // 设置响应体和状态码
             ctx.body = result;
@@ -184,10 +184,9 @@ module.exports = app => {
          */
         async findById() {
             const { ctx } = this;
-            let select = {};
-            let query = ctx.request.query;
-            let id = ctx.params.id;
-            const users = await ctx.service.user.findById(query, id);
+            const query = ctx.request.query;
+            const id = ctx.params.id;
+            await ctx.service.user.findById(query, id);
         }
 
         /**
@@ -216,7 +215,7 @@ module.exports = app => {
          */
         async deleteById() {
             const { ctx } = this;
-            let id = ctx.params.id;
+            const id = ctx.params.id;
             const result = await ctx.service.user.delete(id);
             ctx.body = result;
         }
@@ -226,8 +225,8 @@ module.exports = app => {
          */
         async updateById() {
             const { ctx } = this;
-            let id = ctx.params.id;
-            let body = ctx.request.body;
+            const id = ctx.params.id;
+            const body = ctx.request.body;
             const result = await ctx.service.user.updateById(id, body);
             ctx.body = result;
         }
@@ -239,7 +238,7 @@ module.exports = app => {
         async replaceById() {
             const { ctx } = this;
             const newDocument = ctx.request.body;
-            let id = ctx.params.id;
+            const id = ctx.params.id;
             newDocument._id = id;
             const result = await ctx.service.user.replaceById(id, newDocument);
             ctx.body = result;

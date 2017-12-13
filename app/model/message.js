@@ -1,16 +1,17 @@
+'use strict';
 /*
- * @Author: kobepeng 
- * @Date: 2017-12-06 09:21:23 
+ * @Author: kobepeng
+ * @Date: 2017-12-06 09:21:23
  * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-06 10:48:14
+ * @Last Modified time: 2017-12-13 13:59:27
  */
 module.exports = app => {
     /**
      * 消息
     */
     const mongoose = app.mongoose;
-    var ObjectId = mongoose.Schema.ObjectId;
-    let message = new mongoose.Schema({
+    const ObjectId = mongoose.Schema.ObjectId;
+    const message = new mongoose.Schema({
         // 用户名
         userid: { type: ObjectId },
         // 消息类型[点赞、系统、文字...]
@@ -31,5 +32,5 @@ module.exports = app => {
 
     message.index({ userid: 1 }, { unique: true });
 
-    return mongoose.model("message", message);
-}
+    return mongoose.model('message', message);
+};

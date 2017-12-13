@@ -1,38 +1,40 @@
+'use strict';
+
 const Service = require('egg').Service;
 class TomatoService extends Service {
     async statistics(userid, startTime, endDate, succeed) {
-        let Tomato = this.ctx.model.Tomato;
+        const Tomato = this.ctx.model.Tomato;
 
-        let res = await Tomato.aggregate([
+        const res = await Tomato.aggregate([
             {
                 $match: {
-                    "userid": userid,
-                    "succeed": parseInt(succeed),
-                    "startTime": { "$gte": new Date(startTime), "$lte": new Date(endDate) }
-                }
+                    userid,
+                    succeed: parseInt(succeed),
+                    startTime: { $gte: new Date(startTime), $lte: new Date(endDate) },
+                },
             },
             {
                 $project: {
                     // 校准日期并格式化
-                    startTime: { $substr: [{ "$add": ["$startTime", 28800000] }, 0, 10] },
-                    succeed: 1
+                    startTime: { $substr: [{ $add: [ '$startTime', 28800000 ] }, 0, 10 ] },
+                    succeed: 1,
                 },
             },
             {
                 $group: {
-                    _id: "$startTime",
+                    _id: '$startTime',
                     count: { $sum: 1 },
-                }
+                },
             },
             {
-                $sort: { _id: 1 }
-            }
+                $sort: { _id: 1 },
+            },
         ]);
         return res;
     }
 
     async findAll(query, conditions) {
-        let model = this.ctx.model.Tomato;
+        const model = this.ctx.model.Tomato;
         if (conditions) {
             if (!conditions.deleted) {
                 conditions.deleted = false;
@@ -40,20 +42,20 @@ class TomatoService extends Service {
         }
         let builder = model.find(conditions);
         if (query.select) {
-            select = JSON.parse(query.select);
+            const select = JSON.parse(query.select);
             builder = builder.select(select);
         }
 
-        ["limit", "skip", "sort", "count"].forEach(key => {
+        [ 'limit', 'skip', 'sort', 'count' ].forEach(key => {
             if (query[key]) {
                 let arg = query[key];
-                if (key === "limit" || key === "skip") {
+                if (key === 'limit' || key === 'skip') {
                     arg = parseInt(arg);
                 }
-                if (key === "sort" && typeof arg === "string") {
+                if (key === 'sort' && typeof arg === 'string') {
                     arg = JSON.parse(arg);
                 }
-                if (key !== "count") builder[key](arg);
+                if (key !== 'count') builder[key](arg);
                 else builder[key]();
             }
         });
@@ -62,7 +64,7 @@ class TomatoService extends Service {
     }
 
     async findById(query, id) {
-        let model = this.ctx.model.Tomato;
+        const model = this.ctx.model.Tomato;
         let select = {};
         let builder = model.findById(id);
         if (query.select) {
@@ -74,39 +76,29 @@ class TomatoService extends Service {
     }
 
     async create(body) {
-        let model = this.ctx.model.Tomato;
+        const model = this.ctx.model.Tomato;
         const result = await model.create(body);
         return result;
     }
 
     async delete(id) {
-        let model = this.ctx.model.Tomato;
+        const model = this.ctx.model.Tomato;
         await model.updateOne({ _id: id }, { deleted: true }, {});
         return true;
     }
 
     async updateById(id, body) {
-        let model = await this.ctx.model.Tomato;
+        const model = await this.ctx.model.Tomato;
         const result = await model
             .findByIdAndUpdate(id, body, {
-                new: true
-            })
-            .exec();
-        return result;
-    }
-
-    async updateById(id, body) {
-        let model = this.ctx.model.Tomato;
-        const result = await model
-            .findByIdAndUpdate(id, body, {
-                new: true
+                new: true,
             })
             .exec();
         return result;
     }
 
     async replaceById(id, newDocument) {
-        let model = this.ctx.model.Tomato;
+        const model = this.ctx.model.Tomato;
         await model.findByIdAndRemove(id).exec();
         const result = await model.create(newDocument);
         return result;

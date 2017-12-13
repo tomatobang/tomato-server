@@ -1,15 +1,16 @@
+'use strict';
 /*
- * @Author: kobepeng 
- * @Date: 2017-12-06 09:29:20 
- * @Last Modified by:   kobepeng 
- * @Last Modified time: 2017-12-06 09:29:20 
+ * @Author: kobepeng
+ * @Date: 2017-12-06 09:29:20
+ * @Last Modified by: kobepeng
+ * @Last Modified time: 2017-12-13 14:15:58
  */
 module.exports = app => {
     /**
      * 任务
      */
     const mongoose = app.mongoose;
-    let task = new mongoose.Schema({
+    const task = new mongoose.Schema({
         // 用户编号
         userid: String,
         // 标题
@@ -17,13 +18,13 @@ module.exports = app => {
         // 目标
         target: String,
         // 描述
-        description: { type: String, default: "" },
+        description: { type: String, default: '' },
         // 番茄个数
         num: { type: Number, default: 0 },
         // 是否激活
         isActive: { type: Boolean, default: false },
         // 语音路径
-        voiceUrl: { type: String, default: "" },
+        voiceUrl: { type: String, default: '' },
 
         // 是否已完成
         finished: { type: Boolean, default: false },
@@ -38,5 +39,5 @@ module.exports = app => {
     task.index({ create_at: -1 });
     task.index({ userid: 1, create_at: -1 });
 
-    return mongoose.model("task", task);
-}
+    return mongoose.model('task', task);
+};

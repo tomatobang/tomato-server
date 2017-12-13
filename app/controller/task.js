@@ -1,3 +1,4 @@
+'use strict';
 module.exports = app => {
     class TaskController extends app.Controller {
         /**
@@ -6,8 +7,7 @@ module.exports = app => {
         async list() {
             const { ctx } = this;
             let conditions = {};
-            let select = {};
-            let query = ctx.request.query;
+            const query = ctx.request.query;
             // 按用户筛选
             if (ctx.request.currentUser) {
                 conditions.userid = ctx.request.currentUser.username;
@@ -16,7 +16,7 @@ module.exports = app => {
                 conditions = JSON.parse(query.conditions);
             }
             const result = await ctx.service.task.findAll(query, conditions);
-            //ctx.logger.info("task", result);
+            // ctx.logger.info("task", result);
 
             // 设置响应体和状态码
             ctx.body = result;
@@ -28,10 +28,9 @@ module.exports = app => {
          */
         async findById() {
             const { ctx } = this;
-            let select = {};
-            let query = ctx.request.query;
-            let id = ctx.params.id;
-            const users = await ctx.service.task.findById(query, id);
+            const query = ctx.request.query;
+            const id = ctx.params.id;
+            await ctx.service.task.findById(query, id);
         }
 
         /**
@@ -53,7 +52,7 @@ module.exports = app => {
          */
         async deleteById() {
             const { ctx } = this;
-            let id = ctx.params.id;
+            const id = ctx.params.id;
             const result = await ctx.service.task.delete(id);
             ctx.body = result;
         }
@@ -63,8 +62,8 @@ module.exports = app => {
          */
         async updateById() {
             const { ctx } = this;
-            let id = ctx.params.id;
-            let body = ctx.request.body;
+            const id = ctx.params.id;
+            const body = ctx.request.body;
             const result = await ctx.service.task.updateById(id, body);
             ctx.body = result;
         }
@@ -75,7 +74,7 @@ module.exports = app => {
         async replaceById() {
             const { ctx } = this;
             const newDocument = ctx.request.body;
-            let id = ctx.params.id;
+            const id = ctx.params.id;
             newDocument._id = id;
             const result = await ctx.service.task.replaceById(id, newDocument);
             ctx.body = result;

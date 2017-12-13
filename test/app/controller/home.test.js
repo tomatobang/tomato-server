@@ -1,14 +1,15 @@
-const { app, mock, assert } = require('egg-mock/bootstrap');
+'use strict';
+
+const { app, assert } = require('egg-mock/bootstrap');
 describe('test/controller/home.test.js', () => {
-    let token = "";
-    
+    let token = '';
     // 注册失败
     it('should register failed( 400 )', async () => {
-        let loginRes = await app.httpRequest()
+        const loginRes = await app.httpRequest()
             .post('/api/user')
             .type('form')
             .send({
-                username: 'pengyi',
+                username: 'test123',
                 password: '123',
             });
         assert(loginRes.status === 400);
@@ -16,30 +17,27 @@ describe('test/controller/home.test.js', () => {
 
     // 注册失败
     it('should register succeed( 200 )', async () => {
-        let loginRes = await app.httpRequest()
+        const loginRes = await app.httpRequest()
             .post('/api/user')
             .type('form')
             .send({
-                username: 'pengyi',
-                password: 'pengyi',
+                username: 'test123',
+                password: 'test123',
             });
-        assert(loginRes.status === 200);
+        assert(loginRes.status === 201 || loginRes.status === 200);
     });
     // 先进行登录
     it('should login succeed', async () => {
-        let loginRes = await app.httpRequest()
+        const loginRes = await app.httpRequest()
             .post('/api/login')
             .type('form')
             .send({
-                username: 'pengyi',
-                password: 'pengyi',
+                username: 'test123',
+                password: 'test123',
             });
         assert(loginRes.status === 200);
         token = loginRes.body.token;
     });
-
-
-
     it('should status 200 and get the body', () => {
         return app.httpRequest()
             .get('/')

@@ -1,3 +1,4 @@
+'use strict';
 // app/router.js
 module.exports = app => {
     // for test
@@ -11,7 +12,6 @@ module.exports = app => {
 
     // 版本管理
     app.get('/api/version', app.controller.version.findLatestVersion);
-    
     /**
      * 用户类
      */
@@ -21,7 +21,7 @@ module.exports = app => {
     app.post('/api/user', app.controller.user.create);
     app.post('/api/user/:id', app.controller.user.updateById);
     app.del('/api/user/:id', app.controller.user.deleteById);
-    //app.post('/getRongyunToken', app.controller.user.getRongyunToken);
+    // app.post('/getRongyunToken', app.controller.user.getRongyunToken);
     app.post('/email_username/verify', app.controller.user.emailUserNameVerify);
     app.post('/api/login', app.controller.user.login);
     app.post('/api/logout', app.controller.user.logout);
@@ -30,7 +30,6 @@ module.exports = app => {
     app.post('/api/user/displayname', app.controller.user.UpdateDisplayName);
     app.post('/api/user/email', app.controller.user.UpdateEmail);
     app.post('/api/user/location', app.controller.user.UpdateLocation);
-   
     /**
      * 番茄钟类
      */
@@ -42,7 +41,6 @@ module.exports = app => {
     app.post('/api/search', app.controller.tomato.search);
     app.post('/api/tomato/statistics', app.controller.tomato.statistics);
     app.del('/api/tomato/:id', app.controller.tomato.deleteById);
-   
     /**
      * 任务类
      */
@@ -63,5 +61,4 @@ module.exports = app => {
     app.get('/download/voicefile/:path', app.controller.other.downloadVoiceFile);
     app.post('/tool/dismissgroup', app.controller.other.dismissgroup);
     app.post('/upload/voicefile', app.controller.other.uploadVoiceFile);
-    
   };

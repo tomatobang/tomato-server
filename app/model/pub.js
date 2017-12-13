@@ -1,16 +1,17 @@
+'use strict';
 /*
- * @Author: kobepeng 
- * @Date: 2017-12-06 09:21:23 
+ * @Author: kobepeng
+ * @Date: 2017-12-06 09:21:23
  * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-06 10:50:21
+ * @Last Modified time: 2017-12-13 14:13:56
  */
 module.exports = app => {
     /**
      * 动态
     */
     const mongoose = app.mongoose;
-    var ObjectId = mongoose.Schema.ObjectId;
-    let pub = new mongoose.Schema({
+    const ObjectId = mongoose.Schema.ObjectId;
+    const pub = new mongoose.Schema({
         // 内容
         content: { type: String },
         // 发布用户
@@ -18,7 +19,7 @@ module.exports = app => {
         // 标签
         tag: { type: String },
         // 点赞者
-        ups: [ mongoose.Schema.Types.ObjectId],
+        ups: [ mongoose.Schema.Types.ObjectId ],
         // 是否置顶
         top: { type: Boolean, default: false },
         // 是否禁止回复
@@ -45,5 +46,5 @@ module.exports = app => {
 
     pub.index({ userid: 1 }, { unique: true });
 
-    return mongoose.model("pub", pub);
-}
+    return mongoose.model('pub', pub);
+};

@@ -1,3 +1,4 @@
+'use strict';
 module.exports = app => {
     class VersionController extends app.Controller {
         /**

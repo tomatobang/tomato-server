@@ -1,15 +1,16 @@
+'use strict';
 /*
- * @Author: kobepeng 
- * @Date: 2017-12-06 09:21:23 
+ * @Author: kobepeng
+ * @Date: 2017-12-06 09:21:23
  * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-06 10:21:05
+ * @Last Modified time: 2017-12-13 14:13:30
  */
 module.exports = app => {
     /**
      * 用户
     */
     const mongoose = app.mongoose;
-    let user = new mongoose.Schema({
+    const user = new mongoose.Schema({
         // 用户名
         username: String,
         // 密码
@@ -41,11 +42,11 @@ module.exports = app => {
 
     user.index({ username: 1 }, { unique: true });
 
-    user.pre('save', function (next) {
-        let now = new Date();
+    user.pre('save', next => {
+        const now = new Date();
         this.update_at = now;
         next();
     });
 
-    return mongoose.model("user", user);
-}
+    return mongoose.model('user', user);
+};
