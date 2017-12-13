@@ -1,6 +1,12 @@
 'use strict';
-module.exports = app => {
-    class TomatoController extends app.Controller {
+
+const BaseController = require('./base');
+    class TomatoController extends BaseController {
+        constructor(ctx) {
+            super(ctx);
+            this.service = ctx.service.tomato;
+          }
+
         async statistics() {
             const { ctx } = this;
             const isSuccess = ctx.request.body.isSuccess;
@@ -74,87 +80,5 @@ module.exports = app => {
             ctx.body = ret;
 
         }
-
-        /**
-         * 按条件查找
-         */
-        async list() {
-            const { ctx } = this;
-            let conditions = {};
-            const query = ctx.request.query;
-            // 按用户筛选
-            if (ctx.request.currentUser) {
-                conditions.userid = ctx.request.currentUser.username;
-            }
-            if (query.conditions) {
-                conditions = JSON.parse(query.conditions);
-            }
-            const result = await ctx.service.tomato.findAll(query, conditions);
-            // ctx.logger.info('tomato', result);
-
-            // 设置响应体和状态码
-            ctx.body = result;
-            ctx.status = 200;
-        }
-
-        /**
-         * 按 id 查找
-         */
-        async findById() {
-            const { ctx } = this;
-            const query = ctx.request.query;
-            const id = ctx.params.id;
-            await ctx.service.tomato.findById(query, id);
-        }
-
-        /**
-         * 创建
-         */
-        async create() {
-            const { ctx } = this;
-            // 存储用户编号/username
-            if (ctx.request.currentUser) {
-                ctx.request.body.userid = ctx.request.currentUser.username;
-            }
-            const result = await ctx.service.tomato.create(ctx.request.body);
-            ctx.status = 201;
-            ctx.body = result;
-        }
-
-        /**
-         * 删除
-         */
-        async deleteById() {
-            const { ctx } = this;
-            const id = ctx.params.id;
-            const result = await ctx.service.tomato.delete(id);
-            ctx.body = result;
-        }
-
-        /**
-         * 按 id 更新
-         */
-        async updateById() {
-            const { ctx } = this;
-            const id = ctx.params.id;
-            const body = ctx.request.body;
-            const result = await ctx.service.tomato.updateById(id, body);
-            ctx.body = result;
-        }
-
-
-        /**
-         * 按 id 替换
-         */
-        async replaceById() {
-            const { ctx } = this;
-            const newDocument = ctx.request.body;
-            const id = ctx.params.id;
-            newDocument._id = id;
-            const result = await ctx.service.tomato.replaceById(id, newDocument);
-            ctx.body = result;
-        }
-
     }
-    return TomatoController;
-};
+    module.exports = TomatoController;
