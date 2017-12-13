@@ -1,91 +1,24 @@
 'use strict';
 
-const Service = require('egg').Service;
+const BaseService = require('./base');
 
-class TaskService extends Service {
+class TaskService extends BaseService {
 
-  async findAll(query, conditions) {
-    const model = this.ctx.model.Task;
-    if (conditions) {
-      if (!conditions.deleted) {
-        conditions.deleted = false;
-      }
-    }
-    let builder = model.find(conditions);
-    if (query.select) {
-      const select = JSON.parse(query.select);
-      builder = builder.select(select);
-    }
-
-    [ 'limit', 'skip', 'sort', 'count' ].forEach(key => {
-      if (query[key]) {
-        let arg = query[key];
-        if (key === 'limit' || key === 'skip') {
-          arg = parseInt(arg);
-        }
-        if (key === 'sort' && typeof arg === 'string') {
-          arg = JSON.parse(arg);
-        }
-        if (key !== 'count') builder[key](arg);
-        else builder[key]();
-      }
-    });
-    const result = await builder.exec();
-    return result;
+  constructor(ctx) {
+    super(ctx);
+    this.model = this.ctx.model.Task;
   }
 
-  async findById(query, id) {
-    const model = this.ctx.model.Task;
-    let select = {};
-    let builder = model.findById(id);
-    if (query.select) {
-      select = JSON.parse(query.select);
-      builder = builder.select(select);
-    }
-    const result = await builder.exec();
-    return result;
-  }
-
-  async create(body) {
-    const model = this.ctx.model.Task;
-    const result = await model.create(body);
-    return result;
-  }
-
-  async delete(id) {
-    const model = this.ctx.model.Task;
-    await model.updateOne({ _id: id }, { deleted: true }, {});
-    return true;
-  }
-
-  async erase(id) {
-    const model = this.ctx.model.Task;
-    await model.findByIdAndRemove(id).exec();
-    return true;
-  }
-
-
-  async updateById(id, body) {
-    const model = this.ctx.model.Task;
-    const result = await model
-      .findByIdAndUpdate(id, body, {
-        new: true,
-      })
-      .exec();
-    return result;
-  }
-
+  /**
+   * 更新语音路径
+   * @param { Number } taskid 任务编号
+   * @param { String } relateUrl 相对路径
+   * @return { Boolean } 是否成功
+   */
   async updateVoiceUrl(taskid, relateUrl) {
     const model = this.ctx.model.Task;
     await model.updateOne({ _id: taskid }, { voiceUrl: relateUrl }, {});
     return true;
-  }
-
-  async replaceById(id, newDocument) {
-    const model = this.ctx.model.Task;
-    await model.findByIdAndRemove(id).exec();
-    const result = await model.create(newDocument);
-    return result;
   }
 }
 module.exports = TaskService;
