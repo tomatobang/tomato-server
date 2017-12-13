@@ -1,4 +1,5 @@
 # Tomato-Server
+[![Build Status](https://www.travis-ci.org/pengkobe/tomato-server.svg?branch=master)](https://www.travis-ci.org/pengkobe/tomato-server)
 > server end for tomatobang 
 
 ## Tech related

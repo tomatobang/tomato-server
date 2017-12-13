@@ -63,7 +63,7 @@ exports.ratelimit= {
   duration: 60000,
   throw:true,
   errorMessage: "请求频率过快！",
-  max: 2,
+  max: 200,
 },
 // robot's configurations
 exports.robot = {
