@@ -1,6 +1,11 @@
 'use strict';
-const Service = require('egg').Service;
-class VersionService extends Service {
+const BaseService = require('./base');
+class VersionService extends BaseService {
+
+    constructor(ctx) {
+        super(ctx);
+        this.model = this.ctx.model.Version;
+    }
 
     async findLatestVersion() {
         const model = this.ctx.model.Version;

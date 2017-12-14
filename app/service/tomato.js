@@ -1,8 +1,20 @@
 'use strict';
 
-const Service = require('egg').Service;
-class TomatoService extends Service {
-    async statistics(userid, startTime, endDate, succeed) {
+const BaseService = require('./base');
+class TomatoService extends BaseService {
+    constructor(ctx) {
+        super(ctx);
+        this.model = this.ctx.model.Tomato;
+    }
+    /**
+     * 日历统计数据
+     * @param { Number } userid 用户编号
+     * @param { Date } startTime 开始时间
+     * @param { Date } endTime 结束时间
+     * @param { Boolean } succeed 番茄钟未中断
+     * @return { Object } 查询结果
+     */
+    async statistics(userid, startTime, endTime, succeed) {
         const Tomato = this.ctx.model.Tomato;
 
         const res = await Tomato.aggregate([
@@ -10,7 +22,7 @@ class TomatoService extends Service {
                 $match: {
                     userid,
                     succeed: parseInt(succeed),
-                    startTime: { $gte: new Date(startTime), $lte: new Date(endDate) },
+                    startTime: { $gte: new Date(startTime), $lte: new Date(endTime) },
                 },
             },
             {
@@ -31,77 +43,6 @@ class TomatoService extends Service {
             },
         ]);
         return res;
-    }
-
-    async findAll(query, conditions) {
-        const model = this.ctx.model.Tomato;
-        if (conditions) {
-            if (!conditions.deleted) {
-                conditions.deleted = false;
-            }
-        }
-        let builder = model.find(conditions);
-        if (query.select) {
-            const select = JSON.parse(query.select);
-            builder = builder.select(select);
-        }
-
-        [ 'limit', 'skip', 'sort', 'count' ].forEach(key => {
-            if (query[key]) {
-                let arg = query[key];
-                if (key === 'limit' || key === 'skip') {
-                    arg = parseInt(arg);
-                }
-                if (key === 'sort' && typeof arg === 'string') {
-                    arg = JSON.parse(arg);
-                }
-                if (key !== 'count') builder[key](arg);
-                else builder[key]();
-            }
-        });
-        const result = await builder.exec();
-        return result;
-    }
-
-    async findById(query, id) {
-        const model = this.ctx.model.Tomato;
-        let select = {};
-        let builder = model.findById(id);
-        if (query.select) {
-            select = JSON.parse(query.select);
-            builder = builder.select(select);
-        }
-        const result = await builder.exec();
-        return result;
-    }
-
-    async create(body) {
-        const model = this.ctx.model.Tomato;
-        const result = await model.create(body);
-        return result;
-    }
-
-    async delete(id) {
-        const model = this.ctx.model.Tomato;
-        await model.updateOne({ _id: id }, { deleted: true }, {});
-        return true;
-    }
-
-    async updateById(id, body) {
-        const model = await this.ctx.model.Tomato;
-        const result = await model
-            .findByIdAndUpdate(id, body, {
-                new: true,
-            })
-            .exec();
-        return result;
-    }
-
-    async replaceById(id, newDocument) {
-        const model = this.ctx.model.Tomato;
-        await model.findByIdAndRemove(id).exec();
-        const result = await model.create(newDocument);
-        return result;
     }
 }
 module.exports = TomatoService;
