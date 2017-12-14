@@ -1,5 +1,4 @@
 'use strict';
-
 const Controller = require('egg').Controller;
 class BaseController extends Controller {
   /**
@@ -38,10 +37,16 @@ class BaseController extends Controller {
    * 创建
    */
   async create() {
-    const { ctx } = this;
+    const { ctx, app } = this;
     // 存储用户编号/username
     if (ctx.request.currentUser) {
       ctx.request.body.userid = ctx.request.currentUser.username;
+    }
+    if (this.validateRule) {
+      const invalid = app.validator.validate(this.validateRule, ctx.request.body);
+      if (invalid) {
+          ctx.throw(400);
+      }
     }
     const result = await this.service.create(ctx.request.body);
     ctx.status = 201;
