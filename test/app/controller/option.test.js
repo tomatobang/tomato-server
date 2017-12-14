@@ -1,7 +1,7 @@
 'use strict';
 
 const { app, assert } = require('egg-mock/bootstrap');
-describe('test/controller/home.test.js', () => {
+describe('test/controller/option.test.js', () => {
     let token = '';
     it('should register succeed( 200 )', async () => {
         const res = await app.httpRequest()
@@ -27,11 +27,12 @@ describe('test/controller/home.test.js', () => {
         assert(loginRes.status === 200);
         token = loginRes.body.token;
     });
-    it('should status 200 and get the body', () => {
-        return app.httpRequest()
-            .get('/')
+
+    // 列表查询
+    it('should load option list', async () => {
+        await app.httpRequest()
+            .get('/api/option')
             .set('Authorization', token)
-            .expect(200)
-            .expect('Hello, this is TomatoBang Index Page');
+            .expect(200);
     });
 });

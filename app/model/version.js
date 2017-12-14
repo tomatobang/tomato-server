@@ -16,6 +16,8 @@ module.exports = app => {
         size: String,
         // 发布时间
         datetime: { type: Date },
+        // 删除标识
+        deleted: { type: Boolean, default: false },
     });
 
     return mongoose.model('version', user);

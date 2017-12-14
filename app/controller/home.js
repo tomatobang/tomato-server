@@ -1,10 +1,8 @@
 'use strict';
-// app/controller/home.js
-module.exports = app => {
-    class HomeController extends app.Controller {
-      async index() {
-        this.ctx.body = 'Hello, this is TomatoBang Index Page';
-      }
-    }
-    return HomeController;
-  };
+const Controller = require('egg').Controller;
+class HomeController extends Controller {
+  async index() {
+    this.ctx.body = 'Hello, this is TomatoBang Index Page';
+  }
+}
+module.exports = HomeController;

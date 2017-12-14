@@ -1,31 +1,13 @@
 'use strict';
-const Service = require('egg').Service;
+const BaseService = require('./base');
 
-class OptionsService extends Service {
-    async findAll(query, conditions) {
-        const model = this.ctx.model.Options;
-        let builder = model.find(conditions);
-        if (query.select) {
-            const select = JSON.parse(query.select);
-            builder = builder.select(select);
-        }
+class OptionsService extends BaseService {
 
-        [ 'limit', 'skip', 'sort', 'count' ].forEach(key => {
-            if (query[key]) {
-                let arg = query[key];
-                if (key === 'limit' || key === 'skip') {
-                    arg = parseInt(arg);
-                }
-                if (key === 'sort' && typeof arg === 'string') {
-                    arg = JSON.parse(arg);
-                }
-                if (key !== 'count') builder[key](arg);
-                else builder[key]();
-            }
-        });
-        const result = await builder.exec();
-        return result;
+    constructor(ctx) {
+        super(ctx);
+        this.model = this.ctx.model.Option;
     }
+
 }
 
 module.exports = OptionsService;
