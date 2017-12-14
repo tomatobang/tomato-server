@@ -44,7 +44,7 @@ class TomatoController extends BaseController {
             '-' +
             (datenow.getMonth() + 1) +
             '-' +
-            datenow.getDate(); // ,'$lte':new Date()
+            datenow.getDate();
         // 按用户筛选
         const conditions = { startTime: { $gte: new Date(date).toISOString() } };
         if (ctx.request.currentUser) {

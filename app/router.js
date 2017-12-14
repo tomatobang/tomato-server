@@ -12,6 +12,9 @@ module.exports = app => {
 
     // 版本管理
     app.get('/api/version', app.controller.version.findLatestVersion);
+    // 选项
+    app.get('/api/option', app.controller.version.list);
+
     /**
      * 用户类
      */

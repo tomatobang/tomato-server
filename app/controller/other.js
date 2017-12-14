@@ -5,7 +5,7 @@ class OtherController extends Controller {
      * 解散群组（待删）
     */
     async dismissgroup() {
-        const { ctx } = this;
+        const { ctx, app } = this;
         const userid = ctx.request.body.userid;
         const groupid = ctx.request.body.groupid;
         if (!userid || !groupid) {
@@ -78,6 +78,7 @@ class OtherController extends Controller {
             await ctx.service.task.updateVoiceUrl(taskid, relateUrl);
         });
 
+        // 此处写法待重构
         ctx.status = 200;
         ctx.body = {
             success: true,

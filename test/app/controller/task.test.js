@@ -1,9 +1,8 @@
 'use strict';
 
 const { app, assert } = require('egg-mock/bootstrap');
-describe('test/controller/home.test.js', () => {
+describe('test/controller/task.test.js', () => {
     let token = '';
-
     // 先进行登录
     it('should login succeed', async () => {
         const loginRes = await app.httpRequest()
@@ -16,11 +15,12 @@ describe('test/controller/home.test.js', () => {
         assert(loginRes.status === 200);
         token = loginRes.body.token;
     });
-    it('should status 200 and get the body', () => {
-        return app.httpRequest()
-            .get('/')
+
+    // 列表查询
+    it('should load task list', async () => {
+        await app.httpRequest()
+            .get('/api/task')
             .set('Authorization', token)
-            .expect(200)
-            .expect('Hello, this is TomatoBang Index Page');
+            .expect(200);
     });
 });
