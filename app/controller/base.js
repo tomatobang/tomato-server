@@ -30,7 +30,8 @@ class BaseController extends Controller {
     const { ctx } = this;
     const query = ctx.request.query;
     const id = ctx.params.id;
-    await this.service.findById(query, id);
+    const result = await this.service.findById(query, id);
+    ctx.body = result;
   }
 
   /**
@@ -45,7 +46,7 @@ class BaseController extends Controller {
     if (this.validateRule) {
       const invalid = app.validator.validate(this.validateRule, ctx.request.body);
       if (invalid) {
-          ctx.throw(400);
+        ctx.throw(400);
       }
     }
     const result = await this.service.create(ctx.request.body);

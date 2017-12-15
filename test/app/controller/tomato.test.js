@@ -64,4 +64,41 @@ describe('test/controller/tomato.test.js', () => {
             })
             .expect(200);
     });
+
+    it('should create tomato', async () => {
+        const res = await app.httpRequest()
+            .post('/api/tomato')
+            .type('form')
+            .send({
+                userid: 'test123',
+                title: 'tomato test',
+                taskid: 'testid',
+            });
+            assert(res.status === 200 || res.status === 201);
+    });
+
+    it('should find tomato by id', async () => {
+        await app.httpRequest()
+            .get('/api/tomato/4edd40c86762e0fb12000003?aaa=123')
+            .set('Authorization', token)
+            .expect(204);
+    });
+
+    it('should update tomato by id', async () => {
+        const res = await app.httpRequest()
+            .post('/api/tomato/4edd40c86762e0fb12000003')
+            .set('Authorization', token)
+            .type('form')
+            .send({
+                title: 'tomato test',
+            });
+        assert(res.status === 204);
+    });
+
+    it('should delete tomato by id', async () => {
+        const res = await app.httpRequest()
+            .del('/api/tomato/4edd40c86762e0fb12000003')
+            .set('Authorization', token);
+        assert(res.status === 200);
+    });
 });

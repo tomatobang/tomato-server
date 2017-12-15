@@ -1,10 +1,12 @@
 'use strict';
 
 const BaseController = require('./base');
+const tomatoValidationRule = require('../validate/tomato');
 class TomatoController extends BaseController {
     constructor(ctx) {
         super(ctx);
         this.service = ctx.service.tomato;
+        this.validateRule = tomatoValidationRule;
     }
 
     async statistics() {
