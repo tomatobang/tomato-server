@@ -120,19 +120,6 @@ module.exports = app => {
         }
       }
     }
-
-    /**
-     * 连接中断（迁移至中间件 auth）
-     */
-    // async disconnect() {
-    //   let socket = this.ctx.socket;
-    //   let userid = await app.redis.get(socket.id);
-    //   let count = await app.redis.scard(userid + ':socket')
-    //   if (count > 0) {
-    //     await app.redis.srem(userid + ':socket', socket.id);
-    //     await app.redis.del(socket.id);
-    //   }
-    // }
   }
   return Controller;
 };

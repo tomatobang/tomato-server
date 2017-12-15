@@ -2,7 +2,7 @@
 
 module.exports = app => {
   return function* (next) {
-    console.log('auth!');
+    console.log('auth! todo~~~');
     yield* next;
     console.log('disconnect!');
     const socket = this.socket;
