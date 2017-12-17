@@ -5,10 +5,12 @@
  * @Last Modified by: kobepeng
  * @Last Modified time: 2017-12-13 14:13:30
  */
+const bcrypt = require('bcrypt');
 module.exports = app => {
     /**
      * 用户
     */
+    const saltRounds = 10;
     const mongoose = app.mongoose;
     const user = new mongoose.Schema({
         // 用户名
@@ -42,11 +44,17 @@ module.exports = app => {
 
     user.index({ username: 1 }, { unique: true });
 
-    user.pre('save', next => {
+    user.pre('save', async function(next) {
         const now = new Date();
+        if (this.password) {
+            this.password = await bcrypt.hash(this.password, saltRounds);
+        }
         this.update_at = now;
         next();
     });
+    user.methods.comparePassword = async function(candidatePassword) {
+        return await bcrypt.compare(candidatePassword, this.password);
+    };
 
     return mongoose.model('user', user);
 };

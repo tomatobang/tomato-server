@@ -21,7 +21,7 @@ class UserController extends BaseController {
         };
         const password = users[0].password;
 
-        if (password === ctx.request.body.password) {
+        if (password === ctx.request.body.password || users[0].comparePassword(ctx.request.body.password)) {
             const token = ctx.helper.tokenService.createToken(user);
             ctx.logger.info(user, token);
             await app.redis.set(token, JSON.stringify(user), 'EX', 3 * 24 * 60 * 60);
