@@ -29,7 +29,6 @@
   "homepage": "https://github.com/tomatobang/tomato-server#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "bluebird": "^3.5.1",
     "co-rongcloud-api": "^1.1.1",
     "egg": "^1.11.0",
     "egg-alinode": "^1.1.1",
@@ -44,13 +43,9 @@
     "jpush-sdk": "*",
     "jsonwebtoken": "^7.1.9",
     "koa-ratelimit": "^4.0.0",
-    "qiniu": "^6.1.13",
-    "restc": "^0.0.4",
     "rongcloud-sdk": "^1.0.3"
   },
   "devDependencies": {
-    "babel-eslint": "^7.1.1",
-    "babel-plugin-transform-runtime": "^6.15.0",
     "egg-bin": "^4.3.5",
     "egg-mock": "^3.13.0",
     "eslint": "^3.17.0",
