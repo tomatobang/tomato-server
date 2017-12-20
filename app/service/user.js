@@ -68,6 +68,16 @@ class UserService extends BaseService {
             .exec();
         return result;
     }
+
+    async UpdateBio(id, bio) {
+        const model = this.ctx.model.User;
+        const result = await model
+            .findByIdAndUpdate(id, {
+                bio,
+            }, { new: true })
+            .exec();
+        return result;
+    }
 }
 
 module.exports = UserService;

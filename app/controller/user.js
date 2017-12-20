@@ -20,8 +20,8 @@ class UserController extends BaseController {
             timestamp: (new Date()).valueOf(),
         };
         const password = users[0].password;
-
-        if (password === ctx.request.body.password || users[0].comparePassword(ctx.request.body.password)) {
+        const verifyPWD = await users[0].comparePassword(ctx.request.body.password);
+        if (password === ctx.request.body.password || verifyPWD) {
             const token = ctx.helper.tokenService.createToken(user);
             ctx.logger.info(user, token);
             await app.redis.set(token, JSON.stringify(user), 'EX', 3 * 24 * 60 * 60);
@@ -44,37 +44,12 @@ class UserController extends BaseController {
     async logout() {
         const { ctx, app } = this;
         const headers = ctx.request.headers;
-        let token;
-        try {
-            token = headers.authorization;
-        } catch (err) {
-            ctx.body = {
-                status: 'fail',
-                description: err,
-            };
-        }
-
-        if (!token) {
-            ctx.body = {
-                status: 'fail',
-                description: 'Token not found',
-            };
-        }
-
-        const result = ctx.helper.tokenService.verifyToken(token);
-
-        if (result === false) {
-            ctx.body = {
-                status: 'fail',
-                description: 'Token verify failed',
-            };
-        } else {
-            await app.redis.del('token');
-            ctx.body = {
-                status: 'success',
-                description: 'Token deleted',
-            };
-        }
+        const token = headers.authorization;
+        await app.redis.del(token);
+        ctx.body = {
+            status: 'success',
+            description: 'logout succeed',
+        };
     }
 
     /**
@@ -204,6 +179,17 @@ class UserController extends BaseController {
         const id = ctx.request.body.userid;
         const location = ctx.request.body.location;
         const result = await ctx.service.user.UpdateLocation(id, location);
+        ctx.body = result;
+    }
+
+    /**
+     * 更新签名
+    */
+    async UpdateBio() {
+        const { ctx } = this;
+        const id = ctx.request.body.userid;
+        const bio = ctx.request.body.bio;
+        const result = await ctx.service.user.UpdateLocation(id, bio);
         ctx.body = result;
     }
 }

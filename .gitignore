@@ -41,3 +41,4 @@ public/
 !public/tool.html
 uploadfile/
 run/
+docker-compose.yml

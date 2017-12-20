@@ -32,6 +32,8 @@ module.exports = app => {
     app.post('/api/user/displayname', app.controller.user.UpdateDisplayName);
     app.post('/api/user/email', app.controller.user.UpdateEmail);
     app.post('/api/user/location', app.controller.user.UpdateLocation);
+    app.post('/api/user/bio', app.controller.user.UpdateBio);
+
     /**
      * 番茄钟类
      */

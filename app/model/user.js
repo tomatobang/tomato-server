@@ -3,7 +3,7 @@
  * @Author: kobepeng
  * @Date: 2017-12-06 09:21:23
  * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-18 15:42:12
+ * @Last Modified time: 2017-12-20 11:40:58
  */
 const bcrypt = require('bcryptjs');
 module.exports = app => {
@@ -19,6 +19,8 @@ module.exports = app => {
         password: String,
         // 显示名称
         displayName: String,
+        // 签名
+        bio: String,
         // 头像
         img: String,
         // 邮箱
