@@ -42,6 +42,8 @@ module.exports = (option, app) => {
 
         console.log('当前用户:', reply);
         if (reply) {
+            // 若有登录则过期时间延长
+            app.redis.expire(token, 3 * 24 * 60 * 60);
             const currentUser = JSON.parse(reply);
             ctx.request.currentUser = currentUser;
             return next();
