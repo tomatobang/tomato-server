@@ -44,6 +44,7 @@ module.exports = app => {
     app.post('/api/tomato/:id', app.controller.tomato.updateById);
     app.post('/api/search', app.controller.tomato.search);
     app.post('/api/tomato/statistics', app.controller.tomato.statistics);
+    app.post('/api/tomato/pagination', app.controller.tomato.pagination);
     app.del('/api/tomato/:id', app.controller.tomato.deleteById);
     /**
      * 任务类

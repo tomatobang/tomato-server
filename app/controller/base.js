@@ -86,6 +86,42 @@ class BaseController extends Controller {
     const result = await this.service.replaceById(id, newDocument);
     ctx.body = result;
   }
+
+  /**
+ * 关键词查找
+ */
+  async pagination() {
+    const { ctx } = this;
+    const current = ctx.request.body.current;
+    let userid = '';
+    if (ctx.request.currentUser) {
+      userid = ctx.request.currentUser.username;
+    }
+    if (!this.select_field) {
+      ctx.status = 403;
+      ctx.body = {
+        error_msg: '暂不支持分页!',
+      };
+      return;
+    }
+    if (!current || current < 1) {
+      ctx.status = 403;
+      ctx.body = {
+        error_msg: 'current 参数格式不正确!',
+      };
+      return;
+    }
+    const ret = await ctx.service.tomato.loadByPagination({
+      current,
+      userid,
+      pageSize: 6,
+      sorter: {
+        startTime: -1,
+      },
+    }, this.select_field);
+    ctx.status = 200;
+    ctx.body = ret;
+  }
 }
 
 module.exports = BaseController;

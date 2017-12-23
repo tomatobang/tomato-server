@@ -95,6 +95,28 @@ describe('test/controller/tomato.test.js', () => {
         assert(res.status === 204);
     });
 
+    it('should load tomato pagination succeed', async () => {
+        const res = await app.httpRequest()
+            .post('/api/tomato/pagination')
+            .set('Authorization', token)
+            .type('form')
+            .send({
+                current: 1,
+            });
+        assert(res.status === 200);
+    });
+
+    it('should load tomato pagination err( current param not right : 403)', async () => {
+        const res = await app.httpRequest()
+            .post('/api/tomato/pagination')
+            .set('Authorization', token)
+            .type('form')
+            .send({
+                current: 0,
+            });
+        assert(res.status === 403);
+    });
+
     it('should delete tomato by id', async () => {
         const res = await app.httpRequest()
             .del('/api/tomato/4edd40c86762e0fb12000003')

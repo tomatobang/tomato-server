@@ -121,6 +121,77 @@ class BaseService extends Service {
     await model.findByIdAndRemove(id).exec();
     return true;
   }
+
+    /**
+   * 分页
+   * @param { Object } query 查询条件
+   * @param { String } selectField 需要选出的字段
+   * @param { String } populate 关联表
+   * @return { Object } 返回查询结果
+   */
+  async loadByPagination(query, selectField, populate = '') {
+    const model = this.model;
+    const getCount = queryParams => model.count(queryParams);
+    const getSelect = ({ queryParams, sorter, pageSize, start, selectField }) => model
+      .find(queryParams)
+      .skip(start)
+      .limit(pageSize)
+      .populate(populate)
+      .sort(sorter)
+      .select(selectField);
+
+    return await this._pagination(query, getCount, getSelect, selectField);
+  }
+
+/**
+ * 构建返回结果
+ * @param { Object } query 条件
+ * @param { Promise } getCount 数量
+ * @param { Promise } getSelect 查询语句
+ * @param { Promise } selectField 需要选出的字段
+ * @return { Object } 返回查询结果
+ */
+  async _pagination(query, getCount, getSelect, selectField) {
+    const pagination = { current: 1, pageSize: 10 };
+    const queryParams = {};
+    let sorter = [];
+    let sorterField;
+    for (const key in query) {
+      if (key === 'current' || key === 'pageSize') {
+        pagination[key] = +query[key];
+      } else if (key === 'sorter') {
+        if (key === 'sorter') sorterField = query[key];
+      } else {
+        if (!query[key]) {
+          continue;
+        }
+        queryParams[key] = query[key];
+      }
+    }
+    if (sorterField) {
+      sorter = sorterField;
+    }
+    const current = pagination.current;
+    const pageSize = pagination.pageSize;
+    const start = (current - 1) * pageSize;
+    const result = {
+      pagination,
+    };
+    const [ count, records ] = await Promise.all([
+      getCount(queryParams),
+      getSelect({
+        queryParams,
+        sorter,
+        pageSize,
+        start,
+        selectField,
+      }),
+    ]);
+    result.pagination.total = Array.isArray(count) ?
+      count.reduce((pre, cur) => ({ count: pre.count + cur.count }), { count: 0 }).count : count;
+    result.records = records;
+    return result;
+  }
 }
 
 module.exports = BaseService;

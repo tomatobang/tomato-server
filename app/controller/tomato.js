@@ -7,6 +7,7 @@ class TomatoController extends BaseController {
         super(ctx);
         this.service = ctx.service.tomato;
         this.validateRule = tomatoValidationRule;
+        this.select_field = '_id title target description startTime endTime succeed breakReason voiceUrl userid ';
     }
 
     async statistics() {
@@ -68,7 +69,6 @@ class TomatoController extends BaseController {
     /**
      * 关键词查找
      */
-
     async search() {
         const { ctx } = this;
         // 对这些关键字得做处理
@@ -80,7 +80,6 @@ class TomatoController extends BaseController {
         });
         ctx.status = 200;
         ctx.body = ret;
-
     }
 }
 module.exports = TomatoController;
