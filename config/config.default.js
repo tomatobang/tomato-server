@@ -43,7 +43,7 @@ exports.keys = 'com.server.tomatobang';
 
 
 exports.mongoose = {
-  url: 'mongodb://' + (env.DATABASE_HOST ? env.DATABASE_HOST : '127.0.0.1') + ':27017/blog',
+  url: 'mongodb://' + (env.DATABASE_HOST ? env.DATABASE_HOST : '127.0.0.1') + ':27017/tomatobang',
   options: {},
 };
 
@@ -62,7 +62,7 @@ exports.ratelimit = {
   duration: 60000,
   throw: true,
   errorMessage: '请求频率过快！',
-  max: 200,
+  max: 2000,
 };
 // robot's configurations
 exports.robot = {

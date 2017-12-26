@@ -116,7 +116,7 @@ describe('test/controller/user.test.js', () => {
         await app.httpRequest()
             .get('/api/user/headimg/' + _mockid)
             .set('Authorization', token)
-            .expect(500);
+            .expect(404);
     });
 
     it('should update bio succeed', async () => {

@@ -60,13 +60,13 @@ exports.dateHelper = {
   // https://www.cnblogs.com/tugenhua0707/p/3776808.html
   format(datetime, fmt) {
     const o = {
-      'M+': datetime.getMonth() + 1,               // 月份
-      'd+': datetime.getDate(),                    // 日
-      'h+': datetime.getHours(),                   // 小时
-      'm+': datetime.getMinutes(),                 // 分
-      's+': datetime.getSeconds(),                 // 秒
+      'M+': datetime.getMonth() + 1, // 月份
+      'd+': datetime.getDate(), // 日
+      'h+': datetime.getHours(), // 小时
+      'm+': datetime.getMinutes(), // 分
+      's+': datetime.getSeconds(), // 秒
       'q+': Math.floor((datetime.getMonth() + 3) / 3), // 季度
-      S: datetime.getMilliseconds(),             // 毫秒
+      S: datetime.getMilliseconds(), // 毫秒
     };
     if (/(y+)/.test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (datetime.getFullYear() + '').substr(4 - RegExp.$1.length));

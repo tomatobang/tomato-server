@@ -29,7 +29,7 @@ class UserService extends BaseService {
         return result;
     }
 
-    async UpdateSex(id, sex) {
+    async updateSex(id, sex) {
         const model = this.ctx.model.User;
         const result = await model
             .findByIdAndUpdate(id, {
@@ -39,7 +39,7 @@ class UserService extends BaseService {
         return result;
     }
 
-    async UpdateDisplayName(id, displayName) {
+    async updateDisplayName(id, displayName) {
         const model = this.ctx.model.User;
         const result = await model
             .findByIdAndUpdate(id, {
@@ -49,7 +49,7 @@ class UserService extends BaseService {
         return result;
     }
 
-    async UpdateEmail(id, email) {
+    async updateEmail(id, email) {
         const model = this.ctx.model.User;
         const result = await model
             .findByIdAndUpdate(id, {
@@ -59,7 +59,7 @@ class UserService extends BaseService {
         return result;
     }
 
-    async UpdateLocation(id, location) {
+    async updateLocation(id, location) {
         const model = this.ctx.model.User;
         const result = await model
             .findByIdAndUpdate(id, {
@@ -69,7 +69,7 @@ class UserService extends BaseService {
         return result;
     }
 
-    async UpdateBio(id, bio) {
+    async updateBio(id, bio) {
         const model = this.ctx.model.User;
         const result = await model
             .findByIdAndUpdate(id, {

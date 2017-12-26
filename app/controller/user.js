@@ -141,55 +141,55 @@ class UserController extends BaseController {
     /**
      * 更新性别
     */
-    async UpdateSex() {
+    async updateSex() {
         const { ctx } = this;
         const id = ctx.request.body.userid;
         const sex = ctx.request.body.sex;
-        const result = await ctx.service.user.UpdateSex(id, sex);
+        const result = await ctx.service.user.updateSex(id, sex);
         ctx.body = result;
     }
 
     /**
      * 更新昵称
     */
-    async UpdateDisplayName() {
+    async updateDisplayName() {
         const { ctx } = this;
         const id = ctx.request.body.userid;
         const displayname = ctx.request.body.displayname;
-        const result = await ctx.service.user.UpdateDisplayName(id, displayname);
+        const result = await ctx.service.user.updateDisplayName(id, displayname);
         ctx.body = result;
     }
 
     /**
      * 更新邮箱
     */
-    async UpdateEmail() {
+    async updateEmail() {
         const { ctx } = this;
         const id = ctx.request.body.userid;
         const email = ctx.request.body.email;
-        const result = await ctx.service.user.UpdateEmail(id, email);
+        const result = await ctx.service.user.updateEmail(id, email);
         ctx.body = result;
     }
 
     /**
      * 更新位置
     */
-    async UpdateLocation() {
+    async updateLocation() {
         const { ctx } = this;
         const id = ctx.request.body.userid;
         const location = ctx.request.body.location;
-        const result = await ctx.service.user.UpdateLocation(id, location);
+        const result = await ctx.service.user.updateLocation(id, location);
         ctx.body = result;
     }
 
     /**
      * 更新签名
     */
-    async UpdateBio() {
+    async updateBio() {
         const { ctx } = this;
         const id = ctx.request.body.userid;
         const bio = ctx.request.body.bio;
-        const result = await ctx.service.user.UpdateLocation(id, bio);
+        const result = await ctx.service.user.updateBio(id, bio);
         ctx.body = result;
     }
 }

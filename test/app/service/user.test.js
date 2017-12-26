@@ -45,25 +45,25 @@ describe('test/service/user.test.js', () => {
         );
         assert(result.img === 'new img url');
 
-        result = await ctx.service.user.UpdateSex(
+        result = await ctx.service.user.updateSex(
             find_all[0]._id,
             'man'
         );
         assert(result.sex === 'man');
 
-        result = await ctx.service.user.UpdateDisplayName(
+        result = await ctx.service.user.updateDisplayName(
             find_all[0]._id,
             'new displayName'
         );
         assert(result.displayName === 'new displayName');
 
-        result = await ctx.service.user.UpdateEmail(
+        result = await ctx.service.user.updateEmail(
             find_all[0]._id,
             'new email'
         );
         assert(result.email === 'new email');
 
-        result = await ctx.service.user.UpdateLocation(
+        result = await ctx.service.user.updateLocation(
             find_all[0]._id,
             'new location'
         );

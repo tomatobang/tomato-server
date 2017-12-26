@@ -16,7 +16,7 @@ module.exports = (option, app) => {
       ctx.url.endsWith('/api/version') ||
       ctx.url.endsWith('/email_username/verify');
     if (apiNoAuth) {
-      await koaRatelimit({
+      return await koaRatelimit({
         db: app.redis,
         duration: option.duration,
         errorMessage: option.errorMessage,
@@ -29,7 +29,6 @@ module.exports = (option, app) => {
         },
         max: option.max,
       })(ctx, next);
-      return next();
     }
     return next();
   };

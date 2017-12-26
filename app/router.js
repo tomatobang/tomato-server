@@ -1,8 +1,9 @@
 'use strict';
 // app/router.js
 module.exports = app => {
+    const { router, controller } = app;
     // for test
-    app.get('/', app.controller.home.index);
+    router.get('/', controller.home.index);
 
     // socket.io 相关
     app.io.of('/tomatobang').route('load_tomato', app.io.controllers.tomatobang.loadTomato);
@@ -10,60 +11,60 @@ module.exports = app => {
     app.io.of('/tomatobang').route('break_tomato', app.io.controllers.tomatobang.breakTomato);
 
     // 版本管理
-    app.get('/api/version', app.controller.version.findLatestVersion);
+    router.get('/api/version', controller.version.findLatestVersion);
     // 选项
-    app.get('/api/option', app.controller.version.list);
+    router.get('/api/option', controller.version.list);
 
     /**
      * 用户类
      */
-    app.get('/api/user', app.controller.user.list);
-    app.get('/api/user/:id', app.controller.user.findById);
-    app.get('/api/user/headimg/:path', app.controller.user.downloadHeadImg);
-    app.post('/api/user', app.controller.user.create);
-    app.post('/api/user/:id', app.controller.user.updateById);
-    app.del('/api/user/:id', app.controller.user.deleteById);
-    // app.post('/getRongyunToken', app.controller.user.getRongyunToken);
-    app.post('/email_username/verify', app.controller.user.emailUserNameVerify);
-    app.post('/api/login', app.controller.user.login);
-    app.post('/api/logout', app.controller.user.logout);
-    app.post('/api/user/headimg', app.controller.user.uploadHeadImg);
-    app.post('/api/user/sex', app.controller.user.UpdateSex);
-    app.post('/api/user/displayname', app.controller.user.UpdateDisplayName);
-    app.post('/api/user/email', app.controller.user.UpdateEmail);
-    app.post('/api/user/location', app.controller.user.UpdateLocation);
-    app.post('/api/user/bio', app.controller.user.UpdateBio);
+    router.get('/api/user', controller.user.list);
+    router.get('/api/user/:id', controller.user.findById);
+    router.get('/api/user/headimg/:path', controller.user.downloadHeadImg);
+    router.post('/api/user', controller.user.create);
+    router.del('/api/user/:id', controller.user.deleteById);
+    // router.post('/getRongyunToken', controller.user.getRongyunToken);
+    router.post('/email_username/verify', controller.user.emailUserNameVerify);
+    router.post('/api/login', controller.user.login);
+    router.post('/api/logout', controller.user.logout);
+    router.post('/api/user/headimg', controller.user.uploadHeadImg);
+    router.post('/api/user/sex', controller.user.updateSex);
+    router.post('/api/user/displayname', controller.user.updateDisplayName);
+    router.post('/api/user/email', controller.user.updateEmail);
+    router.post('/api/user/location', controller.user.updateLocation);
+    router.post('/api/user/bio', controller.user.updateBio);
+    router.post('/api/user/:id', controller.user.updateById);
 
     /**
      * 番茄钟类
      */
-    app.get('/api/tomato', app.controller.tomato.list);
-    app.get('/api/tomato/:id', app.controller.tomato.findById);
-    app.get('/filter/tomatotoday', app.controller.tomato.tomatoToday);
-    app.post('/api/tomato', app.controller.tomato.create);
-    app.post('/api/tomato/:id', app.controller.tomato.updateById);
-    app.post('/api/search', app.controller.tomato.search);
-    app.post('/api/tomato/statistics', app.controller.tomato.statistics);
-    app.post('/api/tomato/pagination', app.controller.tomato.pagination);
-    app.del('/api/tomato/:id', app.controller.tomato.deleteById);
+    router.get('/api/tomato', controller.tomato.list);
+    router.get('/api/tomato/:id', controller.tomato.findById);
+    router.get('/filter/tomatotoday', controller.tomato.tomatoToday);
+    router.post('/api/tomato', controller.tomato.create);
+    router.post('/api/search', controller.tomato.search);
+    router.post('/api/tomato/statistics', controller.tomato.statistics);
+    router.post('/api/tomato/pagination', controller.tomato.pagination);
+    router.del('/api/tomato/:id', controller.tomato.deleteById);
+    router.post('/api/tomato/:id', controller.tomato.updateById);
     /**
      * 任务类
      */
-    app.get('/api/task', app.controller.task.list);
-    app.get('/api/task/:id', app.controller.task.findById);
-    app.post('/api/task', app.controller.task.create);
-    app.post('/api/task/:id', app.controller.task.updateById);
-    app.del('/api/task/:id', app.controller.task.deleteById);
+    router.get('/api/task', controller.task.list);
+    router.get('/api/task/:id', controller.task.findById);
+    router.post('/api/task', controller.task.create);
+    router.del('/api/task/:id', controller.task.deleteById);
+    router.post('/api/task/:id', controller.task.updateById);
 
     /**
      * 配置类
      */
-    app.get('/api/options', app.controller.options.list);
+    router.get('/api/options', controller.options.list);
 
     /**
      * 其它
      */
-    app.get('/download/voicefile/:path', app.controller.other.downloadVoiceFile);
-    app.post('/tool/dismissgroup', app.controller.other.dismissgroup);
-    app.post('/upload/voicefile', app.controller.other.uploadVoiceFile);
+    router.get('/download/voicefile/:path', controller.other.downloadVoiceFile);
+    router.post('/tool/dismissgroup', controller.other.dismissgroup);
+    router.post('/upload/voicefile', controller.other.uploadVoiceFile);
   };

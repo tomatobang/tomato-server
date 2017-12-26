@@ -61,7 +61,7 @@ describe('test/controller/other.test.js', () => {
         const res = await app.httpRequest()
             .get('/download/voicefile/testpath')
             .set('Authorization', token);
-        assert(res.status === 500);
+        assert(res.status === 404);
     });
 
 });
