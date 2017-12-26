@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = app => {
-  return function* (next) {
+  return async function(ctx, next) {
     console.log('auth! todo~~~');
-    yield* next;
+    await next;
     console.log('disconnect!');
-    const socket = this.socket;
+    const socket = ctx.socket;
     app.redis.get(socket.id).then(userid => {
       console.log('userid!', userid);
       if (userid) {
