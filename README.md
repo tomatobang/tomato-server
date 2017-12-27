@@ -17,6 +17,8 @@
 * ✔︎ mongodb 
 * ✔︎ redis
 * ✔︎ socket.io 
+* ✔︎ docker
+* ✔︎ travis
 
 ## Getting Started
 
