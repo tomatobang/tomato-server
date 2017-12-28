@@ -24,11 +24,17 @@ exports.io = {
   package: 'egg-socket.io',
 };
 
+exports.validate = {
+  package: 'egg-validate',
+};
+
 // exports.alinode = {
 //   enable: true,
 //   package: 'egg-alinode'
 // };
 
-exports.validate = {
-  package: 'egg-validate',
-};
+// const path = require('path');
+// exports.qiniu = {
+//   enable: true,
+//   path: path.join(__dirname, '../lib/plugin/egg-qiniu'),
+// };
