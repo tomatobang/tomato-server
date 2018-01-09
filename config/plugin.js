@@ -32,3 +32,9 @@ exports.io = {
 exports.validate = {
   package: 'egg-validate',
 };
+
+const path = require('path');
+exports.qiniu = {
+  enable: true,
+  path: path.join(__dirname, '../lib/plugin/egg-qiniu'),
+};

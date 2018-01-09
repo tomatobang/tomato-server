@@ -10,7 +10,7 @@ script:
 after_script:
 - npminstall codecov && codecov
 - chmod a+x ./scripts/deploy.sh
-- test $TRAVIS_NODE_VERSION = 8 && travis_wait ./scripts/deploy.sh
+- test $TRAVIS_NODE_VERSION = 8 && ./scripts/deploy.sh
 services:
 - mongodb
 - redis-server

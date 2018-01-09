@@ -104,5 +104,14 @@ class OtherController extends Controller {
         // 默认会加上本服务器地址
         await send(ctx, savePath);
     }
+
+    async test() {
+        const { ctx, app } = this;
+        const localFile = 'D:\/rate.png';
+        const key = 'rate.png';
+        const msg = await app.qiniu.putFile(key, localFile);
+        ctx.status = 200;
+        ctx.body = msg;
+    }
 }
 module.exports = OtherController;

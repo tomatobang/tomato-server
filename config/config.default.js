@@ -117,6 +117,19 @@ exports.alinode = {
   // ]
 };
 
+exports.cors = {
+  origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+  credentials: true,
+};
+
+exports.qiniu = {
+  ACCESS_KEY: '',
+  SECRET_KEY: '',
+  expires: 7200,
+  scope: 'yipeng-images',
+};
+
 exports.options = [
   {
     key: 'analyzeCode',

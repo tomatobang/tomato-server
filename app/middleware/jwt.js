@@ -8,6 +8,7 @@ module.exports = (option, app) => {
         const apiNoAuth = ctx.url.startsWith('/api/login')
             || ctx.url.endsWith('/api/user')
             || ctx.url.endsWith('/api/version')
+            || ctx.url.endsWith('qiu/test')
             || ctx.url.endsWith('/email_username/verify');
         if (apiNoAuth) {
             return next();
