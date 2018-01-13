@@ -13,6 +13,8 @@ exports.security = {
 exports.logger = {
   level: 'DEBUG',
   consoleLevel: 'INFO',
+  // 应用启动后，也能看能日志了( 文档中没说明:不建议使用 )
+  disableConsoleAfterReady: false,
 };
 
 exports.static = {
@@ -109,8 +111,8 @@ exports.cors = {
 };
 
 exports.qiniu = {
-  ACCESS_KEY: '',
-  SECRET_KEY: '',
+  ACCESS_KEY: 'Y44Z8xMcoLUS2fVVQvRJQnWz388t5kjhpqCOaJz8',
+  SECRET_KEY: 'm3AnlOvO28Ok25Xg75tvyhNIWW2Ao7Yet7Q8G4sD',
   expires: 7200,
   scope: 'yipeng-images',
 };

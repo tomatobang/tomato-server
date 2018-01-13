@@ -107,9 +107,23 @@ class OtherController extends Controller {
 
     async test() {
         const { ctx, app } = this;
-        const localFile = 'D:\/rate.png';
+        // const localFile = 'D:\/rate.png';
         const key = 'rate.png';
-        const msg = await app.qiniu.putFile(key, localFile);
+            // (respErr, respBody, respInfo) => {
+            //   if (respErr) {
+            //     reject(respErr);
+            //   }
+            //   if (respInfo.statusCode === 200) {
+            //     resolve(respBody);
+            //   } else {
+            //     console.log(respInfo.statusCode);
+            //     resolve(respBody);
+            //   }
+            // }
+          // { respErr, respBody, respInfo }
+        // const msg = await app.qiniu.putFile(key, localFile);
+        // const msg = await app.qiniu.putFile(key, localFile);
+        const msg = await app.qiniu.publicDownloadUrl(key, 'http://osv2a938x.bkt.clouddn.com');
         ctx.status = 200;
         ctx.body = msg;
     }
