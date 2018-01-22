@@ -13,7 +13,7 @@ exports.security = {
 exports.logger = {
   level: 'DEBUG',
   consoleLevel: 'INFO',
-  // 应用启动后，也能看能日志了( 文档中没说明:不建议使用 )
+  // 应用启动后，也能看日志( 文档中没说明:不建议使用 )
   disableConsoleAfterReady: false,
 };
 
@@ -98,10 +98,6 @@ exports.alinode = {
   server: 'wss://agentserver.node.aliyun.com:8080',
   appid: '182',
   secret: '',
-  // logdir: '/tmp/',
-  // error_log: [
-  // '/root/.logs/error.#YYYY#-#MM#-#DD#.log',
-  // ]
 };
 
 exports.cors = {

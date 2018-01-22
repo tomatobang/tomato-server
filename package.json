@@ -4,7 +4,7 @@
   "description": "tomabang server",
   "main": "index.js",
   "scripts": {
-    "start": "egg-scripts start --daemon",
+    "start": "NODE_ENV=prod && egg-scripts start --daemon",
     "stop": "egg-scripts stop",
     "lint": "eslint app test",
     "dev": "egg-bin dev  --cluster --sticky",
