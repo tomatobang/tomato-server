@@ -70,7 +70,7 @@ module.exports = app => {
               .to(so)
               .emit('new_tomate_added', tomato);
           }
-          this.ctx.helper.pushMessage(userid, '你完成了一个番茄钟', tomato.title);
+          app.util.jpush.pushMessage(userid, '你完成了一个番茄钟', tomato.title);
         },
         1000 * 60 * countdown,
         userid

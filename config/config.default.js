@@ -13,6 +13,8 @@ exports.security = {
 exports.logger = {
   level: 'DEBUG',
   consoleLevel: 'INFO',
+  // 应用启动后，也能看日志( 文档中没说明:不建议使用 )
+  disableConsoleAfterReady: false,
 };
 
 exports.static = {
@@ -96,15 +98,69 @@ exports.alinode = {
   server: 'wss://agentserver.node.aliyun.com:8080',
   appid: '182',
   secret: '',
-  // logdir: '/tmp/',
-  // error_log: [
-  // '/root/.logs/error.#YYYY#-#MM#-#DD#.log',
-  // ]
 };
 
-// exports.qiniu = {
-//   ak: '<Your Access Key>',
-//   sk: '<Your secret Key>',
-//   prefix: '<Key Prefix>',
-//   buckets: [{}]
-// };
+exports.cors = {
+  origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+  credentials: true,
+};
+
+exports.qiniu = {
+  ACCESS_KEY: 'Y44Z8xMcoLUS2fVVQvRJQnWz388t5kjhpqCOaJz8',
+  SECRET_KEY: 'm3AnlOvO28Ok25Xg75tvyhNIWW2Ao7Yet7Q8G4sD',
+  expires: 7200,
+  scope: 'yipeng-images',
+};
+
+exports.options = [
+  {
+    key: 'analyzeCode',
+    value: '',
+  },
+  {
+    key: 'description',
+    value: '',
+  },
+  {
+    key: 'faviconUrl',
+    value: '/static/favicon.ico',
+  },
+  {
+    key: 'logoUrl',
+    value: '/static/logo.png',
+  },
+  {
+    key: 'githubUrl',
+    value: '',
+  },
+  {
+    key: 'keywords',
+    value: '',
+    desc: '网站关键字',
+  },
+  {
+    key: 'miitbeian',
+    value: '',
+  },
+  {
+    key: 'numPerPage',
+    value: '',
+  },
+  {
+    key: 'siteUrl',
+    value: '',
+  },
+  {
+    key: 'title',
+    value: '',
+  },
+  {
+    key: 'weiboUrl',
+    value: '',
+  },
+  {
+    key: 'twoFactorAuth',
+    value: '',
+  },
+];

@@ -67,4 +67,5 @@ module.exports = app => {
     router.get('/download/voicefile/:path', controller.other.downloadVoiceFile);
     router.post('/tool/dismissgroup', controller.other.dismissgroup);
     router.post('/upload/voicefile', controller.other.uploadVoiceFile);
+    router.get('/qiu/test', controller.other.test);
   };

@@ -4,13 +4,14 @@
   "description": "tomabang server",
   "main": "index.js",
   "scripts": {
-    "start": "egg-scripts start --daemon",
+    "start": "set NODE_ENV=prod && egg-scripts start --daemon --ignore-stderr",
     "stop": "egg-scripts stop",
     "lint": "eslint app test",
     "dev": "egg-bin dev  --cluster --sticky",
     "test": "npm run lint && egg-bin test",
     "cov": "egg-bin cov",
     "debug": "egg-bin debug",
+    "debug-raw": "egg-bin debug --inspect-brk",
     "ci": "npm run lint && npm run cov"
   },
   "repository": {
@@ -48,6 +49,7 @@
     "koa-ratelimit": "^4.0.0",
     "koa-send": "^4.1.2",
     "moment": "^2.20.1",
+    "qiniu": "^7.1.1",
     "socket.io-client": "^2.0.4"
   },
   "devDependencies": {

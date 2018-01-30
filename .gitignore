@@ -32,3 +32,4 @@ uploadfile/
 run/
 docker-compose.yml
 app/public/
+config/config.prod.js

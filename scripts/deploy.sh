@@ -11,17 +11,21 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" -
 fi
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
+echo "key: ${ENCRYPTION_LABEL}"
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
 ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
+echo "ENCRYPTED_KEY_VAR: $ENCRYPTED_KEY_VAR, ENCRYPTED_IV_VAR: $ENCRYPTED_IV_VAR"
+
 ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
 ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
-echo "key: $ENCRYPTED_KEY, iv: $ENCRYPTED_IV"
+echo "ENCRYPTED_KEY: $ENCRYPTED_KEY, ENCRYPTED_IV: $ENCRYPTED_IV"
+
 openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in scripts/id_rsa.enc -out ~/.ssh/id_rsa -d
 chmod 600 ~/.ssh/id_rsa
 echo -e "Host 47.100.16.77\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 # 删除 CI 环境下无关文件
-npm run clean
+# npm run clean
 rm -rf node_modules
 tar -czf tomatobang-server.tar.gz *
 # 拷贝文件至服务器

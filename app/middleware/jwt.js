@@ -8,6 +8,7 @@ module.exports = (option, app) => {
         const apiNoAuth = ctx.url.startsWith('/api/login')
             || ctx.url.endsWith('/api/user')
             || ctx.url.endsWith('/api/version')
+            || ctx.url.endsWith('qiu/test')
             || ctx.url.endsWith('/email_username/verify');
         if (apiNoAuth) {
             return next();
@@ -30,7 +31,7 @@ module.exports = (option, app) => {
             });
         }
 
-        const result = ctx.helper.tokenService.verifyToken(token);
+        const result = app.util.jwt.tokenService.verifyToken(token);
         if (result === false) {
             return (ctx.body = {
                 status: 'fail',

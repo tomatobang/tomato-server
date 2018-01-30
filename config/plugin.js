@@ -33,8 +33,12 @@ exports.validate = {
 //   package: 'egg-alinode'
 // };
 
-// const path = require('path');
-// exports.qiniu = {
-//   enable: true,
-//   path: path.join(__dirname, '../lib/plugin/egg-qiniu'),
-// };
+exports.validate = {
+  package: 'egg-validate',
+};
+
+const path = require('path');
+exports.qiniu = {
+  enable: true,
+  path: path.join(__dirname, '../lib/plugin/egg-qiniu'),
+};

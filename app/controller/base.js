@@ -44,7 +44,10 @@ class BaseController extends Controller {
       ctx.request.body.userid = ctx.request.currentUser.username;
     }
     if (this.validateRule) {
-      const invalid = app.validator.validate(this.validateRule, ctx.request.body);
+      const invalid = app.validator.validate(
+        this.validateRule,
+        ctx.request.body
+      );
       if (invalid) {
         ctx.throw(400);
       }
@@ -88,8 +91,8 @@ class BaseController extends Controller {
   }
 
   /**
- * 关键词查找
- */
+   * 关键词查找
+   */
   async pagination() {
     const { ctx } = this;
     const current = ctx.request.body.current;
@@ -111,16 +114,35 @@ class BaseController extends Controller {
       };
       return;
     }
-    const ret = await ctx.service.tomato.loadByPagination({
-      current,
-      userid,
-      pageSize: 6,
-      sorter: {
-        startTime: -1,
+    const ret = await ctx.service.tomato.loadByPagination(
+      {
+        current,
+        userid,
+        pageSize: 6,
+        sorter: {
+          startTime: -1,
+        },
       },
-    }, this.select_field);
+      this.select_field
+    );
     ctx.status = 200;
     ctx.body = ret;
+  }
+
+  /**
+   * 统一错误处理
+   * @param {*} type 错误类型
+   * @param {*} message 错误消息
+   */
+  async throwBizError(type, message) {
+    if (type === 'DB:ERR') {
+      throw new Error('发生了数据库错误');
+    }
+    if (type === 'FILE:ERR') {
+      throw new Error('发生了文件类型错误');
+    } else {
+      throw new Error(message);
+    }
   }
 }
 
