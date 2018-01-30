@@ -31,7 +31,7 @@ module.exports = (option, app) => {
             });
         }
 
-        const result = ctx.helper.tokenService.verifyToken(token);
+        const result = app.util.jwt.tokenService.verifyToken(token);
         if (result === false) {
             return (ctx.body = {
                 status: 'fail',
