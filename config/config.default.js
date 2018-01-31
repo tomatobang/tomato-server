@@ -39,6 +39,15 @@ exports.mongoose = {
   url: 'mongodb://' + (env.DATABASE_HOST ? env.DATABASE_HOST : '127.0.0.1') + ':27017/tomatobang',
   options: {},
 };
+// 另一种可行的配置方式
+// config.mongoose = {
+//   url: 'mongodb://localhost/db',
+//   options: {
+//     auth: { authSource: "username" },
+//     user: 'username',
+//     pass: 'pass'
+//   }
+// };
 
 exports.redis = {
   client: {
