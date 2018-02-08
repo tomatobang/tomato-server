@@ -27,7 +27,8 @@ const userValidationRule = {
     format: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   },
   sex: {
-    type: 'string',
+    type: 'enum',
+    values: [ 'woman', 'man', 'unknown' ],
     required: false,
   },
   location: {
@@ -51,4 +52,41 @@ const loginValidationRule = {
   },
 };
 
-module.exports = { userValidationRule, loginValidationRule };
+const emailUserNameValidationRule = {
+  username: {
+    type: 'string',
+    required: true,
+    allowEmpty: false,
+  },
+  email: {
+    type: 'email',
+    required: false,
+    allowEmpty: false,
+    format: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  },
+};
+
+const emailValidationRule = {
+  email: {
+    type: 'email',
+    required: false,
+    allowEmpty: false,
+    format: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  },
+};
+
+const sexValidationRule = {
+  sex: {
+    type: 'enum',
+    values: [ 'woman', 'man', 'unknown' ],
+    required: false,
+  },
+};
+
+module.exports = {
+  userValidationRule,
+  loginValidationRule,
+  emailUserNameValidationRule,
+  emailValidationRule,
+  sexValidationRule,
+};

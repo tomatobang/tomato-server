@@ -1,6 +1,12 @@
 'use strict';
 const BaseController = require('./base');
-const { userValidationRule, loginValidationRule } = require('../validate/user');
+const {
+  userValidationRule,
+  loginValidationRule,
+  emailUserNameValidationRule,
+  emailValidationRule,
+  sexValidationRule,
+} = require('../validate/user');
 class UserController extends BaseController {
   constructor(ctx) {
     super(ctx);
@@ -49,7 +55,16 @@ class UserController extends BaseController {
       ctx.body = {
         status: 'success',
         token,
-        userinfo: users[0],
+        userinfo: {
+          username: users[0].username,
+          displayName: users[0].displayName,
+          bio: users[0].bio,
+          img: users[0].img,
+          email: users[0].email,
+          sex: users[0].sex,
+          location: users[0].location,
+          level: users[0].level,
+        },
       };
     } else {
       ctx.body = {
@@ -77,7 +92,19 @@ class UserController extends BaseController {
    * 邮箱验证
    */
   async emailUserNameVerify() {
-    const { ctx } = this;
+    const { ctx, app } = this;
+    const invalid = app.validator.validate(
+      emailUserNameValidationRule,
+      ctx.request.body
+    );
+    if (invalid) {
+      ctx.body = {
+        status: 'fail',
+        description: '请求参数错误！',
+      };
+      return;
+    }
+
     const email = ctx.request.body.email;
     const username = ctx.request.body.username;
     const {
@@ -156,7 +183,15 @@ class UserController extends BaseController {
    * 更新性别
    */
   async updateSex() {
-    const { ctx } = this;
+    const { ctx, app } = this;
+    const invalid = app.validator.validate(sexValidationRule, ctx.request.body);
+    if (invalid) {
+      ctx.body = {
+        status: 'fail',
+        description: '请求参数错误！',
+      };
+      return;
+    }
     const id = ctx.request.currentUser._id;
     const sex = ctx.request.body.sex;
     const result = await ctx.service.user.updateSex(id, sex);
@@ -178,7 +213,19 @@ class UserController extends BaseController {
    * 更新邮箱
    */
   async updateEmail() {
-    const { ctx } = this;
+    const { ctx, app } = this;
+    const invalid = app.validator.validate(
+      emailValidationRule,
+      ctx.request.body
+    );
+    if (invalid) {
+      ctx.body = {
+        status: 'fail',
+        description: '请求参数错误！',
+      };
+      return;
+    }
+
     const id = ctx.request.currentUser._id;
     const email = ctx.request.body.email;
     const result = await ctx.service.user.updateEmail(id, email);
