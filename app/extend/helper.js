@@ -27,7 +27,7 @@ exports.dateHelper = {
     const nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
     return this.format(new Date(nextMonthFirstDay), 'yyyy-MM-dd');
   },
-  // https://www.cnblogs.com/tugenhua0707/p/3776808.html
+  // 参考: https://www.cnblogs.com/tugenhua0707/p/3776808.html
   format(datetime, fmt) {
     const o = {
       'M+': datetime.getMonth() + 1, // 月份

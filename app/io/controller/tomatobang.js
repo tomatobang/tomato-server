@@ -1,11 +1,18 @@
 'use strict';
 
+/**
+ * TODO:
+ * 错误处理
+ */
+
 const TIME_OUT_PAIRS = {};
 module.exports = app => {
+  /**
+   * 消息订阅测试
+   */
   app.redis.on('message', (channel, message) => {
     console.log('Receive message %s from channel %s', message, channel);
   });
-
 
   class Controller extends app.Controller {
     /**
@@ -15,25 +22,19 @@ module.exports = app => {
       const obj = this.ctx.args[0];
       const socket = this.ctx.socket;
       const { userid } = obj;
+
       const tomato = await app.redis.get(userid + ':tomato');
-      // 需要事先移除关联的用户（用户切换时有必要）
+      // 需要事先移除关联的用户, 用户切换时有必要
       const old_userid = await app.redis.get(socket.id);
       await app.redis.srem(old_userid + ':socket', socket.id);
       await app.redis.sadd(userid + ':socket', socket.id);
       await app.redis.set(socket.id, userid);
 
-      if (tomato) {
-        console.log('send load tomato', tomato);
-        await app.io
-          .of('/tomatobang')
-          .to(socket.id)
-          .emit('load_tomato_succeed', JSON.parse(tomato));
-      } else {
-        await app.io
-          .of('/tomatobang')
-          .to(socket.id)
-          .emit('load_tomato_succeed', null);
-      }
+      console.log('send load tomato', tomato);
+      await app.io
+        .of('/tomatobang')
+        .to(socket.id)
+        .emit('load_tomato_succeed', tomato ? JSON.parse(tomato) : null);
     }
 
     /**
@@ -43,11 +44,17 @@ module.exports = app => {
       const obj = this.ctx.args[0];
       const socket = this.ctx.socket;
       this.ctx.logger.info('start_tomato', obj);
-      // conundown 长度由客户端指定
       const { userid, tomato, countdown } = obj;
       tomato.startTime = new Date();
-      // 需要添加过期处理机制，否则会失效
-      await app.redis.set(userid + ':tomato', JSON.stringify(tomato), 'EX', countdown * 60 + 10);
+
+      // 添加过期处理机制, 过期后自动清空, 10s 用来确保番茄钟被保存
+      await app.redis.set(
+        userid + ':tomato',
+        JSON.stringify(tomato),
+        'EX',
+        countdown * 60 + 10
+      );
+
       let TIME_OUT_ID = TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'];
       if (TIME_OUT_ID) {
         clearTimeout(TIME_OUT_ID);
@@ -62,20 +69,24 @@ module.exports = app => {
           tomato.succeed = 1;
           await this.service.tomato.create(tomato);
           await app.redis.del(userid + ':tomato');
-          // 服务端推送消息
           const socketList = await app.redis.smembers(userid + ':socket');
-          for (const so of socketList) {
+          for (const item of socketList) {
             await app.io
               .of('/tomatobang')
-              .to(so)
+              .to(item)
               .emit('new_tomate_added', tomato);
           }
-          app.util.jpush.pushMessage(userid, '你完成了一个番茄钟', tomato.title);
+          app.util.jpush.pushMessage(
+            userid,
+            '你完成了一个番茄钟',
+            tomato.title
+          );
         },
         1000 * 60 * countdown,
         userid
       );
       TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'] = TIME_OUT_ID;
+
       const socketList = await app.redis.smembers(userid + ':socket');
       for (const so of socketList) {
         if (so !== socket.id) {
@@ -94,28 +105,30 @@ module.exports = app => {
       const obj = this.ctx.args[0];
       const socket = this.ctx.socket;
       const { userid, tomato } = obj;
-      let r_tomato = await app.redis.get(userid + ':tomato');
-      if (!r_tomato) {
+
+      let tomato_doing = await app.redis.get(userid + ':tomato');
+      if (!tomato_doing) {
         return;
       }
-      r_tomato = JSON.parse(r_tomato);
-      const socketList = await app.redis.smembers(userid + ':socket');
-      const _tomato = r_tomato;
-      _tomato.endTime = new Date();
-      _tomato.succeed = 0;
-      _tomato.breakReason = tomato.breakReason;
+
+      tomato_doing = JSON.parse(tomato_doing);
+      tomato_doing.endTime = new Date();
+      tomato_doing.succeed = 0;
+      tomato_doing.breakReason = tomato.breakReason;
+
       const TIME_OUT_ID = TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'];
       clearTimeout(TIME_OUT_ID);
-      const result = await this.service.tomato.create(_tomato);
-      this.ctx.logger.info('创建一个TOMATO!');
+      const result = await this.service.tomato.create(tomato_doing);
+      this.ctx.logger.info('创建一个TOMATO: UNFINISHED!');
       await app.redis.del(userid + ':tomato');
       if (result) {
+        const socketList = await app.redis.smembers(userid + ':socket');
         for (const so of socketList) {
           if (so !== socket.id) {
             await app.io
               .of('/tomatobang')
               .to(so)
-              .emit('other_end_break_tomato', _tomato);
+              .emit('other_end_break_tomato', tomato_doing);
           }
         }
       }
