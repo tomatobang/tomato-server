@@ -6,7 +6,7 @@ class OtherController extends Controller {
     */
     async dismissgroup() {
         const { ctx, app } = this;
-        const userid = ctx.request.body.userid;
+        const userid = ctx.request.currentUser._id;
         const groupid = ctx.request.body.groupid;
         if (!userid || !groupid) {
             ctx.status = 500;
@@ -43,13 +43,12 @@ class OtherController extends Controller {
         const formidable = require('formidable');
         const fs = require('fs');
         const path = require('path');
-
+        const userid = ctx.request.currentUser._id;
         const form = new formidable.IncomingForm();
         await form.parse(ctx.req, async (err, fields, files) => {
             const taskid = fields.taskid;
-            const userid = fields.userid;
-            if (!taskid || !userid) {
-                throw new Error('taskid或userid为空！');
+            if (!taskid) {
+                throw new Error('taskid为空！');
             }
             if (err) { throw err; }
             let file = files.files;
@@ -65,7 +64,6 @@ class OtherController extends Controller {
             const rootDir = path.resolve(__dirname, '../../');
             const relateUrl = '/uploadfile/voices/' + (userid + '_' + taskid + '_' + file.name);
             const savePath = rootDir + relateUrl;
-            // path.join(os.tmpdir()
             const stream = fs.createWriteStream(savePath, {
                 flags: 'w',
                 defaultEncoding: 'utf8',

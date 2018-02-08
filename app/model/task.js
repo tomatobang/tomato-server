@@ -1,10 +1,5 @@
 'use strict';
-/*
- * @Author: kobepeng
- * @Date: 2017-12-06 09:29:20
- * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-13 14:15:58
- */
+
 module.exports = app => {
     /**
      * 任务

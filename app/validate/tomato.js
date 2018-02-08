@@ -5,7 +5,7 @@ const tomatoValidationRule = {
         required: true, allowEmpty: false,
     },
     title: {
-        type: 'password', required: true, allowEmpty: false, min: 1, max: 50,
+        type: 'string', required: true, allowEmpty: false, min: 1, max: 50,
     },
     taskid: {
         type: 'string',

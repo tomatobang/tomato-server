@@ -36,6 +36,7 @@ class UserController extends BaseController {
       return;
     }
     const user = {
+      _id: users[0]._id,
       username: users[0].username,
       timestamp: new Date().valueOf(),
     };
@@ -113,7 +114,7 @@ class UserController extends BaseController {
     const path = require('path');
 
     const { ctx } = this;
-    const userid = ctx.request.body.userid;
+    const userid = ctx.request.currentUser._id;
     const imgData = ctx.request.body.imgData;
     ctx.logger.info('上传中:' + userid);
 
@@ -144,12 +145,6 @@ class UserController extends BaseController {
   async downloadHeadImg() {
     const { ctx } = this;
     const send = require('koa-send');
-    if (!ctx.request.currentUser) {
-      ctx.status = 500;
-      ctx.body = '请先登录!!!';
-      ctx.logger.info('请先登录!!!');
-      return;
-    }
     const relateUrl = ctx.params.path;
     const savePath = '/uploadfile/headimg/' + relateUrl + '.png';
     // 默认会加上本服务器地址
@@ -162,7 +157,7 @@ class UserController extends BaseController {
    */
   async updateSex() {
     const { ctx } = this;
-    const id = ctx.request.body.userid;
+    const id = ctx.request.currentUser._id;
     const sex = ctx.request.body.sex;
     const result = await ctx.service.user.updateSex(id, sex);
     ctx.body = result;
@@ -173,7 +168,7 @@ class UserController extends BaseController {
    */
   async updateDisplayName() {
     const { ctx } = this;
-    const id = ctx.request.body.userid;
+    const id = ctx.request.currentUser._id;
     const displayname = ctx.request.body.displayname;
     const result = await ctx.service.user.updateDisplayName(id, displayname);
     ctx.body = result;
@@ -184,7 +179,7 @@ class UserController extends BaseController {
    */
   async updateEmail() {
     const { ctx } = this;
-    const id = ctx.request.body.userid;
+    const id = ctx.request.currentUser._id;
     const email = ctx.request.body.email;
     const result = await ctx.service.user.updateEmail(id, email);
     ctx.body = result;
@@ -195,7 +190,7 @@ class UserController extends BaseController {
    */
   async updateLocation() {
     const { ctx } = this;
-    const id = ctx.request.body.userid;
+    const id = ctx.request.currentUser._id;
     const location = ctx.request.body.location;
     const result = await ctx.service.user.updateLocation(id, location);
     ctx.body = result;
@@ -206,7 +201,7 @@ class UserController extends BaseController {
    */
   async updateBio() {
     const { ctx } = this;
-    const id = ctx.request.body.userid;
+    const id = ctx.request.currentUser._id;
     const bio = ctx.request.body.bio;
     const result = await ctx.service.user.updateBio(id, bio);
     ctx.body = result;

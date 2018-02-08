@@ -1,10 +1,5 @@
 'use strict';
-/*
- * @Author: kobepeng
- * @Date: 2017-12-06 09:21:23
- * @Last Modified by: kobepeng
- * @Last Modified time: 2017-12-13 14:13:56
- */
+
 module.exports = app => {
     /**
      * 动态
