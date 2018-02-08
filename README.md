@@ -1,4 +1,5 @@
 # Tomato-Server
+
 [![build status][travis-image]][travis-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![David deps][david-image]][david-url]
@@ -10,19 +11,26 @@
 [david-image]: https://img.shields.io/david/tomatobang/tomato-server.svg?style=flat-square
 [david-url]: https://david-dm.org/tomatobang/tomato-server
 
-> server end for tomatobang 
+> server end for tomatobang
+
+## Related Repo
+
+* [tomato-ionic](https://github.com/tomatobang/tomato-ionic)
+* [tomato-web](https://github.com/tomatobang/tomato-web)
 
 ## Tech related
+
 * ✔︎ eggjs
-* ✔︎ mongodb 
+* ✔︎ mongodb
 * ✔︎ redis
-* ✔︎ socket.io 
+* ✔︎ socket.io
 * ✔︎ docker
 * ✔︎ travis
 
 ## Getting Started
 
 Follow the commands listed below.
+
 ```
 $ npm install
 $ npm run dev
@@ -30,4 +38,5 @@ $ open http://localhost:7001
 ```
 
 ## License
+
 MIT@yipeng.info
