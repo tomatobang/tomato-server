@@ -68,4 +68,5 @@ module.exports = app => {
     router.post('/tool/dismissgroup', controller.other.dismissgroup);
     router.post('/upload/voicefile', controller.other.uploadVoiceFile);
     router.get('/qiu/test', controller.other.test);
+    router.get('/qiu/uploadtoken', controller.other.getQiniuUploadToken);
   };

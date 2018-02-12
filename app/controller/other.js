@@ -112,7 +112,7 @@ class OtherController extends Controller {
    */
   async getQiniuUploadToken() {
     const { ctx, app } = this;
-    const uploadToken = await app.qiniu.uploadToken();
+    const uploadToken = await app.qiniu.getuploadToken();
     ctx.status = 200;
     ctx.body = uploadToken;
   }
