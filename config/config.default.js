@@ -120,4 +120,5 @@ exports.qiniu = {
   SECRET_KEY: 'm3AnlOvO28Ok25Xg75tvyhNIWW2Ao7Yet7Q8G4sD',
   expires: 7200,
   scope: 'yipeng-images',
+  insertOnly: 0,
 };
