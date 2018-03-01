@@ -80,4 +80,11 @@ describe('test/service/user.test.js', () => {
         const ret = await ctx.service.user.delete(find_all[0]._id);
         assert(ret);
     });
+
+
+    it('hasUser:should return false', async () => {
+        const finded = await ctx.service.user.hasUser('xxxx');
+        assert(finded === false);
+    });
+    
 });

@@ -19,6 +19,17 @@ class UserService extends BaseService {
         };
     }
 
+    async hasUser(userid){
+        const model = this.ctx.model.User;
+        const ret = await model.findOne({ _id:userid }).exec();
+        if(ret){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     async updateHeadImg(id, imgurl) {
         const model = this.ctx.model.User;
         const result = await model
