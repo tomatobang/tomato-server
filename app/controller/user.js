@@ -134,49 +134,18 @@ class UserController extends BaseController {
   }
 
   /**
-   * 上传头像
+   * 更新头像路径
    */
-  async uploadHeadImg() {
-    const fs = require('fs');
-    const path = require('path');
-
+  async updateHeadImg() {
     const { ctx } = this;
     const userid = ctx.request.currentUser._id;
-    const imgData = ctx.request.body.imgData;
-    ctx.logger.info('上传中:' + userid);
-
-    // 过滤data:URL
-    const base64Data = imgData.replace(/^data:image\/\w+;base64,/, '');
-    const dataBuffer = new Buffer(base64Data, 'base64');
-    const rootDir = path.resolve(__dirname, '../../');
-    const relateUrl = rootDir + '/uploadfile/headimg/' + userid + '.png';
-
-    const imgPath = relateUrl;
-    ctx.logger.info('上传中(path):' + imgPath);
-    fs.writeFile(imgPath, dataBuffer, async err => {
-      if (err) throw err;
-      ctx.logger.info('The file has been saved!');
-      await ctx.service.user.updateHeadImg(userid, userid + '.png');
-    });
+    const filename = ctx.request.body.filename;
+    await ctx.service.user.updateHeadImg(userid, filename);
     ctx.status = 200;
     ctx.body = {
       success: true,
       msg: '保存成功！',
     };
-  }
-
-  /**
-   * 下载头像
-   * 通过 query 参数获取相关内容
-   */
-  async downloadHeadImg() {
-    const { ctx } = this;
-    const send = require('koa-send');
-    const relateUrl = ctx.params.path;
-    const savePath = '/uploadfile/headimg/' + relateUrl + '.png';
-    // 默认会加上本服务器地址
-    ctx.logger.info('发送中!!!');
-    await send(ctx, savePath);
   }
 
   /**
