@@ -36,60 +36,6 @@ class OtherController extends Controller {
   }
 
   /**
-   * 上传音频文件
-   */
-  async uploadVoiceFile() {
-    const { ctx } = this;
-    const formidable = require('formidable');
-    const fs = require('fs');
-    const path = require('path');
-    const userid = ctx.request.currentUser._id;
-    const form = new formidable.IncomingForm();
-    await form.parse(ctx.req, async (err, fields, files) => {
-      const taskid = fields.taskid;
-      if (!taskid) {
-        throw new Error('taskid为空！');
-      }
-      if (err) {
-        throw err;
-      }
-      let file = files.files;
-      ctx.logger.info(files.name);
-      if (!file) {
-        // 兼容 ionic file transfer 插件
-        file = files.file;
-      }
-      if (!file) {
-        // egg 做了定制？
-        file = files.name;
-      }
-      const reader = fs.createReadStream(file.path);
-      // 设置保存路径
-      const rootDir = path.resolve(__dirname, '../../');
-      const relateUrl =
-        '/uploadfile/voices/' + (userid + '_' + taskid + '_' + file.name);
-      const savePath = rootDir + relateUrl;
-      const stream = fs.createWriteStream(savePath, {
-        flags: 'w',
-        defaultEncoding: 'utf8',
-        fd: null,
-        mode: 0o666,
-        autoClose: true,
-      });
-      reader.pipe(stream);
-      ctx.logger.info('uploading %s -> %s', file.name, stream.path);
-      await ctx.service.task.updateVoiceUrl(taskid, relateUrl);
-    });
-
-    // 此处写法待重构
-    ctx.status = 200;
-    ctx.body = {
-      success: true,
-      msg: '上传成功',
-    };
-  }
-
-  /**
    * 下载音频文件
    * 通过 query 参数获取相关内容
    */
@@ -114,9 +60,12 @@ class OtherController extends Controller {
     const { ctx, app } = this;
     const uploadToken = await app.qiniu.getuploadToken();
     ctx.status = 200;
-    ctx.body = uploadToken;
+    ctx.body = { uploadToken };
   }
 
+  /**
+   * just for test
+   */
   async test() {
     const { ctx, app } = this;
     // const localFile = 'D:\/rate.png';

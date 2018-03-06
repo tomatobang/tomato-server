@@ -54,6 +54,7 @@ module.exports = app => {
     router.get('/api/task/:id', controller.task.findById);
     router.post('/api/task', controller.task.create);
     router.del('/api/task/:id', controller.task.deleteById);
+    router.post('/api/task/updateVoiceUrl', controller.task.updateVoiceUrl);
     router.post('/api/task/:id', controller.task.updateById);
 
     /**
@@ -72,7 +73,6 @@ module.exports = app => {
      */
     router.get('/download/voicefile/:path', controller.other.downloadVoiceFile);
     router.post('/tool/dismissgroup', controller.other.dismissgroup);
-    router.post('/upload/voicefile', controller.other.uploadVoiceFile);
     router.get('/qiu/test', controller.other.test);
     router.get('/qiu/uploadtoken', controller.other.getQiniuUploadToken);
   };

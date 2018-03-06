@@ -16,9 +16,7 @@ class BaseController extends Controller {
       conditions = JSON.parse(query.conditions);
     }
     const result = await this.service.findAll(query, conditions);
-    ctx.logger.info('message', result);
-
-    // 设置响应体和状态码
+    // ctx.logger.info('message', result);
     ctx.body = result;
     ctx.status = 200;
   }
