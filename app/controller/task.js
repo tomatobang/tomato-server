@@ -1,6 +1,9 @@
 'use strict';
 const BaseController = require('./base');
-const { taskValidationRule, relateUrlValidationRule } = require('../validate/task');
+const {
+  taskValidationRule,
+  relateUrlValidationRule,
+} = require('../validate/task');
 class TaskController extends BaseController {
   constructor(ctx) {
     super(ctx);
@@ -8,9 +11,12 @@ class TaskController extends BaseController {
     this.validateRule = taskValidationRule;
   }
 
-  async updateVoiceUrl(){
+  async updateVoiceUrl() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(relateUrlValidationRule, ctx.request.body);
+    const invalid = app.validator.validate(
+      relateUrlValidationRule,
+      ctx.request.body
+    );
     if (invalid) {
       ctx.body = {
         status: 'fail',
@@ -21,11 +27,11 @@ class TaskController extends BaseController {
     const taskid = ctx.request.body.taskid;
     const relateUrl = ctx.request.body.relateUrl;
     await ctx.service.task.updateVoiceUrl(taskid, relateUrl);
-      // 此处写法待重构
-      ctx.status = 200;
-      ctx.body = {
-        success: true,
-      };
+    // 此处写法待重构
+    ctx.status = 200;
+    ctx.body = {
+      success: true,
+    };
   }
 }
 module.exports = TaskController;

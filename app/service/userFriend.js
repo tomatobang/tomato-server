@@ -16,7 +16,7 @@ class User_friendService extends BaseService {
     const model = this.ctx.model.UserFriend;
     await model.updateOne(
       { _id: recordid },
-      { state: state, response_time: new Date().valueOf() },
+      { state, response_time: new Date().valueOf() },
       {}
     );
     return true;

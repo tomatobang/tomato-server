@@ -17,7 +17,7 @@ const user_friendValidationRule = {
 };
 
 const stateValidationRule = {
-    recordId: {
+  recordId: {
     type: 'string',
     required: true,
     allowEmpty: false,
@@ -26,7 +26,7 @@ const stateValidationRule = {
   },
   state: {
     type: 'enum',
-    values: [ '1', '2', '3' , '4' ],
+    values: [ '1', '2', '3', '4' ],
     required: true,
   },
 };

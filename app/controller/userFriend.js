@@ -34,10 +34,14 @@ class User_friendController extends BaseController {
       (await ctx.service.user.hasUser(from_userid)) &&
       (await ctx.service.user.hasUser(to_userid));
     if (!isUserExist) {
-     
+      ctx.body = {
+        status: 'fail',
+        description: '用户不存在',
+      };
+      return;
     }
 
-    if(from_userid === to_userid){
+    if (from_userid === to_userid) {
       ctx.body = {
         status: 'fail',
         description: '不能添加自己为好友!',
@@ -46,8 +50,8 @@ class User_friendController extends BaseController {
     }
 
     const user_friend = {
-      from_userid: from_userid,
-      to_userid: to_userid,
+      from_userid,
+      to_userid,
       request_time: new Date().valueOf(),
       state: 1,
     };

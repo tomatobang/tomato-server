@@ -12,7 +12,8 @@
     "cov": "egg-bin cov",
     "debug": "egg-bin debug",
     "debug-raw": "egg-bin debug --inspect-brk",
-    "ci": "npm run lint && npm run cov"
+    "ci": "npm run lint && npm run cov",
+    "autod": "egg-bin autod"
   },
   "repository": {
     "type": "git",

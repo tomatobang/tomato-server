@@ -29,6 +29,6 @@ const relateUrlValidationRule = {
 };
 
 module.exports = {
-    taskValidationRule,
-    relateUrlValidationRule
+  taskValidationRule,
+  relateUrlValidationRule,
 };
