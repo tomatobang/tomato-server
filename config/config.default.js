@@ -1,6 +1,13 @@
 'use strict';
 const env = process.env;
 
+exports.cluster = {
+  listen: {
+    port: 7001,
+    hostname: '127.0.0.1',
+  }
+}
+
 exports.keys = 'com.server.tomatobang';
 exports.middleware = [ 'ratelimit', 'errorhandler', 'robot', 'jwt' ];
 
