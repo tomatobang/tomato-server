@@ -35,7 +35,10 @@ class UserService extends BaseService {
         {
           img: imgurl,
         },
-        { new: true }
+        {
+          new: true,
+          upsert: true,
+        }
       )
       .exec();
     return result;
@@ -49,7 +52,10 @@ class UserService extends BaseService {
         {
           sex,
         },
-        { new: true }
+        {
+          new: true,
+          upsert: true,
+        }
       )
       .exec();
     return result;
@@ -63,7 +69,10 @@ class UserService extends BaseService {
         {
           displayName,
         },
-        { new: true }
+        {
+          new: true,
+          upsert: true,
+        }
       )
       .exec();
     return result;
@@ -77,7 +86,10 @@ class UserService extends BaseService {
         {
           email,
         },
-        { new: true }
+        {
+          new: true,
+          upsert: true,
+        }
       )
       .exec();
     return result;
@@ -91,7 +103,10 @@ class UserService extends BaseService {
         {
           location,
         },
-        { new: true }
+        {
+          new: true,
+          upsert: true,
+        }
       )
       .exec();
     return result;
@@ -105,7 +120,10 @@ class UserService extends BaseService {
         {
           bio,
         },
-        { new: true }
+        {
+          new: true,
+          upsert: true,
+        }
       )
       .exec();
     return result;
