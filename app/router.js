@@ -73,11 +73,11 @@ module.exports = app => {
    */
   router.post(
     '/api/user_friend/request_add_friend',
-    controller.userFriend.request_add_friend
+    controller.userFriend.requestAddFriend
   );
   router.post(
     '/api/user_friend/response_add_friend',
-    controller.userFriend.response_add_friend
+    controller.userFriend.responseAddFriend
   );
 
   /**

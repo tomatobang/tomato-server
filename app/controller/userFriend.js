@@ -11,10 +11,29 @@ class User_friendController extends BaseController {
     super(ctx);
     this.service = ctx.service.userFriend;
   }
+
   /**
-   * @api {request_add_friend} /api/user_friend/request_add_friend [请求添加为好友]
+   * @api {getFriendReqList} /api/user_friend/request_add_friend [请求添加为好友]
    */
-  async request_add_friend() {
+  async getFriendReqList() {
+    const { ctx } = this;
+    let conditions = {};
+    const query = ctx.request.query;
+    if (ctx.request.currentUser) {
+      conditions.to_userid = ctx.request.currentUser._id;
+    }
+    if (query.conditions) {
+      conditions = JSON.parse(query.conditions);
+    }
+    const result = await this.service.findAll(query, conditions);
+    ctx.body = result;
+    ctx.status = 200;
+  }
+
+  /**
+   * @api {requestAddFriend} /api/user_friend/request_add_friend [请求添加为好友]
+   */
+  async requestAddFriend() {
     const { ctx, app } = this;
     const invalid = app.validator.validate(
       user_friendValidationRule,
@@ -62,9 +81,9 @@ class User_friendController extends BaseController {
   }
 
   /**
-   * @api {response_add_friend} /api/user_friend/response_add_friend [回复添加好友请求]
+   * @api {responseAddFriend} /api/user_friend/response_add_friend [回复添加好友请求]
    */
-  async response_add_friend() {
+  async responseAddFriend() {
     const { ctx, app } = this;
     const invalid = app.validator.validate(
       stateValidationRule,
