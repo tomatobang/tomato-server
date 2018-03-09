@@ -9,8 +9,8 @@ script:
 - npm run ci
 after_script:
 - npminstall codecov && codecov
-- chmod a+x ./scripts/deploy.sh
-- test $TRAVIS_NODE_VERSION = 8 && ./scripts/deploy.sh
+# - chmod a+x ./scripts/deploy.sh
+# - test $TRAVIS_NODE_VERSION = 8 && ./scripts/deploy.sh
 services:
 - mongodb
 - redis-server
