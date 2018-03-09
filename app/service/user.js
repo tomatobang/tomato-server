@@ -37,7 +37,6 @@ class UserService extends BaseService {
         },
         {
           new: true,
-          upsert: true,
         }
       )
       .exec();
@@ -54,7 +53,6 @@ class UserService extends BaseService {
         },
         {
           new: true,
-          upsert: true,
         }
       )
       .exec();
@@ -71,7 +69,6 @@ class UserService extends BaseService {
         },
         {
           new: true,
-          upsert: true,
         }
       )
       .exec();
@@ -88,7 +85,6 @@ class UserService extends BaseService {
         },
         {
           new: true,
-          upsert: true,
         }
       )
       .exec();
@@ -105,7 +101,6 @@ class UserService extends BaseService {
         },
         {
           new: true,
-          upsert: true,
         }
       )
       .exec();
@@ -122,7 +117,6 @@ class UserService extends BaseService {
         },
         {
           new: true,
-          upsert: true,
         }
       )
       .exec();

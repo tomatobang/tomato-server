@@ -82,8 +82,6 @@ module.exports = app => {
   /**
    * 其它
    */
-  router.get('/download/voicefile/:path', controller.other.downloadVoiceFile);
-  router.post('/tool/dismissgroup', controller.other.dismissgroup);
   router.get('/qiu/test', controller.other.test);
   router.get('/qiu/uploadtoken', controller.other.getQiniuUploadToken);
 };

@@ -85,7 +85,7 @@ describe('test/service/user.test.js', () => {
   });
 
   it('hasUser:should return false', async () => {
-    const finded = await ctx.service.user.hasUser('xxxx');
+    const finded = await ctx.service.user.hasUser('56a1f40647c2222f48041452');
     assert(finded === false);
   });
 });
