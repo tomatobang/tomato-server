@@ -2,40 +2,6 @@
 const Controller = require('egg').Controller;
 class OtherController extends Controller {
   /**
-   * 解散群组（待删）
-   */
-  async dismissgroup() {
-    const { ctx, app } = this;
-    const userid = ctx.request.currentUser._id;
-    const groupid = ctx.request.body.groupid;
-    if (!userid || !groupid) {
-      ctx.status = 500;
-      ctx.body = {
-        success: false,
-        msg: 'userid与groupid 必填！',
-      };
-      return;
-    }
-    ctx.logger.info('userid', userid);
-    ctx.logger.info('groupid', groupid);
-    const ret = await app.hepler.rongyunUtil.dissmissgroup(userid, groupid);
-    ctx.logger.info('ret', ret);
-    if (ret) {
-      ctx.status = 200;
-      ctx.body = {
-        success: true,
-        msg: '删除成功',
-      };
-    } else {
-      ctx.status = 500;
-      ctx.body = {
-        success: false,
-        msg: '删除失败',
-      };
-    }
-  }
-
-  /**
    * 下载音频文件
    * 通过 query 参数获取相关内容
    */

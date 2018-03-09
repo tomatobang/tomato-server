@@ -28,7 +28,6 @@ module.exports = app => {
   router.get('/api/user/:id', controller.user.findById);
   router.post('/api/user', controller.user.create);
   router.del('/api/user/:id', controller.user.deleteById);
-  // router.post('/getRongyunToken', controller.user.getRongyunToken);
   router.post('/email_username/verify', controller.user.emailUserNameVerify);
   router.post('/api/login', controller.user.login);
   router.post('/api/logout', controller.user.logout);
