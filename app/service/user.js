@@ -33,7 +33,7 @@ class UserService extends BaseService {
       .findByIdAndUpdate(
         id,
         {
-          img: imgurl,
+          $set: { img: imgurl },
         },
         {
           new: true,
@@ -49,7 +49,7 @@ class UserService extends BaseService {
       .findByIdAndUpdate(
         id,
         {
-          sex,
+          $set: { sex },
         },
         {
           new: true,
@@ -65,7 +65,7 @@ class UserService extends BaseService {
       .findByIdAndUpdate(
         id,
         {
-          displayName,
+          $set: { displayName },
         },
         {
           new: true,
@@ -81,7 +81,7 @@ class UserService extends BaseService {
       .findByIdAndUpdate(
         id,
         {
-          email,
+          $set: { email },
         },
         {
           new: true,
@@ -97,7 +97,7 @@ class UserService extends BaseService {
       .findByIdAndUpdate(
         id,
         {
-          location,
+          $set: { location },
         },
         {
           new: true,
@@ -113,7 +113,7 @@ class UserService extends BaseService {
       .findByIdAndUpdate(
         id,
         {
-          bio,
+          $set: { bio },
         },
         {
           new: true,

@@ -14,7 +14,6 @@ class TomatoController extends BaseController {
         const { ctx } = this;
         const isSuccess = ctx.request.body.isSuccess;
         const date = ctx.request.body.date;
-        // 按用户筛选
         let userid = '';
         if (ctx.request.currentUser) {
             userid = ctx.request.currentUser.username;
@@ -48,7 +47,6 @@ class TomatoController extends BaseController {
             (datenow.getMonth() + 1) +
             '-' +
             datenow.getDate();
-        // 按用户筛选
         const conditions = { startTime: { $gte: new Date(date).toISOString() } };
         if (ctx.request.currentUser) {
             conditions.userid = ctx.request.currentUser.username;
@@ -71,7 +69,6 @@ class TomatoController extends BaseController {
      */
     async search() {
         const { ctx } = this;
-        // 对这些关键字得做处理
         let keywords = ctx.request.body.keywords;
         keywords = ctx.helper.escape(keywords);
         ctx.logger.info('keywords2', keywords);

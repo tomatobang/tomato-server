@@ -6,6 +6,7 @@ class User_friendService extends BaseService {
     super(ctx);
     this.model = this.ctx.model.UserFriend;
   }
+
   /**
    * 回复好友请求
    * @param { String } recordid 记录编号
@@ -21,6 +22,8 @@ class User_friendService extends BaseService {
     );
     return true;
   }
+
+
 }
 
 module.exports = User_friendService;
