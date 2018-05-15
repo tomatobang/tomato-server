@@ -7,6 +7,20 @@ class User_friendService extends BaseService {
     this.model = this.ctx.model.UserFriend;
   }
 
+  async getUserFriends(userid) {
+    const model = this.ctx.model.UserFriend;
+    const result = await model
+      .find({ $or: [{ from_userid: userid }, { to_userid: userid }] })
+      .populate(
+        { path: 'from_userid', select: 'username bio img email sex location' },
+        { path: 'to_userid', select: 'username bio img email sex location' }
+      )
+      .sort('-response_time')
+      .select('response_time from_userid to_userid');
+
+    return result;
+  }
+
   /**
    * 回复好友请求
    * @param { String } recordid 记录编号
@@ -22,8 +36,6 @@ class User_friendService extends BaseService {
     );
     return true;
   }
-
-
 }
 
 module.exports = User_friendService;

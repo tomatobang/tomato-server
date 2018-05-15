@@ -18,7 +18,7 @@ module.exports = app => {
       const obj = this.ctx.args[0];
       const socket = this.ctx.socket;
       const { userid } = obj;
-      const userLoginEnds = await app.redis.get('chat:user:socket:' + userid);
+      const userLoginEnds = await app.redis.smembers('chat:user:socket:' + userid);
       if (userLoginEnds && userLoginEnds.length > 0) {
         // 已登录
       } else {
@@ -62,7 +62,18 @@ module.exports = app => {
                   1,
                   userid
                 );
-                 // TODO:向好友客户端推送消息
+                 // 向好友终端推送在线消息
+                 const friendLoginEnds = await app.redis.smembers('chat:user:socket:' + friendid);
+                 if (friendLoginEnds && friendLoginEnds.length > 0) {
+                  for (const end of friendLoginEnds) {
+                    if (end) {
+                      await app.io
+                        .of('/chat')
+                        .to(end)
+                        .emit('friend_online', { userid });
+                    }
+                  }
+                 } 
               }
             } else {
               await app.redis.zadd('chat:user:friends:' + userid, 0, friendid);
@@ -235,7 +246,18 @@ module.exports = app => {
                   userid
                 );
               }
-              // TODO:向好友客户端推送消息
+              // 向好友终端推送离线消息
+              const friendLoginEnds = await app.redis.smembers('chat:user:socket:' + end[0]);
+                 if (friendLoginEnds && friendLoginEnds.length > 0) {
+                  for (const end of friendLoginEnds) {
+                    if (end) {
+                      await app.io
+                        .of('/chat')
+                        .to(end)
+                        .emit('friend_offline', { userid });
+                    }
+                  }
+                 }
             }
           }
 

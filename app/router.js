@@ -83,6 +83,9 @@ module.exports = app => {
   /**
    * 社交类
    */
+
+  router.post('/api/user_friend', controller.userFriend.getUserFriends);
+
   router.post(
     '/api/user_friend/request_add_friend',
     controller.userFriend.requestAddFriend

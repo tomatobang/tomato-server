@@ -13,6 +13,22 @@ class User_friendController extends BaseController {
   }
 
   /**
+   * @api {getFriendReqList} /api/user_friend [获取好友列表]
+   */
+  async getUserFriends() {
+    const { ctx } = this;
+    let userid = ctx.request.body.userid;
+    if (userid) {
+      const result = await this.service.getUserFriends(userid);
+      ctx.body = result;
+      ctx.status = 200;
+    } else {
+      ctx.body = '请求不合法！';
+      ctx.status = 403;
+    }
+  }
+
+  /**
    * @api {getFriendReqList} /api/user_friend/request_add_friend [请求添加为好友]
    */
   async getFriendReqList() {
