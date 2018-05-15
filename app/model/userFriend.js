@@ -3,6 +3,9 @@
 module.exports = app => {
   /**
    * 好友关系
+   * TODO:
+   *  + 好友上限值设置
+   *  + 活跃好友
    */
   const mongoose = app.mongoose;
   const ObjectId = mongoose.Schema.ObjectId;
