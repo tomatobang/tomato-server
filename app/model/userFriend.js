@@ -11,9 +11,9 @@ module.exports = app => {
   const ObjectId = mongoose.Schema.ObjectId;
   const user_friend = new mongoose.Schema({
     // 用户编号( 发起者 )
-    from_userid:  { type:ObjectId, ref: 'user' },
+    from_userid: { type: ObjectId, ref: 'user' },
     // 用户编号( 接受者 )
-    to_userid:{ type:ObjectId, ref: 'user' },
+    to_userid: { type: ObjectId, ref: 'user' },
     // 请求时间
     request_time: { type: Date },
     // 回复时间

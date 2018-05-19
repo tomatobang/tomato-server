@@ -18,13 +18,15 @@ module.exports = app => {
       const obj = this.ctx.args[0];
       const socket = this.ctx.socket;
       const { userid } = obj;
-      if(!userid){
-          return '用户编号不合法！';
+      if (!userid) {
+        this.failRes(this.app, this.socket.id, '用户编号不合法！');
       }
       // 存储登录信息
       await app.redis.sadd('chat:user:socket:' + userid, socket.id);
-      await app.redis.set('chat:socket:user:' + socket.id, userid); 
-      const userLoginEnds = await app.redis.smembers('chat:user:socket:' + userid);
+      await app.redis.set('chat:socket:user:' + socket.id, userid);
+      const userLoginEnds = await app.redis.smembers(
+        'chat:user:socket:' + userid
+      );
       if (userLoginEnds && userLoginEnds.length > 0) {
         // TODO:多终端登录或重复登录
       } else {
@@ -40,19 +42,18 @@ module.exports = app => {
         if (friends && friends.lenth > 0) {
           for (let index = 0; index < friends.length; index++) {
             const element = friends[index];
-            let fsockets;
             let friendid;
             if (element.from_userid !== userid) {
-              friendid = from_userid;
+              friendid = element.from_userid;
             } else {
-              friendid = to_userid;
+              friendid = element.to_userid;
             }
-            fsockets = await app.redis.smembers(
+            const fsockets = await app.redis.smembers(
               'chat:user:socket:' + friendid
             );
             if (fsockets && fsockets.length > 0) {
               await app.redis.zadd('chat:user:friends:' + userid, 1, friendid);
-              let score = await app.redis.zscore(
+              const score = await app.redis.zscore(
                 'chat:user:friends:' + friendid,
                 userid
               );
@@ -64,7 +65,7 @@ module.exports = app => {
                   userid
                 );
                 // 向好友终端推送离线消息
-                this.notify(friendid,'friend_online', { userid });
+                this.notify(friendid, 'friend_online', { userid });
               }
             } else {
               await app.redis.zadd('chat:user:friends:' + userid, 0, friendid);
@@ -72,7 +73,6 @@ module.exports = app => {
           }
         }
       }
-      return;
     }
 
     /**
@@ -92,9 +92,8 @@ module.exports = app => {
       }
       if (message) {
         // 向各个终端推送离线消息
-        this.notify(to, 'message_received',{ from, message });
+        this.notify(to, 'message_received', { from, message });
       }
-      return;
     }
 
     /**
@@ -106,8 +105,11 @@ module.exports = app => {
        * userid:string
        */
       const { userid } = obj;
+      if (!userid) {
+        this.failRes(this.app, this.socket.id, '用户编号不合法！');
+      }
       // 查询所有好友在线列表
-      let friends = await app.redis.zrange(
+      const friends = await app.redis.zrange(
         'chat:user:friends:' + userid,
         0,
         -1,
@@ -135,8 +137,8 @@ module.exports = app => {
       const { ctx, app } = this;
       const obj = ctx.args[0];
       const { from_userid, to_userid } = obj;
-      if(!from_userid || !to_userid){
-        return '用户编号不合法！';
+      if (!from_userid || !to_userid) {
+        this.failRes(app, this.socket.id, '用户编号不合法！');
       }
       const invalid = app.validator.validate(user_friendValidationRule, {
         from_userid,
@@ -206,12 +208,13 @@ module.exports = app => {
      * 断开连接
      */
     async disconnect() {
-      const socket = this.ctx.socket;
-      app.redis.get(socket.id).then(userid => {
-        this.ctx.logger.info('userid!', userid);
+      const { ctx, app } = this;
+      const socket = ctx.socket;
+      app.redis.get(socket.id).then(async function(userid) {
+        ctx.logger.info('userid!', userid);
         if (userid) {
           // 查询所有好友在线列表
-          let friends = await app.redis.zrange(
+          const friends = await app.redis.zrange(
             'chat:user:friends:' + userid,
             0,
             -1,
@@ -221,38 +224,37 @@ module.exports = app => {
           for (const end of friends) {
             // 好友在线
             // TODO: 格式需要做验证
-            if(end[1] === 1){
-              let score = await app.redis.zscore(
+            if (end[1] === 1) {
+              const score = await app.redis.zscore(
                 'chat:user:friends:' + end[0],
                 userid
               );
               if (score !== 0) {
                 await app.redis.zincrby(
-                  'chat:user:friends:'  + end[0],
+                  'chat:user:friends:' + end[0],
                   -1,
                   userid
                 );
               }
               // 向好友终端推送离线消息
-              this.notify(end[0],'friend_offline', { userid });
+              this.notify(end[0], 'friend_offline', { userid });
             }
           }
 
-          await app.redis.del(
-            'chat:user:friends:' + userid
-          );
+          await app.redis.del('chat:user:friends:' + userid);
           await app.redis.srem('chat:user:socket:', userid);
           await app.redis.del('chat:socket:user:' + socket.id);
         }
       });
-      return;
     }
-
 
     /**
      * 辅助方法
+     * @param {string} userid 用户编号
+     * @param {string} evtName 事件名称
+     * @param {string} message 消息
      */
-    async notify(userid, evtName, message){
+    async notify(userid, evtName, message) {
       // 向好友终端推送离线消息
       const loginEnds = await app.redis.smembers('chat:user:socket:' + userid);
       if (loginEnds && loginEnds.length > 0) {
@@ -265,6 +267,19 @@ module.exports = app => {
           }
         }
       }
+    }
+
+    /**
+     * 失败返回
+     * @param {string} app app
+     * @param {string} socketid 套接字编号
+     * @param {string} message 消息
+     */
+    async failRes(app, socketid, message) {
+      await app.io
+        .of('/chat')
+        .to(socketid)
+        .emit('fail', message);
     }
   }
   return Controller;
