@@ -19,7 +19,7 @@ module.exports = app => {
       const socket = this.ctx.socket;
       const { userid } = obj;
       if (!userid) {
-        this.failRes(this.app, this.socket.id, '用户编号不合法！');
+        this.failRes(this.socket.id, '用户编号不合法！');
       }
       // 存储登录信息
       await app.redis.sadd('chat:user:socket:' + userid, socket.id);
@@ -106,7 +106,7 @@ module.exports = app => {
        */
       const { userid } = obj;
       if (!userid) {
-        this.failRes(this.app, this.socket.id, '用户编号不合法！');
+        this.failRes(this.socket.id, '用户编号不合法！');
       }
       // 查询所有好友在线列表
       const friends = await app.redis.zrange(
@@ -135,14 +135,14 @@ module.exports = app => {
        * state:number
        */
       const { ctx, app } = this;
-      const obj = ctx.args[0];
-      const { from_userid, to_userid } = obj;
-      if (!from_userid || !to_userid) {
-        this.failRes(app, this.socket.id, '用户编号不合法！');
+      const obj = ctx.argsargs[0];
+      const { from, to } = obj;
+      if (!from || !to) {
+        this.failRes(this.socket.id, '用户编号不合法！');
       }
       const invalid = app.validator.validate(user_friendValidationRule, {
-        from_userid,
-        to_userid,
+        from,
+        to,
       });
       if (invalid) {
         await app.io
@@ -152,8 +152,8 @@ module.exports = app => {
       }
 
       const isUserExist =
-        (await ctx.service.user.hasUser(from_userid)) &&
-        (await ctx.service.user.hasUser(to_userid));
+        (await ctx.service.user.hasUser(from)) &&
+        (await ctx.service.user.hasUser(to));
       if (!isUserExist) {
         await app.io
           .of('/chat')
@@ -161,7 +161,7 @@ module.exports = app => {
           .emit('fail', { status: 'fail', description: '用户不存在' });
       }
 
-      if (from_userid === to_userid) {
+      if (from === to) {
         await app.io
           .of('/chat')
           .to(this.socket.id)
@@ -169,13 +169,15 @@ module.exports = app => {
       }
 
       const user_friend = {
-        from_userid,
-        to_userid,
+        from,
+        to,
         request_time: new Date().valueOf(),
         state: 1,
       };
 
       await this.service.userFriend.create(user_friend);
+
+      this.notify(to, 'receive_friend_request', from);
 
       await app.io
         .of('/chat')
@@ -186,7 +188,7 @@ module.exports = app => {
     async responseAddFriend() {
       const { ctx, app } = this;
       const obj = ctx.args[0];
-      const { recordId, state } = obj;
+      const { recordId, from, to, state } = obj;
       const invalid = app.validator.validate(stateValidationRule, {
         recordId,
         state,
@@ -198,6 +200,29 @@ module.exports = app => {
           .emit('fail', { status: 'fail', description: '请求参数不合法！' });
       }
       await ctx.service.userFriend.updateState(recordId, state);
+      if (state === 2) {
+        const userLoginEnds = await app.redis.smembers(
+          'chat:user:socket:' + to
+        );
+        if (userLoginEnds && userLoginEnds.length > 0) {
+          await app.redis.zadd('chat:user:friends:' + from, 1, to);
+          await app.redis.zadd('chat:user:friends:' + to, 1, from);
+          this.notify(to, 'new_added_friend', {
+            friendid: from,
+            state: 'online',
+          });
+          this.notify(from, 'new_added_friend', {
+            friendid: to,
+            state: 'online',
+          });
+        } else {
+          await app.redis.zadd('chat:user:friends:' + from, 0, to);
+          this.notify(from, 'new_added_friend', {
+            friendid: to,
+            state: 'offline',
+          });
+        }
+      }
       await app.io
         .of('/chat')
         .to(this.socket.id)
@@ -271,16 +296,20 @@ module.exports = app => {
 
     /**
      * 失败返回
-     * @param {string} app app
      * @param {string} socketid 套接字编号
      * @param {string} message 消息
      */
-    async failRes(app, socketid, message) {
+    async failRes(socketid, message) {
       await app.io
         .of('/chat')
         .to(socketid)
         .emit('fail', message);
     }
+
+    /**
+     * TODO:获取用户信息
+     */
+    getUserInfo() {}
   }
   return Controller;
 };
