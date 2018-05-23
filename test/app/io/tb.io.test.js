@@ -3,7 +3,7 @@ const ioc = require('socket.io-client');
 const mm = require('egg-mock');
 
 const { assert } = require('egg-mock/bootstrap');
-describe('test/io/io.test.js', () => {
+describe('test/io/tb.io.test.js', () => {
 
     afterEach(() => {
         mm.restore();
