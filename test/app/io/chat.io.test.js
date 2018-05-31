@@ -31,7 +31,7 @@ describe('test/io/chat.io.test.js', () => {
     return ioc(url, opts);
   }
 
-  it('io controller should works ok', done => {
+  it('chat io controller should works ok', done => {
     const app = mm.cluster({
       workers: 1,
       sticky: false,
@@ -46,7 +46,7 @@ describe('test/io/chat.io.test.js', () => {
         const from = 234;
         const to = 123;
         const flag = 1;
-        socket1.emit('send_friend_request', { from, to });
+        socket1.emit('request_add_request', { from, to });
         assert(flag);
       });
       socket1.on('disconnect', () => app.close().then(done, done));
@@ -105,9 +105,10 @@ describe('test/io/chat.io.test.js', () => {
       });
 
       socket2.on('responseAddFriend_success', msg => {
+        console.log(msg);
         // 加载好友列表
-        socket1.emit('load_online_friend_list', { userid });
         const userid = 123;
+        socket1.emit('load_online_friend_list', { userid });
         const from = 123;
         const to = 234;
         socket1.emit('send_message', {

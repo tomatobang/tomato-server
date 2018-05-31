@@ -17,17 +17,23 @@ module.exports = app => {
     .route('break_tomato', app.io.controllers.tomatobang.breakTomato);
 
   // socket.io: 聊天同步
-  // app.io.of('/chat').route('login', app.io.controllers.chat.login);
-  // app.io.of('/chat').route('send_message', app.io.controllers.chat.sendMessage);
-  // app.io
-  //   .of('/chat')
-  //   .route(
-  //     'load_online_friend_list',
-  //     app.io.controllers.chat.loadOnlineFriendList
-  //   );
-  // app.io
-  //   .of('/chat')
-  //   .route('send_friend_request', app.io.controllers.chat.sendFriendRequest);
+  app.io.of('/chat').route('login', app.io.controllers.chat.login);
+  app.io.of('/chat').route('send_message', app.io.controllers.chat.sendMessage);
+  app.io
+    .of('/chat')
+    .route(
+      'load_online_friend_list',
+      app.io.controllers.chat.loadOnlineFriendList
+    );
+  app.io
+    .of('/chat')
+    .route('request_add_request', app.io.controllers.chat.requestAddFriend);
+  app.io
+    .of('/chat')
+    .route(
+      'response_friend_request',
+      app.io.controllers.chat.responseAddFriend
+    );
 
   // 版本管理
   router.get('/api/version', controller.version.findLatestVersion);
