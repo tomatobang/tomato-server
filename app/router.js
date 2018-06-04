@@ -8,31 +8,31 @@ module.exports = app => {
   // socket.io: 番茄钟同步
   app.io
     .of('/tomatobang')
-    .route('load_tomato', app.io.controllers.tomatobang.loadTomato);
+    .route('load_tomato', app.io.controller.tomatobang.loadTomato);
   app.io
     .of('/tomatobang')
-    .route('start_tomato', app.io.controllers.tomatobang.startTomato);
+    .route('start_tomato', app.io.controller.tomatobang.startTomato);
   app.io
     .of('/tomatobang')
-    .route('break_tomato', app.io.controllers.tomatobang.breakTomato);
+    .route('break_tomato', app.io.controller.tomatobang.breakTomato);
 
   // socket.io: 聊天同步
-  app.io.of('/chat').route('login', app.io.controllers.chat.login);
-  app.io.of('/chat').route('send_message', app.io.controllers.chat.sendMessage);
+  app.io.of('/chat').route('login', app.io.controller.chat.login);
+  app.io.of('/chat').route('send_message', app.io.controller.chat.sendMessage);
   app.io
     .of('/chat')
     .route(
       'load_online_friend_list',
-      app.io.controllers.chat.loadOnlineFriendList
+      app.io.controller.chat.loadOnlineFriendList
     );
   app.io
     .of('/chat')
-    .route('request_add_request', app.io.controllers.chat.requestAddFriend);
+    .route('request_add_request', app.io.controller.chat.requestAddFriend);
   app.io
     .of('/chat')
     .route(
       'response_friend_request',
-      app.io.controllers.chat.responseAddFriend
+      app.io.controller.chat.responseAddFriend
     );
 
   // 版本管理

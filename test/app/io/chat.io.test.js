@@ -16,12 +16,29 @@
 
 const ioc = require('socket.io-client');
 const mm = require('egg-mock');
+// const rimraf = require('rimraf');
+// const path = require('path');
 
 const { assert } = require('egg-mock/bootstrap');
 describe('test/io/chat.io.test.js', () => {
+  const zhangs = '5b0f712e24b71d2cc029bf11';
+  const lisi = '5b0f714924b71d2cc029bf12';
+
+  before(() => {
+    // clean();
+  });
+
   afterEach(() => {
     mm.restore();
   });
+
+  // function clean() {
+  //   const logPath = path.join(__dirname, '../../../', 'logs');
+  //   const runPath = path.join(__dirname, '../../../', 'run');
+
+  //   rimraf.sync(logPath);
+  //   rimraf.sync(runPath);
+  // }
 
   function client(nsp, opts = {}) {
     let url = 'http://127.0.0.1:' + opts.port + (nsp || '');
@@ -36,25 +53,26 @@ describe('test/io/chat.io.test.js', () => {
       workers: 1,
       sticky: false,
     });
+
     app.ready().then(() => {
       console.log('process.env', app.port);
       /**
-       * chat1
+       * chat1:zhangs
        */
       const socket1 = client('chat', { port: app.port + '/' });
       socket1.on('connect', () => {
-        const from = 234;
-        const to = 123;
+        const from = zhangs;
+        const to = lisi;
         const flag = 1;
         socket1.emit('request_add_request', { from, to });
         assert(flag);
       });
-      socket1.on('disconnect', () => app.close().then(done, done));
+      // socket1.on('disconnect', () => app.close().then(done, done));
 
       socket1.on('message_received', msg => {
         console.log(msg);
-        const from = 234;
-        const to = 123;
+        const from = zhangs;
+        const to = lisi;
         socket1.emit('send_message', {
           from,
           to,
@@ -89,14 +107,17 @@ describe('test/io/chat.io.test.js', () => {
         const flag = 1;
         assert(flag);
       });
-      socket2.on('disconnect', () => app.close().then(done, done));
+      socket2.on('disconnect', () => {
+        console.log('socket2 closed!!!');
+        app.close().then(done, done);
+      });
 
       socket2.on('receive_friend_request', msg => {
         console.log(msg);
         const recordId = '1232';
-        const from = 123;
-        const to = 234;
-        socket1.emit('response_friend_request', {
+        const from = lisi;
+        const to = zhangs;
+        socket2.emit('response_friend_request', {
           recordId,
           from,
           to,
@@ -107,11 +128,11 @@ describe('test/io/chat.io.test.js', () => {
       socket2.on('responseAddFriend_success', msg => {
         console.log(msg);
         // 加载好友列表
-        const userid = 123;
-        socket1.emit('load_online_friend_list', { userid });
-        const from = 123;
-        const to = 234;
-        socket1.emit('send_message', {
+        const userid = lisi;
+        socket2.emit('load_online_friend_list', { userid });
+        const from = lisi;
+        const to = zhangs;
+        socket2.emit('send_message', {
           from,
           to,
           message: 'we are friend now!',
@@ -129,7 +150,6 @@ describe('test/io/chat.io.test.js', () => {
       socket2.on('fail', msg => {
         console.log(msg);
       });
-
       setTimeout(() => {
         socket2.close();
       }, 3000);
