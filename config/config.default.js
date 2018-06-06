@@ -4,11 +4,11 @@ const env = process.env;
 exports.cluster = {
   listen: {
     port: 7001,
-  }
-}
+  },
+};
 
 exports.keys = 'com.server.tomatobang';
-exports.middleware = [ 'ratelimit', 'errorhandler', 'robot', 'jwt' ];
+exports.middleware = ['ratelimit', 'errorhandler', 'robot', 'jwt'];
 
 exports.security = {
   csrf: {
@@ -31,7 +31,11 @@ exports.static = {
 exports.io = {
   namespace: {
     '/tomatobang': {
-      connectionMiddleware: [ 'auth' ],
+      connectionMiddleware: ['auth'],
+      packetMiddleware: [],
+    },
+    '/chat': {
+      connectionMiddleware: [],
       packetMiddleware: [],
     },
   },
@@ -42,7 +46,10 @@ exports.io = {
 };
 
 exports.mongoose = {
-  url: 'mongodb://' + (env.DATABASE_HOST ? env.DATABASE_HOST : '127.0.0.1') + ':27017/tomatobang',
+  url:
+    'mongodb://' +
+    (env.DATABASE_HOST ? env.DATABASE_HOST : '127.0.0.1') +
+    ':27017/tomatobang',
   options: {},
 };
 // 另一种可行的配置方式
@@ -72,9 +79,7 @@ exports.ratelimit = {
 };
 
 exports.robot = {
-  ua: [
-    /Baiduspider/i,
-  ],
+  ua: [/Baiduspider/i],
 };
 
 exports.view = {

@@ -19,22 +19,25 @@ module.exports = app => {
       const socket = this.ctx.socket;
       const { userid } = obj;
       if (!userid) {
-        this.failRes(this.socket.id, '用户编号不合法！');
+        this.failRes(socket.id, '用户编号不合法！');
       }
       // 存储登录信息
-      await app.redis.sadd('chat:user:socket:' + userid, socket.id);
-      await app.redis.set('chat:socket:user:' + socket.id, userid);
       const userLoginEnds = await app.redis.smembers(
         'chat:user:socket:' + userid
       );
+      console.log('2324');
       if (userLoginEnds && userLoginEnds.length > 0) {
         // TODO:多终端登录或重复登录
+        await app.redis.sadd('chat:user:socket:' + userid, socket.id);
+        await app.redis.set('chat:socket:user:' + socket.id, userid);
       } else {
+        await app.redis.sadd('chat:user:socket:' + userid, socket.id);
+        await app.redis.set('chat:socket:user:' + socket.id, userid);
         // 加载好友列表并置状态
-        const friends = await this.service.findAll(
+        const friends = await this.ctx.service.userFriend.findAll(
           { sort: '{"response_time": -1 }' },
           {
-            $or: [{ from_userid: userid }, { to_userid: userid }],
+            $or: [{ from: userid }, { to: userid }],
             deleted: false,
             state: 2,
           }
@@ -43,10 +46,10 @@ module.exports = app => {
           for (let index = 0; index < friends.length; index++) {
             const element = friends[index];
             let friendid;
-            if (element.from_userid !== userid) {
-              friendid = element.from_userid;
+            if (element.from !== userid) {
+              friendid = element.from;
             } else {
-              friendid = element.to_userid;
+              friendid = element.to;
             }
             const fsockets = await app.redis.smembers(
               'chat:user:socket:' + friendid
@@ -101,12 +104,13 @@ module.exports = app => {
      */
     async loadOnlineFriendList() {
       const obj = this.ctx.args[0];
+      const socket = this.ctx.socket;
       /**
        * userid:string
        */
       const { userid } = obj;
       if (!userid) {
-        this.failRes(this.socket.id, '用户编号不合法！');
+        this.failRes(socket.id, '用户编号不合法！');
       }
       // 查询所有好友在线列表
       const friends = await app.redis.zrange(
@@ -118,7 +122,7 @@ module.exports = app => {
       if (userid) {
         await app.io
           .of('/chat')
-          .to(this.socket.id)
+          .to(socket.id)
           .emit('online_friendlist_received', {
             friendlist: friends,
           });
@@ -135,10 +139,11 @@ module.exports = app => {
        * state:number
        */
       const { ctx, app } = this;
-      const obj = ctx.argsargs[0];
+      const obj = ctx.args[0];
+      const socket = this.ctx.socket;
       const { from, to } = obj;
       if (!from || !to) {
-        this.failRes(this.socket.id, '用户编号不合法！');
+        this.failRes(socket.id, '用户编号不合法！');
       }
       const invalid = app.validator.validate(user_friendValidationRule, {
         from,
@@ -147,7 +152,7 @@ module.exports = app => {
       if (invalid) {
         await app.io
           .of('/chat')
-          .to(this.socket.id)
+          .to(socket.id)
           .emit('fail', { status: 'fail', description: '请求参数错误！' });
       }
 
@@ -157,14 +162,14 @@ module.exports = app => {
       if (!isUserExist) {
         await app.io
           .of('/chat')
-          .to(this.socket.id)
+          .to(socket.id)
           .emit('fail', { status: 'fail', description: '用户不存在' });
       }
 
       if (from === to) {
         await app.io
           .of('/chat')
-          .to(this.socket.id)
+          .to(socket.id)
           .emit('fail', { status: 'fail', description: '不能添加自己为好友' });
       }
 
@@ -175,18 +180,19 @@ module.exports = app => {
         state: 1,
       };
 
-      await this.service.userFriend.create(user_friend);
+      await ctx.service.userFriend.create(user_friend);
 
       this.notify(to, 'receive_friend_request', from);
 
       await app.io
         .of('/chat')
-        .to(this.socket.id)
+        .to(socket.id)
         .emit('requestAddFriend_success', {});
     }
 
     async responseAddFriend() {
       const { ctx, app } = this;
+      const socket = this.ctx.socket;
       const obj = ctx.args[0];
       const { recordId, from, to, state } = obj;
       const invalid = app.validator.validate(stateValidationRule, {
@@ -196,7 +202,7 @@ module.exports = app => {
       if (invalid) {
         await app.io
           .of('/chat')
-          .to(this.socket.id)
+          .to(socket.id)
           .emit('fail', { status: 'fail', description: '请求参数不合法！' });
       }
       await ctx.service.userFriend.updateState(recordId, state);
@@ -225,7 +231,7 @@ module.exports = app => {
       }
       await app.io
         .of('/chat')
-        .to(this.socket.id)
+        .to(socket.id)
         .emit('responseAddFriend_success', {});
     }
 

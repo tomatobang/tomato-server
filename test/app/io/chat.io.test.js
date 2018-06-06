@@ -64,6 +64,8 @@ describe('test/io/chat.io.test.js', () => {
         const from = zhangs;
         const to = lisi;
         const flag = 1;
+        socket1.emit('login', { userid: from });
+        socket1.emit('load_online_friend_list', { userid: from });
         socket1.emit('request_add_request', { from, to });
         assert(flag);
       });
@@ -106,6 +108,9 @@ describe('test/io/chat.io.test.js', () => {
       socket2.on('connect', () => {
         const flag = 1;
         assert(flag);
+        const from = lisi;
+        socket2.emit('login', { userid: from });
+        socket2.emit('load_online_friend_list', { userid: from });
       });
       socket2.on('disconnect', () => {
         console.log('socket2 closed!!!');
