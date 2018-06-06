@@ -36,7 +36,7 @@ class User_friendController extends BaseController {
     let conditions = {};
     const query = ctx.request.query;
     if (ctx.request.currentUser) {
-      conditions.to_userid = ctx.request.currentUser._id;
+      conditions.to = ctx.request.currentUser._id;
     }
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
@@ -63,11 +63,11 @@ class User_friendController extends BaseController {
       return;
     }
 
-    const from_userid = ctx.request.body.from_userid;
-    const to_userid = ctx.request.body.to_userid;
+    const from = ctx.request.body.from;
+    const to = ctx.request.body.to;
     const isUserExist =
-      (await ctx.service.user.hasUser(from_userid)) &&
-      (await ctx.service.user.hasUser(to_userid));
+      (await ctx.service.user.hasUser(from)) &&
+      (await ctx.service.user.hasUser(to));
     if (!isUserExist) {
       ctx.body = {
         status: 'fail',
@@ -76,7 +76,7 @@ class User_friendController extends BaseController {
       return;
     }
 
-    if (from_userid === to_userid) {
+    if (from === to) {
       ctx.body = {
         status: 'fail',
         description: '不能添加自己为好友!',
@@ -85,8 +85,8 @@ class User_friendController extends BaseController {
     }
 
     const user_friend = {
-      from_userid,
-      to_userid,
+      from,
+      to,
       request_time: new Date().valueOf(),
       state: 1,
     };

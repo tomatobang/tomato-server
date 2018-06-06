@@ -1,13 +1,13 @@
 'use strict';
 const user_friendValidationRule = {
-  from_userid: {
+  from: {
     type: 'string',
     required: true,
     allowEmpty: false,
     min: 10,
     max: 30,
   },
-  to_userid: {
+  to: {
     type: 'string',
     required: true,
     allowEmpty: false,

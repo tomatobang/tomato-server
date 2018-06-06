@@ -10,13 +10,13 @@ class User_friendService extends BaseService {
   async getUserFriends(userid) {
     const model = this.ctx.model.UserFriend;
     const result = await model
-      .find({ $or: [{ from_userid: userid }, { to_userid: userid }] })
+      .find({ $or: [{ from: userid }, { to: userid }] })
       .populate(
-        { path: 'from_userid', select: 'username bio img email sex location' },
-        { path: 'to_userid', select: 'username bio img email sex location' }
+        { path: 'from', select: 'username bio img email sex location' },
+        { path: 'to', select: 'username bio img email sex location' }
       )
       .sort('-response_time')
-      .select('response_time from_userid to_userid');
+      .select('response_time from to');
 
     return result;
   }

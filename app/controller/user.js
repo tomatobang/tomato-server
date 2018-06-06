@@ -56,6 +56,7 @@ class UserController extends BaseController {
         status: 'success',
         token,
         userinfo: {
+          userid: users[0]._id,
           username: users[0].username,
           displayName: users[0].displayName,
           bio: users[0].bio,
