@@ -26,6 +26,6 @@ module.exports = app => {
     deleted: { type: Boolean, default: false },
   });
 
-  user_friend.index({ userid: 1, friendid: 1 });
+  user_friend.index({ userid: 1, friendid: 1 }, { unique: true });
   return mongoose.model('user_friend', user_friend);
 };
