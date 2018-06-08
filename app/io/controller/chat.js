@@ -194,6 +194,7 @@ module.exports = app => {
       const { ctx, app } = this;
       const socket = this.ctx.socket;
       const obj = ctx.args[0];
+     
       const { recordId, from, to, state } = obj;
       const invalid = app.validator.validate(stateValidationRule, {
         recordId,

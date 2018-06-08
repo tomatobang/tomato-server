@@ -17,7 +17,7 @@ class User_friendController extends BaseController {
    */
   async getUserFriends() {
     const { ctx } = this;
-    const userid = ctx.request.body.userid;
+    const userid = ctx.request.currentUser._id;
     if (userid) {
       const result = await this.service.getUserFriends(userid);
       ctx.body = result;
