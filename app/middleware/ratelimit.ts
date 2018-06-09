@@ -2,14 +2,17 @@
 
 // app/middleware/ratelimit.js
 // 参考:https://github.com/koajs/ratelimit
-const koaRatelimit = require('koa-ratelimit');
-
+import { koaRatelimit } from 'koa-ratelimit';
+import { Context, Application } from 'egg';
+import { BizConfig } from '../../config/config.default';
 /**
  * 接口请求前验证
  */
-
-module.exports = (option, app) => {
-  return async function(ctx, next) {
+export default function ratelimitMiddleware(
+  option: BizConfig['ratelimit'],
+  app: Application
+) {
+  return async function(ctx: Context, next) {
     const apiNoAuth =
       ctx.url.startsWith('/api/login') ||
       ctx.url.endsWith('/api/user') ||
@@ -17,7 +20,7 @@ module.exports = (option, app) => {
       ctx.url.endsWith('/email_username/verify');
     if (apiNoAuth) {
       return await koaRatelimit({
-        db: app.redis,
+        db: app['redis'],
         duration: option.duration,
         errorMessage: option.errorMessage,
         throw: option.throw, // 是否抛出异常
@@ -32,4 +35,4 @@ module.exports = (option, app) => {
     }
     return next();
   };
-};
+}
