@@ -1,5 +1,5 @@
 'use strict';
-import { BaseController } from './base';
+import BaseController from './base';
 
 import { taskValidationRule, relateUrlValidationRule } from '../validate/task';
 
@@ -12,7 +12,7 @@ export default class TaskController extends BaseController {
 
   async updateVoiceUrl() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(
+    const invalid = app['validator'].validate(
       relateUrlValidationRule,
       ctx.request.body
     );

@@ -1,6 +1,6 @@
 'use strict';
 
-import { BaseController } from './base';
+import BaseController from './base';
 import {
   user_friendValidationRule,
   stateValidationRule,
@@ -17,7 +17,7 @@ export default class User_friendController extends BaseController {
    */
   async getUserFriends() {
     const { ctx } = this;
-    const userid = ctx.request.currentUser._id;
+    const userid = ctx.request['currentUser']._id;
     if (userid) {
       const result = await this.service.getUserFriends(userid);
       ctx.body = result;
@@ -33,10 +33,11 @@ export default class User_friendController extends BaseController {
    */
   async getFriendReqList() {
     const { ctx } = this;
-    let conditions = {};
+    let conditions: any;
+    conditions = {};
     const query = ctx.request.query;
-    if (ctx.request.currentUser) {
-      conditions.to = ctx.request.currentUser._id;
+    if (ctx.request['currentUser']) {
+      conditions.to = ctx.request['currentUser']._id;
     }
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
@@ -51,7 +52,7 @@ export default class User_friendController extends BaseController {
    */
   async requestAddFriend() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(
+    const invalid = app['validator'].validate(
       user_friendValidationRule,
       ctx.request.body
     );
@@ -101,7 +102,7 @@ export default class User_friendController extends BaseController {
    */
   async responseAddFriend() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(
+    const invalid = app['validator'].validate(
       stateValidationRule,
       ctx.request.body
     );

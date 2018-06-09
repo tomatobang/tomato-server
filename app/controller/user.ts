@@ -1,5 +1,5 @@
 'use strict';
-import { BaseController } from './base';
+import BaseController from './base';
 import {
   userValidationRule,
   loginValidationRule,
@@ -20,7 +20,7 @@ export default class UserController extends BaseController {
    */
   async login() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(
+    const invalid = app['validator'].validate(
       loginValidationRule,
       ctx.request.body
     );
@@ -50,9 +50,9 @@ export default class UserController extends BaseController {
     const password = users[0].password;
     const verifyPWD = await users[0].comparePassword(ctx.request.body.password);
     if (password === ctx.request.body.password || verifyPWD) {
-      const token = app.util.jwt.tokenService.createToken(user);
+      const token = app['util'].jwt.tokenService.createToken(user);
       ctx.logger.info(user, token);
-      await app.redis.set(token, JSON.stringify(user), 'EX', 3 * 24 * 60 * 60);
+      await app['redis'].set(token, JSON.stringify(user), 'EX', 3 * 24 * 60 * 60);
       ctx.body = {
         status: 'success',
         token,
@@ -83,7 +83,7 @@ export default class UserController extends BaseController {
     const { ctx, app } = this;
     const headers = ctx.request.headers;
     const token = headers.authorization;
-    await app.redis.del(token);
+    await app['redis'].del(token);
     ctx.body = {
       status: 'success',
       description: 'logout succeed',
@@ -95,7 +95,7 @@ export default class UserController extends BaseController {
    */
   async emailUserNameVerify() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(
+    const invalid = app['validator'].validate(
       emailUserNameValidationRule,
       ctx.request.body
     );
@@ -140,7 +140,7 @@ export default class UserController extends BaseController {
    */
   async updateHeadImg() {
     const { ctx } = this;
-    const userid = ctx.request.currentUser._id;
+    const userid = ctx.request['currentUser']._id;
     const filename = ctx.request.body.filename;
     await ctx.service.user.updateHeadImg(userid, filename);
     ctx.status = 200;
@@ -155,7 +155,7 @@ export default class UserController extends BaseController {
    */
   async updateSex() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(sexValidationRule, ctx.request.body);
+    const invalid = app['validator'].validate(sexValidationRule, ctx.request.body);
     if (invalid) {
       ctx.body = {
         status: 'fail',
@@ -163,7 +163,7 @@ export default class UserController extends BaseController {
       };
       return;
     }
-    const id = ctx.request.currentUser._id;
+    const id = ctx.request['currentUser']._id;
     const sex = ctx.request.body.sex;
     const result = await ctx.service.user.updateSex(id, sex);
     ctx.body = result;
@@ -174,7 +174,7 @@ export default class UserController extends BaseController {
    */
   async updateDisplayName() {
     const { ctx } = this;
-    const id = ctx.request.currentUser._id;
+    const id = ctx.request['currentUser']._id;
     const displayname = ctx.request.body.displayname;
     const result = await ctx.service.user.updateDisplayName(id, displayname);
     ctx.body = result;
@@ -185,7 +185,7 @@ export default class UserController extends BaseController {
    */
   async updateEmail() {
     const { ctx, app } = this;
-    const invalid = app.validator.validate(
+    const invalid = app['validator'].validate(
       emailValidationRule,
       ctx.request.body
     );
@@ -197,7 +197,7 @@ export default class UserController extends BaseController {
       return;
     }
 
-    const id = ctx.request.currentUser._id;
+    const id = ctx.request['currentUser']._id;
     const email = ctx.request.body.email;
     const result = await ctx.service.user.updateEmail(id, email);
     ctx.body = result;
@@ -208,7 +208,7 @@ export default class UserController extends BaseController {
    */
   async updateLocation() {
     const { ctx } = this;
-    const id = ctx.request.currentUser._id;
+    const id = ctx.request['currentUser']._id;
     const location = ctx.request.body.location;
     const result = await ctx.service.user.updateLocation(id, location);
     ctx.body = result;
@@ -219,7 +219,7 @@ export default class UserController extends BaseController {
    */
   async updateBio() {
     const { ctx } = this;
-    const id = ctx.request.currentUser._id;
+    const id = ctx.request['currentUser']._id;
     const bio = ctx.request.body.bio;
     const result = await ctx.service.user.updateBio(id, bio);
     ctx.body = result;

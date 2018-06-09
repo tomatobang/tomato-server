@@ -1,16 +1,21 @@
 'use strict';
 import { Controller } from 'egg';
+
 export default class BaseController extends Controller {
+  select_field;
+  validateRule;
   /**
    * 按条件查找
    */
   async list() {
     const { ctx } = this;
-    let conditions = {};
+    let conditions:any;
+    conditions = {};
     const query = ctx.request.query;
+    ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     // 按用户筛选
-    if (ctx.request.currentUser) {
-      conditions.userid = ctx.request.currentUser.username;
+    if (ctx.request['currentUser']) {
+      conditions.userid =ctx.request['currentUser'].username;
     }
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
@@ -38,11 +43,11 @@ export default class BaseController extends Controller {
   async create() {
     const { ctx, app } = this;
     // 存储用户编号/username
-    if (ctx.request.currentUser) {
-      ctx.request.body.userid = ctx.request.currentUser.username;
+    if (ctx.request['currentUser']) {
+      ctx.request.body.userid =ctx.request['currentUser'].username;
     }
     if (this.validateRule) {
-      const invalid = app.validator.validate(
+      const invalid = app['validator'].validate(
         this.validateRule,
         ctx.request.body
       );
@@ -95,8 +100,8 @@ export default class BaseController extends Controller {
     const { ctx } = this;
     const current = ctx.request.body.current;
     let userid = '';
-    if (ctx.request.currentUser) {
-      userid = ctx.request.currentUser.username;
+    if (ctx.request['currentUser']) {
+      userid =ctx.request['currentUser'].username;
     }
     if (!this.select_field) {
       ctx.status = 403;

@@ -1,5 +1,5 @@
 'use strict';
-import { BaseController } from './base';
+import BaseController from './base';
 export default class VersionController extends BaseController {
   constructor(ctx) {
     super(ctx);

@@ -6,7 +6,7 @@ export default class OtherController extends Controller {
    */
   async getQiniuUploadToken() {
     const { ctx, app } = this;
-    const uploadToken = await app.qiniu.getuploadToken();
+    const uploadToken = await app['qiniu'].getuploadToken();
     ctx.status = 200;
     ctx.body = { uploadToken };
   }
@@ -17,7 +17,7 @@ export default class OtherController extends Controller {
   async test() {
     const { ctx, app } = this;
     const key = 'rate.png';
-    const msg = await app.qiniu.publicDownloadUrl(
+    const msg = await app['qiniu'].publicDownloadUrl(
       key,
       'http://osv2a938x.bkt.clouddn.com'
     );
@@ -32,7 +32,7 @@ export default class OtherController extends Controller {
     const { ctx, app } = this;
     const localFile = 'D:/rate.png';
     const key = 'rate.png';
-    const msg = await app.qiniu.putFile(key, localFile);
+    const msg = await app['qiniu'].putFile(key, localFile);
     ctx.status = 200;
     ctx.body = msg;
   }

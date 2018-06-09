@@ -1,6 +1,6 @@
 'use strict';
 
-import { BaseController } from './base';
+import BaseController from './base';
 import { tomatoValidationRule } from '../validate/tomato';
 
 export default class TomatoController extends BaseController {
@@ -17,8 +17,8 @@ export default class TomatoController extends BaseController {
     const isSuccess = ctx.request.body.isSuccess;
     const date = ctx.request.body.date;
     let userid = '';
-    if (ctx.request.currentUser) {
-      userid = ctx.request.currentUser.username;
+    if (ctx.request['currentUser']) {
+      userid = ctx.request['currentUser'].username;
     } else {
       ctx.status = 200;
       ctx.body = [];
@@ -54,9 +54,10 @@ export default class TomatoController extends BaseController {
       (datenow.getMonth() + 1) +
       '-' +
       datenow.getDate();
-    const conditions = { startTime: { $gte: new Date(date).toISOString() } };
-    if (ctx.request.currentUser) {
-      conditions.userid = ctx.request.currentUser.username;
+    let conditions: any;
+    conditions = { startTime: { $gte: new Date(date).toISOString() } };
+    if (ctx.request['currentUser']) {
+      conditions.userid = ctx.request['currentUser'].username;
     } else {
       ctx.status = 200;
       ctx.body = [];
