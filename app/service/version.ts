@@ -1,6 +1,6 @@
 'use strict';
-const BaseService = require('./base');
-class VersionService extends BaseService {
+import BaseService from './base';
+export default class VersionService extends BaseService {
 
     constructor(ctx) {
         super(ctx);
@@ -17,4 +17,3 @@ class VersionService extends BaseService {
     }
 
 }
-module.exports = VersionService;

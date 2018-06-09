@@ -6,16 +6,19 @@
   "scripts": {
     "start": "set NODE_ENV=prod && egg-scripts start --daemon --ignore-stderr",
     "stop": "egg-scripts stop",
-    "test": "npm run lint -- --fix && egg-bin test",
-    "cov": "egg-bin cov",
-    "debug": "egg-bin debug",
-    "debug-raw": "egg-bin debug --inspect-brk",
-    "ci": "npm run lint && npm run cov",
-    "autod": "egg-bin autod",
     "dev": "egg-bin dev -r egg-ts-helper/register",
     "tsc": "ets && tsc -p tsconfig.json",
     "clean": "ets clean",
-    "lint": "tslint ."
+    "lint": "tslint .",
+    "eslint": "eslint app test",
+    "debug": "egg-bin debug -r egg-ts-helper/register",
+    "test-local": "egg-bin test -r egg-ts-helper/register",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "cov": "egg-bin cov",
+    "debug-raw": "egg-bin debug --inspect-brk",
+    "ci": "npm run lint && npm run cov",
+    "autod": "egg-bin autod",
+    "doc": "apidoc -i app/ -o doc/ "
   },
   "egg": {
     "typescript": true

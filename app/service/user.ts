@@ -1,8 +1,8 @@
 'use strict';
 
-const BaseService = require('./base');
+import BaseService from './base';
 
-class UserService extends BaseService {
+export default class UserService extends BaseService {
   constructor(ctx) {
     super(ctx);
     this.model = this.ctx.model.User;
@@ -124,4 +124,3 @@ class UserService extends BaseService {
   }
 }
 
-module.exports = UserService;

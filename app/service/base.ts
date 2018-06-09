@@ -2,10 +2,10 @@
 /**
  * 服务基类
  */
-const Service = require('egg').Service;
+import { Service } from 'egg';
 
-class BaseService extends Service {
-
+export default class BaseService extends Service {
+  model;
   /**
    * 创建
    * @param { Object } body 实体对象
@@ -17,7 +17,7 @@ class BaseService extends Service {
     return result;
   }
 
-   /**
+  /**
    * 根据 ID 进行查找
    * @param { Object } query 查询关键字
    * @param { Object } conditions 查询条件
@@ -26,32 +26,32 @@ class BaseService extends Service {
   async findAll(query, conditions) {
     const model = this.model;
     if (conditions) {
-        if (!conditions.deleted) {
-            conditions.deleted = false;
-        }
+      if (!conditions.deleted) {
+        conditions.deleted = false;
+      }
     }
     let builder = model.find(conditions);
     if (query.select) {
-        const select = JSON.parse(query.select);
-        builder = builder.select(select);
+      const select = JSON.parse(query.select);
+      builder = builder.select(select);
     }
 
-    [ 'limit', 'skip', 'sort', 'count' ].forEach(key => {
-        if (query[key]) {
-            let arg = query[key];
-            if (key === 'limit' || key === 'skip') {
-                arg = parseInt(arg);
-            }
-            if (key === 'sort' && typeof arg === 'string') {
-                arg = JSON.parse(arg);
-            }
-            if (key !== 'count') builder[key](arg);
-            else builder[key]();
+    ['limit', 'skip', 'sort', 'count'].forEach(key => {
+      if (query[key]) {
+        let arg = query[key];
+        if (key === 'limit' || key === 'skip') {
+          arg = parseInt(arg);
         }
+        if (key === 'sort' && typeof arg === 'string') {
+          arg = JSON.parse(arg);
+        }
+        if (key !== 'count') builder[key](arg);
+        else builder[key]();
+      }
     });
     const result = await builder.exec();
     return result;
-}
+  }
 
   /**
    * 根据 ID 进行查找
@@ -122,7 +122,7 @@ class BaseService extends Service {
     return true;
   }
 
-    /**
+  /**
    * 分页
    * @param { Object } query 查询条件
    * @param { String } selectField 需要选出的字段
@@ -132,27 +132,28 @@ class BaseService extends Service {
   async loadByPagination(query, selectField, populate = '') {
     const model = this.model;
     const getCount = queryParams => model.count(queryParams);
-    const getSelect = ({ queryParams, sorter, pageSize, start, selectField }) => model
-      .find(queryParams)
-      .skip(start)
-      .limit(pageSize)
-      .populate(populate)
-      .sort(sorter)
-      .select(selectField);
+    const getSelect = ({ queryParams, sorter, pageSize, start, selectField }) =>
+      model
+        .find(queryParams)
+        .skip(start)
+        .limit(pageSize)
+        .populate(populate)
+        .sort(sorter)
+        .select(selectField);
 
     return await this._pagination(query, getCount, getSelect, selectField);
   }
 
-/**
- * 构建返回结果
- * @param { Object } query 条件
- * @param { Promise } getCount 数量
- * @param { Promise } getSelect 查询语句
- * @param { Promise } selectField 需要选出的字段
- * @return { Object } 返回查询结果
- */
+  /**
+   * 构建返回结果
+   * @param { Object } query 条件
+   * @param { Promise } getCount 数量
+   * @param { Promise } getSelect 查询语句
+   * @param { Promise } selectField 需要选出的字段
+   * @return { Object } 返回查询结果
+   */
   async _pagination(query, getCount, getSelect, selectField) {
-    const pagination = { current: 1, pageSize: 10 };
+    const pagination = { current: 1, pageSize: 10, total: 0 };
     const queryParams = {};
     let sorter = [];
     let sorterField;
@@ -176,8 +177,9 @@ class BaseService extends Service {
     const start = (current - 1) * pageSize;
     const result = {
       pagination,
+      records: [],
     };
-    const [ count, records ] = await Promise.all([
+    const [count, records] = await Promise.all([
       getCount(queryParams),
       getSelect({
         queryParams,
@@ -187,11 +189,12 @@ class BaseService extends Service {
         selectField,
       }),
     ]);
-    result.pagination.total = Array.isArray(count) ?
-      count.reduce((pre, cur) => ({ count: pre.count + cur.count }), { count: 0 }).count : count;
+    result.pagination.total = Array.isArray(count)
+      ? count.reduce((pre, cur) => ({ count: pre.count + cur.count }), {
+          count: 0,
+        }).count
+      : count;
     result.records = records;
     return result;
   }
 }
-
-module.exports = BaseService;

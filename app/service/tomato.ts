@@ -1,7 +1,7 @@
 'use strict';
 
-const BaseService = require('./base');
-class TomatoService extends BaseService {
+import BaseService from './base';
+export default class TomatoService extends BaseService {
     constructor(ctx) {
         super(ctx);
         this.model = this.ctx.model.Tomato;
@@ -45,4 +45,3 @@ class TomatoService extends BaseService {
         return res;
     }
 }
-module.exports = TomatoService;
