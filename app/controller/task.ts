@@ -1,10 +1,9 @@
 'use strict';
-const BaseController = require('./base');
-const {
-  taskValidationRule,
-  relateUrlValidationRule,
-} = require('../validate/task');
-class TaskController extends BaseController {
+import { BaseController } from './base';
+
+import { taskValidationRule, relateUrlValidationRule } from '../validate/task';
+
+export default class TaskController extends BaseController {
   constructor(ctx) {
     super(ctx);
     this.service = ctx.service.task;
@@ -34,4 +33,3 @@ class TaskController extends BaseController {
     };
   }
 }
-module.exports = TaskController;

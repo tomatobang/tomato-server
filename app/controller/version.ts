@@ -1,6 +1,6 @@
 'use strict';
-const BaseController = require('./base');
-class VersionController extends BaseController {
+import { BaseController } from './base';
+export default class VersionController extends BaseController {
   constructor(ctx) {
     super(ctx);
     this.service = ctx.service.version;
@@ -16,4 +16,3 @@ class VersionController extends BaseController {
     ctx.body = LTSVersion;
   }
 }
-module.exports = VersionController;

@@ -1,12 +1,12 @@
 'use strict';
 
-const BaseController = require('./base');
-const {
+import { BaseController } from './base';
+import {
   user_friendValidationRule,
   stateValidationRule,
-} = require('../validate/user_friend');
+} from '../validate/user_friend';
 
-class User_friendController extends BaseController {
+export default class User_friendController extends BaseController {
   constructor(ctx) {
     super(ctx);
     this.service = ctx.service.userFriend;
@@ -120,4 +120,3 @@ class User_friendController extends BaseController {
     };
   }
 }
-module.exports = User_friendController;

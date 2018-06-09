@@ -1,6 +1,7 @@
 'use strict';
+import { Application } from 'egg';
 // app/router.js
-module.exports = app => {
+export default (app: Application) =>  {
   const { router, controller } = app;
   // for test
   router.get('/', controller.home.index);

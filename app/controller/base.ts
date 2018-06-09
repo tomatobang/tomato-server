@@ -1,6 +1,6 @@
 'use strict';
-const Controller = require('egg').Controller;
-class BaseController extends Controller {
+import { Controller } from 'egg';
+export default class BaseController extends Controller {
   /**
    * 按条件查找
    */
@@ -143,5 +143,3 @@ class BaseController extends Controller {
     }
   }
 }
-
-module.exports = BaseController;

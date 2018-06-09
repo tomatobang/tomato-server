@@ -1,13 +1,14 @@
 'use strict';
-const BaseController = require('./base');
-const {
+import { BaseController } from './base';
+import {
   userValidationRule,
   loginValidationRule,
   emailUserNameValidationRule,
   emailValidationRule,
   sexValidationRule,
-} = require('../validate/user');
-class UserController extends BaseController {
+} from '../validate/user';
+
+export default class UserController extends BaseController {
   constructor(ctx) {
     super(ctx);
     this.service = ctx.service.user;
@@ -224,4 +225,3 @@ class UserController extends BaseController {
     ctx.body = result;
   }
 }
-module.exports = UserController;

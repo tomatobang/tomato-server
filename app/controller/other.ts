@@ -1,6 +1,6 @@
 'use strict';
-const Controller = require('egg').Controller;
-class OtherController extends Controller {
+import { Controller } from 'egg';
+export default class OtherController extends Controller {
   /**
    * 获取七牛客户端上传 token
    */
@@ -37,4 +37,3 @@ class OtherController extends Controller {
     ctx.body = msg;
   }
 }
-module.exports = OtherController;
