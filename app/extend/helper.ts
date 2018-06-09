@@ -1,6 +1,6 @@
 'use strict';
 // app/extend/helper.js
-const moment = require('moment');
+import moment from 'moment';
 exports.relativeTime = time => moment(new Date(time * 1000)).fromNow();
 
 /**
@@ -18,7 +18,8 @@ exports.dateHelper = {
     const nextMonth = ++currentMonth;
     const nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
     const oneDay = 1000 * 60 * 60 * 24;
-    return this.format(new Date(nextMonthFirstDay - oneDay), 'yyyy-MM-dd');
+    date = new Date(nextMonthFirstDay.getTime() - oneDay);
+    return this.format(date, 'yyyy-MM-dd');
   },
   getNextMonthFirst(date) {
     date = new Date(date);
@@ -39,14 +40,21 @@ exports.dateHelper = {
       S: datetime.getMilliseconds(), // 毫秒
     };
     if (/(y+)/.test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (datetime.getFullYear() + '').substr(4 - RegExp.$1.length));
+      fmt = fmt.replace(
+        RegExp.$1,
+        (datetime.getFullYear() + '').substr(4 - RegExp.$1.length)
+      );
     }
     for (const k in o) {
       if (new RegExp('(' + k + ')').test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+        fmt = fmt.replace(
+          RegExp.$1,
+          RegExp.$1.length === 1
+            ? o[k]
+            : ('00' + o[k]).substr(('' + o[k]).length)
+        );
       }
     }
     return fmt;
   },
 };
-
