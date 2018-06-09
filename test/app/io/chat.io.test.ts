@@ -14,8 +14,8 @@
  * 6. 断开好友关系
  */
 
-const ioc = require('socket.io-client');
-const mm = require('egg-mock');
+import ioc from 'socket.io-client';
+import mm from 'egg-mock';
 // const rimraf = require('rimraf');
 // const path = require('path');
 
@@ -40,7 +40,7 @@ describe('test/io/chat.io.test.js', () => {
   //   rimraf.sync(runPath);
   // }
 
-  function client(nsp, opts = {}) {
+  function client(nsp, opts:any) {
     let url = 'http://127.0.0.1:' + opts.port + (nsp || '');
     if (opts.query) {
       url += '?' + opts.query;
@@ -50,16 +50,16 @@ describe('test/io/chat.io.test.js', () => {
 
   it('chat io controller should works ok', done => {
     const app = mm.cluster({
-      workers: 1,
-      sticky: false,
+      // workers: 1,
+      // sticky: false,
     });
 
     app.ready().then(() => {
-      console.log('process.env', app.port);
+      console.log('process.env', app['port']);
       /**
        * chat1:zhangs
        */
-      const socket1 = client('chat', { port: app.port + '/' });
+      const socket1 = client('chat', { port: app['port'] + '/' });
       socket1.on('connect', () => {
         const from = zhangs;
         const to = lisi;
@@ -104,7 +104,7 @@ describe('test/io/chat.io.test.js', () => {
       /**
        * chat2
        */
-      const socket2 = client('chat', { port: app.port + '/' });
+      const socket2 = client('chat', { port: app['port'] + '/' });
       socket2.on('connect', () => {
         const flag = 1;
         assert(flag);

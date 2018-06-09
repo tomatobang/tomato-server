@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, assert } = require('egg-mock/bootstrap');
+import { app, assert } from 'egg-mock/bootstrap';
 describe('test/service/version.test.js', () => {
     let ctx;
     before(() => {

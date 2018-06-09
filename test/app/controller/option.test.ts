@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, assert } = require('egg-mock/bootstrap');
+import { app, assert } from 'egg-mock/bootstrap';
 describe('test/controller/option.test.js', () => {
   let token = '';
   it('should register succeed( 200 )', async () => {

@@ -1,6 +1,6 @@
 'use strict';
 // test/app/middleware/robot.test.js
-const mock = require('egg-mock');
+import mock from 'egg-mock';
 describe('test/app/middleware/robot.test.js', () => {
   let app;
   before(() => {
@@ -9,7 +9,8 @@ describe('test/app/middleware/robot.test.js', () => {
   });
   afterEach(mock.restore);
   it('should block robot', () => {
-    return app.httpRequest()
+    return app
+      .httpRequest()
       .get('/')
       .set('User-Agent', 'Baiduspider')
       .expect(403);

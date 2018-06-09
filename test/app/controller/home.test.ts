@@ -1,7 +1,8 @@
 'use strict';
 
-const { app, assert } = require('egg-mock/bootstrap');
-describe('test/controller/other.test.js', () => {
+import { app, assert } from 'egg-mock/bootstrap';
+
+describe('test/controller/home.test.js', () => {
   let token = '';
   it('should register succeed( 200 )', async () => {
     const res = await app
@@ -29,13 +30,12 @@ describe('test/controller/other.test.js', () => {
     assert(loginRes.status === 200);
     token = loginRes.body.token;
   });
-
-  // 先进行登录
-  it('should get qiniu Uuload token succeed', async () => {
-    await app
+  it('should status 200 and get the body', () => {
+    return app
       .httpRequest()
-      .get('/qiu/uploadtoken')
+      .get('/')
       .set('Authorization', token)
-      .expect(200);
+      .expect(200)
+      .expect('Hello, this is TomatoBang Index Page');
   });
 });
