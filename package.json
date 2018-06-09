@@ -12,10 +12,13 @@
     "debug-raw": "egg-bin debug --inspect-brk",
     "ci": "npm run lint && npm run cov",
     "autod": "egg-bin autod",
-    "dev": "egg-bin dev -r 'egg-ts-helper/register'",
+    "dev": "egg-bin dev -r egg-ts-helper/register",
     "tsc": "ets && tsc -p tsconfig.json",
     "clean": "ets clean",
     "lint": "tslint ."
+  },
+  "egg": {
+    "typescript": true
   },
   "repository": {
     "type": "git",
