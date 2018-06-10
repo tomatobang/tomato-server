@@ -3,10 +3,10 @@
 /**
  * token 服务
  */
-const jwt = require('jsonwebtoken');
-const config = require('../../config/config.default');
-const secret = config.token.tokenSecret;
-const expiresIn = config.token.tokenExpiresIn;
+import jwt from 'jsonwebtoken';
+import config from '../../config/config.default';
+const secret = config().token.tokenSecret;
+const expiresIn = config().token.tokenExpiresIn;
 exports.tokenService = {
   createToken(userinfo) {
     const token = jwt.sign(userinfo, secret, {

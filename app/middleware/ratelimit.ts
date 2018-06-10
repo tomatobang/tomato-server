@@ -2,8 +2,8 @@
 
 // app/middleware/ratelimit.js
 // 参考:https://github.com/koajs/ratelimit
-import { koaRatelimit } from 'koa-ratelimit';
-import { Context, Application } from 'egg';
+import koaRatelimit from 'koa-ratelimit';
+import { Application, Context } from 'egg';
 import { BizConfig } from '../../config/config.default';
 /**
  * 接口请求前验证
