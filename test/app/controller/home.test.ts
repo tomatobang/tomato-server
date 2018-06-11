@@ -1,6 +1,7 @@
 'use strict';
 
-import { app, assert } from 'egg-mock/bootstrap';
+import * as assert from 'assert';
+import { app } from 'egg-mock/bootstrap';
 
 describe('test/controller/home.test.js', () => {
   let token = '';

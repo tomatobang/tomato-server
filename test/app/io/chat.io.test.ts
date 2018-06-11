@@ -14,12 +14,11 @@
  * 6. 断开好友关系
  */
 
-import ioc from 'socket.io-client';
+import * as ioc from 'socket.io-client';
 import mm from 'egg-mock';
 // const rimraf = require('rimraf');
 // const path = require('path');
-
-const { assert } = require('egg-mock/bootstrap');
+import * as assert from 'assert';
 describe('test/io/chat.io.test.js', () => {
   const zhangs = '5b0f712e24b71d2cc029bf11';
   const lisi = '5b0f714924b71d2cc029bf12';

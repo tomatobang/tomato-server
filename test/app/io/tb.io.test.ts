@@ -1,8 +1,8 @@
 'use strict';
-import ioc from 'socket.io-client';
+import * as ioc from 'socket.io-client';
 import mm from 'egg-mock';
 
-const { assert } = require('egg-mock/bootstrap');
+import * as assert from 'assert';
 describe('test/io/tb.io.test.js', () => {
   afterEach(() => {
     mm.restore();
