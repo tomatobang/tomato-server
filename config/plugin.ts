@@ -1,7 +1,7 @@
 'use strict';
 
 import { EggPlugin } from 'egg';
-import path from 'path';
+import * as path from 'path';
 
 const plugin: EggPlugin = {
   static: true,

@@ -4,7 +4,7 @@
  */
 import { Context, Application } from 'egg';
 
-export default function jwtMiddleware(app: Application) {
+export default function jwtMiddleware(option, app: Application) {
   return async (ctx: Context, next) => {
     const apiNoAuth =
       ctx.url.startsWith('/api/login') ||
@@ -32,7 +32,6 @@ export default function jwtMiddleware(app: Application) {
         description: 'Token not found',
       });
     }
-
     const result = app['util'].jwt.tokenService.verifyToken(token);
     if (result === false) {
       return (ctx.body = {

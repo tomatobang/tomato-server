@@ -3,7 +3,7 @@
 /**
  * token 服务
  */
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import config from '../../config/config.default';
 const secret = config().token.tokenSecret;
 const expiresIn = config().token.tokenExpiresIn;

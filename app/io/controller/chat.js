@@ -25,7 +25,6 @@ module.exports = app => {
       const userLoginEnds = await app.redis.smembers(
         'chat:user:socket:' + userid
       );
-      console.log('2324');
       if (userLoginEnds && userLoginEnds.length > 0) {
         // TODO:多终端登录或重复登录
         await app.redis.sadd('chat:user:socket:' + userid, socket.id);

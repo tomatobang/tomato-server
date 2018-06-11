@@ -1,6 +1,6 @@
 'use strict';
 // app/extend/helper.js
-import moment from 'moment';
+import * as moment from 'moment';
 exports.relativeTime = time => moment(new Date(time * 1000)).fromNow();
 
 /**
