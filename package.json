@@ -4,8 +4,8 @@
   "description": "tomabang server",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=prod && egg-scripts start --daemon --ignore-stderr",
-    "stop": "egg-scripts stop",
+    "start": "set NODE_ENV=prod && egg-scripts start --daemon --ignore-stderr --title=tomatobang",
+    "stop": "egg-scripts stop --title=tomatobang",
     "dev": "egg-bin dev -r egg-ts-helper/register",
     "tsc": "ets && tsc -p tsconfig.json",
     "clean": "ets clean",
