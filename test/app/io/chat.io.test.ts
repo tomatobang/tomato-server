@@ -15,31 +15,18 @@
  */
 
 import * as ioc from 'socket.io-client';
-import mm from 'egg-mock';
-// const rimraf = require('rimraf');
-// const path = require('path');
 import * as assert from 'assert';
+import mm from 'egg-mock';
+
 describe('test/io/chat.io.test.js', () => {
   const zhangs = '5b0f712e24b71d2cc029bf11';
   const lisi = '5b0f714924b71d2cc029bf12';
-
-  before(() => {
-    // clean();
-  });
 
   afterEach(() => {
     mm.restore();
   });
 
-  // function clean() {
-  //   const logPath = path.join(__dirname, '../../../', 'logs');
-  //   const runPath = path.join(__dirname, '../../../', 'run');
-
-  //   rimraf.sync(logPath);
-  //   rimraf.sync(runPath);
-  // }
-
-  function client(nsp, opts:any) {
+  function client(nsp, opts: any) {
     let url = 'http://127.0.0.1:' + opts.port + (nsp || '');
     if (opts.query) {
       url += '?' + opts.query;
@@ -68,7 +55,6 @@ describe('test/io/chat.io.test.js', () => {
         socket1.emit('request_add_request', { from, to });
         assert(flag);
       });
-      // socket1.on('disconnect', () => app.close().then(done, done));
 
       socket1.on('message_received', msg => {
         console.log(msg);
@@ -99,6 +85,7 @@ describe('test/io/chat.io.test.js', () => {
       setTimeout(() => {
         socket1.close();
       }, 3000);
+      // socket1.on('disconnect', () => app.close().then(done, done));
 
       /**
        * chat2
@@ -110,10 +97,6 @@ describe('test/io/chat.io.test.js', () => {
         const from = lisi;
         socket2.emit('login', { userid: from });
         socket2.emit('load_online_friend_list', { userid: from });
-      });
-      socket2.on('disconnect', () => {
-        console.log('socket2 closed!!!');
-        app.close().then(done, done);
       });
 
       socket2.on('receive_friend_request', msg => {
@@ -157,6 +140,10 @@ describe('test/io/chat.io.test.js', () => {
       setTimeout(() => {
         socket2.close();
       }, 3000);
+      socket2.on('disconnect', () => {
+        console.log('socket2 closed!!!');
+        app.close().then(done, done);
+      });
     });
   });
 });
