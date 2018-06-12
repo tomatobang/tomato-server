@@ -3,13 +3,14 @@
 /**
  *  消息服务
  */
-const {
+import {
   user_friendValidationRule,
   stateValidationRule,
-} = require('../../validate/user_friend');
+} from '../../validate/user_friend';
+import { Application, Controller } from 'egg';
 
-module.exports = app => {
-  class Controller extends app.Controller {
+module.exports = (app: Application) => {
+  class ChatController extends Controller {
     async connection() {
       return;
     }
@@ -317,5 +318,5 @@ module.exports = app => {
      */
     getUserInfo() {}
   }
-  return Controller;
+  return ChatController;
 };

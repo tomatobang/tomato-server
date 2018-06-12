@@ -1,7 +1,7 @@
 'use strict';
 
 import { EggPlugin } from 'egg';
-const path = require('path')
+import * as path from 'path';
 
 const plugin: EggPlugin = {
   static: true,
@@ -39,7 +39,7 @@ const plugin: EggPlugin = {
     path: path.join(__dirname, '../lib/plugin/egg-qiniu'),
   },
 
-  // alinode : {
+    // alinode : {
   //   enable: true,
   //   package: 'egg-alinode'
   // },

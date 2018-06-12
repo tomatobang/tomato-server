@@ -6,7 +6,8 @@
  */
 
 const TIME_OUT_PAIRS = {};
-module.exports = app => {
+import { Application, Controller } from 'egg';
+module.exports = (app: Application) => {
   /**
    * 消息订阅测试
    */
@@ -14,7 +15,7 @@ module.exports = app => {
     console.log('Receive message %s from channel %s', message, channel);
   });
 
-  class Controller extends app.Controller {
+  class TBController extends Controller {
     /**
      * 加载已有番茄钟
      */
@@ -134,5 +135,5 @@ module.exports = app => {
       }
     }
   }
-  return Controller;
+  return TBController;
 };
