@@ -15,6 +15,24 @@ export default class UserController extends BaseController {
     this.validateRule = userValidationRule;
   }
 
+  async searchUsers() {
+    const { ctx } = this;
+    const query = ctx.request.query;
+    const keyword = query.keyword;
+    console.log('keyword', keyword);
+    const users = await this.service.findAll(
+      {},
+      {
+        $or: [
+          { username: keyword },
+          { displayName: keyword },
+          { bio: keyword },
+        ],
+        deleted: false,
+      }
+    );
+    ctx.body = users;
+  }
   /**
    * 登录
    */
@@ -52,7 +70,12 @@ export default class UserController extends BaseController {
     if (password === ctx.request.body.password || verifyPWD) {
       const token = app['util'].jwt.tokenService.createToken(user);
       ctx.logger.info(user, token);
-      await app['redis'].set(token, JSON.stringify(user), 'EX', 3 * 24 * 60 * 60);
+      await app['redis'].set(
+        token,
+        JSON.stringify(user),
+        'EX',
+        3 * 24 * 60 * 60
+      );
       ctx.body = {
         status: 'success',
         token,
@@ -155,7 +178,10 @@ export default class UserController extends BaseController {
    */
   async updateSex() {
     const { ctx, app } = this;
-    const invalid = app['validator'].validate(sexValidationRule, ctx.request.body);
+    const invalid = app['validator'].validate(
+      sexValidationRule,
+      ctx.request.body
+    );
     if (invalid) {
       ctx.body = {
         status: 'fail',
