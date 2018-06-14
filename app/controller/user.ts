@@ -15,6 +15,9 @@ export default class UserController extends BaseController {
     this.validateRule = userValidationRule;
   }
 
+  /**
+   * 查找用户
+   */
   async searchUsers() {
     const { ctx } = this;
     const query = ctx.request.query;

@@ -45,6 +45,7 @@ export default (app: Application) =>  {
    * 用户类
    */
   router.get('/api/user', controller.user.list);
+  router.get('/api/user/searchUsers', controller.user.searchUsers);
   router.get('/api/user/:id', controller.user.findById);
   router.post('/api/user', controller.user.create);
   router.del('/api/user/:id', controller.user.deleteById);

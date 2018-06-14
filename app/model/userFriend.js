@@ -20,6 +20,8 @@ module.exports = app => {
     response_time: { type: Date },
     // 状态:1(发起请求待回复)、2(回复且同意)、3(回复且拒绝)、4(忽略)
     state: { type: Number },
+    // 请求好友时发送消息
+    info: String,
     // 权限
     permission_level: { type: Number, default: 1 },
     // 是否已删除
