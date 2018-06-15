@@ -18,7 +18,9 @@
     "debug-raw": "egg-bin debug --inspect-brk",
     "ci": "npm run lint && npm run cov",
     "autod": "egg-bin autod",
-    "doc": "apidoc -i app/ -o doc/ "
+    "doc": "apidoc -i app/ -o doc/ ",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "egg": {
     "typescript": true
@@ -63,7 +65,8 @@
     "source-map-support": "^0.5.0",
     "tslib": "^1.8.1",
     "typescript": "^2.8.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "snyk": "^1.82.1"
   },
   "devDependencies": {
     "autod": "^3.0.1",
@@ -85,5 +88,6 @@
     "ts-loader": "^3.2.0",
     "ts-node": "^5.0.0",
     "tslint": "^4.0.0"
-  }
+  },
+  "snyk": true
 }
