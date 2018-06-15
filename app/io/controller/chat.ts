@@ -89,13 +89,20 @@ module.exports = (app: Application) => {
        * message:string
        */
       const { from, to } = obj;
+      console.log('message', obj);
       let { message } = obj;
       if (message.length >= 516) {
         message = message.slice(0, 500) + '...(输入太长，系统自动截断)';
       }
       if (message) {
-        // 向各个终端推送离线消息
-        this.notify(to, 'message_received', { from, message });
+        await this.ctx.service.message.create({
+          type: 1,
+          from: from,
+          to: to,
+          content: message,
+        });
+        // 向各个终端推送消息
+        this.notify(to, 'message_received', {  type: 1,from, message });
       }
     }
 

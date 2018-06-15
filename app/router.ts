@@ -1,7 +1,7 @@
 'use strict';
 import { Application } from 'egg';
 // app/router.js
-export default (app: Application) =>  {
+export default (app: Application) => {
   const { router, controller } = app;
   // for test
   router.get('/', controller.home.index);
@@ -31,10 +31,7 @@ export default (app: Application) =>  {
     .route('request_add_request', app.io.controller.chat.requestAddFriend);
   app.io
     .of('/chat')
-    .route(
-      'response_friend_request',
-      app.io.controller.chat.responseAddFriend
-    );
+    .route('response_friend_request', app.io.controller.chat.responseAddFriend);
 
   // 版本管理
   router.get('/api/version', controller.version.findLatestVersion);
@@ -101,6 +98,15 @@ export default (app: Application) =>  {
   router.post(
     '/api/user_friend/response_add_friend',
     controller.userFriend.responseAddFriend
+  );
+
+  /**
+   * 消息类
+   */
+  router.get('/api/message', controller.message.loadUnreadMessages);
+  router.post(
+    '/api/message/updateReadState',
+    controller.message.updateMessageState
   );
 
   /**
