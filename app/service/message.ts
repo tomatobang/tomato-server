@@ -20,7 +20,7 @@ export default class MessageService extends BaseService {
       {
         $project: {
           // 校准日期并格式化
-          create_at: { $substr: [{ $add: ['$create_at', 28800000] }, 0, 10] },
+          create_at: { $add: ['$create_at', 28800000] },
           content: 1,
           from: 1,
         },

@@ -24,7 +24,5 @@ module.exports = app => {
     deleted: { type: Boolean, default: false },
   });
 
-  message.index({ userid: 1 }, { unique: true });
-
   return mongoose.model('message', message);
 };
