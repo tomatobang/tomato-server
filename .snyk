@@ -12,3 +12,12 @@ patch:
         patched: '2018-06-12T08:53:54.525Z'
     - egg-sequelize > sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
         patched: '2018-06-12T08:53:54.525Z'
+  'npm:hoek:20180212':
+    - jpush-sdk > request > hawk > hoek:
+        patched: '2018-06-19T08:53:26.266Z'
+    - jpush-sdk > request > hawk > boom > hoek:
+        patched: '2018-06-19T08:53:26.266Z'
+    - jpush-sdk > request > hawk > sntp > hoek:
+        patched: '2018-06-19T08:53:26.266Z'
+    - jpush-sdk > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-06-19T08:53:26.266Z'
