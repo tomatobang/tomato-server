@@ -59,7 +59,7 @@ export default class MessageService extends BaseService {
         $set: { has_read },
       },
       {
-        new: true,
+        new: false,
       }
     ).exec();
     return result;
