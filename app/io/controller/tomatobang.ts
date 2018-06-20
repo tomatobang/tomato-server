@@ -134,6 +134,17 @@ module.exports = (app: Application) => {
         }
       }
     }
+
+    async disconnect() {
+      const socket = this.ctx.socket;
+      app.redis.get(socket.id).then(async userid => {
+        this.ctx.logger.info('userid!', userid);
+        if (userid) {
+          await app.redis.srem(userid + ':socket', socket.id);
+          await app.redis.del(socket.id);
+        }
+      });
+    }
   }
   return TBController;
 };
