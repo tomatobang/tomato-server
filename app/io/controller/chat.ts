@@ -42,14 +42,14 @@ module.exports = (app: Application) => {
             state: 2,
           }
         );
-        if (friends && friends.lenth > 0) {
+        if (friends && friends.length > 0) {
           for (let index = 0; index < friends.length; index++) {
             const element = friends[index];
             let friendid;
-            if (element.from !== userid) {
-              friendid = element.from;
+            if (element.from.toString() !== userid) {
+              friendid = element.from.toString();
             } else {
-              friendid = element.to;
+              friendid = element.to.toString();
             }
             const fsockets = await app.redis.smembers(
               'chat:user:socket:' + friendid
@@ -61,7 +61,7 @@ module.exports = (app: Application) => {
                 userid
               );
               // 置用户在线标识
-              if (score === 0) {
+              if (score === '0') {
                 await app.redis.zincrby(
                   'chat:user:friends:' + friendid,
                   1,
@@ -89,20 +89,25 @@ module.exports = (app: Application) => {
        * message:string
        */
       const { from, to } = obj;
-      console.log('message', obj);
       let { message } = obj;
       if (message.length >= 516) {
         message = message.slice(0, 500) + '...(输入太长，系统自动截断)';
       }
       if (message) {
-        await this.ctx.service.message.create({
+        let newMsg = await this.ctx.service.message.create({
           type: 1,
           from: from,
           to: to,
           content: message,
         });
+        // console.log('newMsg', newMsg);
         // 向各个终端推送消息
-        this.notify(to, 'message_received', {  type: 1,from, message });
+        this.notify(to, 'message_received', {
+          _id: newMsg._id,
+          type: 1,
+          from,
+          message,
+        });
       }
     }
 
@@ -249,7 +254,7 @@ module.exports = (app: Application) => {
     async disconnect() {
       const { ctx, app } = this;
       const socket = ctx.socket;
-      app.redis.get(socket.id).then(async function(userid) {
+      app.redis.get('chat:socket:user:' + socket.id).then(async userid => {
         ctx.logger.info('userid!', userid);
         if (userid) {
           // 查询所有好友在线列表
@@ -259,29 +264,28 @@ module.exports = (app: Application) => {
             -1,
             'WITHSCORES'
           );
-
+          let fid = '';
           for (const end of friends) {
             // 好友在线
             // TODO: 格式需要做验证
-            if (end[1] === 1) {
+            if (end.length > 10) {
+              fid = end;
+            }
+            if (end === '1') {
               const score = await app.redis.zscore(
-                'chat:user:friends:' + end[0],
+                'chat:user:friends:' + fid,
                 userid
               );
               if (score !== 0) {
-                await app.redis.zincrby(
-                  'chat:user:friends:' + end[0],
-                  -1,
-                  userid
-                );
+                await app.redis.zincrby('chat:user:friends:' + fid, -1, userid);
               }
               // 向好友终端推送离线消息
-              this.notify(end[0], 'friend_offline', { userid });
+              this.notify(fid, 'friend_offline', { userid });
             }
           }
 
           await app.redis.del('chat:user:friends:' + userid);
-          await app.redis.srem('chat:user:socket:', userid);
+          await app.redis.srem('chat:user:socket:' + userid, socket.id);
           await app.redis.del('chat:socket:user:' + socket.id);
         }
       });
