@@ -255,44 +255,65 @@ module.exports = (app: Application) => {
       const { ctx, app } = this;
       const socket = ctx.socket;
       app.redis.get('chat:socket:user:' + socket.id).then(async userid => {
-        ctx.logger.info('userid!', userid);
-        if (userid) {
-          // 查询所有好友在线列表
-          const friends = await app.redis.zrange(
-            'chat:user:friends:' + userid,
-            0,
-            -1,
-            'WITHSCORES'
-          );
-          let fid = '';
-          for (const end of friends) {
-            // 好友在线
-            // TODO: 格式需要做验证
-            if (end.length > 10) {
-              fid = end;
-            }
-            if (end === '1') {
-              const score = await app.redis.zscore(
-                'chat:user:friends:' + fid,
-                userid
-              );
-              if (score !== 0) {
-                await app.redis.zincrby('chat:user:friends:' + fid, -1, userid);
-              }
-              // 向好友终端推送离线消息
-              this.notify(fid, 'friend_offline', { userid });
-            }
-          }
-
-          await app.redis.del('chat:user:friends:' + userid);
-          await app.redis.srem('chat:user:socket:' + userid, socket.id);
-          await app.redis.del('chat:socket:user:' + socket.id);
-        }
+        this.clearUserInfo(ctx, socket, userid);
       });
     }
 
     /**
-     * 辅助方法
+     * 登出
+     */
+    async logout() {
+      const { ctx, app } = this;
+      const socket = ctx.socket;
+      const obj = ctx.args[0];
+      const { userid } = obj;
+      this.clearUserInfo(ctx, socket, userid);
+    }
+
+    /**
+     * 辅助方法:清除用户信息
+     * @param {string} ctx 上下文
+     * @param {string} socket 当前socket
+     * @param {string} userid 用户编号
+     */
+    async clearUserInfo(ctx, socket, userid) {
+      ctx.logger.info('userid!', userid);
+      if (userid) {
+        // 查询所有好友在线列表
+        const friends = await app.redis.zrange(
+          'chat:user:friends:' + userid,
+          0,
+          -1,
+          'WITHSCORES'
+        );
+        let fid = '';
+        for (const end of friends) {
+          // TODO: 格式需要做验证
+          if (end.length > 10) {
+            fid = end;
+          }
+          // 好友在线
+          if (end === '1') {
+            const score = await app.redis.zscore(
+              'chat:user:friends:' + fid,
+              userid
+            );
+            if (score !== 0) {
+              await app.redis.zincrby('chat:user:friends:' + fid, -1, userid);
+            }
+            // 向好友终端推送离线消息
+            this.notify(fid, 'friend_offline', { userid });
+          }
+        }
+
+        await app.redis.del('chat:user:friends:' + userid);
+        await app.redis.srem('chat:user:socket:' + userid, socket.id);
+        await app.redis.del('chat:socket:user:' + socket.id);
+      }
+    }
+
+    /**
+     * 辅助方法:发送通知
      * @param {string} userid 用户编号
      * @param {string} evtName 事件名称
      * @param {string} message 消息
@@ -323,11 +344,6 @@ module.exports = (app: Application) => {
         .to(socketid)
         .emit('fail', message);
     }
-
-    /**
-     * TODO:获取用户信息
-     */
-    getUserInfo() {}
   }
   return ChatController;
 };

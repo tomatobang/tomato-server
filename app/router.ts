@@ -19,9 +19,12 @@ export default (app: Application) => {
   app.io
     .of('/tomatobang')
     .route('disconnect', app.io.controller.tomatobang.disconnect);
+  app.io.of('/tomatobang').route('logout', app.io.controller.tomatobang.logout);
 
   // socket.io: 聊天同步
   app.io.of('/chat').route('login', app.io.controller.chat.login);
+  app.io.of('/chat').route('logout', app.io.controller.chat.logout);
+
   app.io.of('/chat').route('send_message', app.io.controller.chat.sendMessage);
   app.io
     .of('/chat')
@@ -46,6 +49,7 @@ export default (app: Application) => {
    * 用户类
    */
   router.get('/api/user', controller.user.list);
+  router.get('/api/user/auth', controller.user.auth);
   router.get('/api/user/searchUsers', controller.user.searchUsers);
   router.get('/api/user/:id', controller.user.findById);
   router.post('/api/user', controller.user.create);

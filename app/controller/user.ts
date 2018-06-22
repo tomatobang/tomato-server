@@ -36,6 +36,20 @@ export default class UserController extends BaseController {
     );
     ctx.body = users;
   }
+
+  async auth() {
+    const { ctx } = this;
+    if (ctx.request['currentUser']) {
+      ctx.body = {
+        status: true,
+      };
+    } else {
+      ctx.body = {
+        status: false,
+        description: 'toekn expiration!',
+      };
+    }
+  }
   /**
    * 登录
    */

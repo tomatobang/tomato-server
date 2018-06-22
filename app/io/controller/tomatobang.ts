@@ -145,6 +145,24 @@ module.exports = (app: Application) => {
         }
       });
     }
+
+    /**
+     * 登出
+     */
+    async logout() {
+      const { ctx, app } = this;
+      const socket = ctx.socket;
+      // TODO: username to userid
+      // const obj = ctx.args[0];
+      // const { userid } = obj;
+      app.redis.get(socket.id).then(async userid => {
+        this.ctx.logger.info('userid!', userid);
+        if (userid) {
+          await app.redis.srem(userid + ':socket', socket.id);
+          await app.redis.del(socket.id);
+        }
+      });
+    }
   }
   return TBController;
 };
