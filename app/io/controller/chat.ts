@@ -102,12 +102,7 @@ module.exports = (app: Application) => {
         });
         // console.log('newMsg', newMsg);
         // 向各个终端推送消息
-        this.notify(to, 'message_received', {
-          _id: newMsg._id,
-          type: 1,
-          from,
-          message,
-        });
+        this.notify(to, 'message_received', newMsg);
       }
     }
 

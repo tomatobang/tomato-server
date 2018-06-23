@@ -19,7 +19,11 @@ export default class MessageController extends BaseController {
       ctx.status = 403;
       ctx.body = '请求不合法！';
     }
-    const startTime = query.startTime;
+    let startTime = query.startTime;
+    if (startTime) {
+      console.log('startTime');
+      startTime = new Date(parseInt(startTime, 10)).toISOString();
+    }
     let conditions;
     conditions = {
       to: app.mongoose.Types.ObjectId(userid),
@@ -27,7 +31,9 @@ export default class MessageController extends BaseController {
       deleted: false,
     };
     if (startTime) {
-      conditions.create_at = { $gte: new Date(startTime) };
+      conditions.create_at = {
+        $gte: new Date(startTime),
+      };
     }
     const result = await this.service.loadUnreadMessages(conditions);
     ctx.body = result;

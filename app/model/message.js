@@ -23,6 +23,6 @@ module.exports = app => {
     // 是否已删除
     deleted: { type: Boolean, default: false },
   });
-
+  message.index({ from: 1, to: 1 });
   return mongoose.model('message', message);
 };
