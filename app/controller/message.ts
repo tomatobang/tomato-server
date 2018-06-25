@@ -32,18 +32,25 @@ export default class MessageController extends BaseController {
     };
     if (startTime) {
       conditions.create_at = {
-        $gte: new Date(startTime),
+        $gt: new Date(startTime),
       };
     }
     const result = await this.service.loadUnreadMessages(conditions);
-    ctx.body = result;
+    const lst_create_at = await this.service.loadLatestMessageTime(
+      app.mongoose.Types.ObjectId(userid)
+    );
+    console.log('loadLatestMessageTime', lst_create_at);
+    ctx.body = {
+      messages: result,
+      lst_create_at: lst_create_at,
+    };
   }
 
   /**
    * 更新消息已读状态
    */
   async updateMessageState() {
-    const { ctx, app } = this;
+    const { ctx } = this;
     let id = ctx.request.body.id;
     let has_read = ctx.request.body.has_read;
     const result = await this.service.updateMessageState(id, has_read);

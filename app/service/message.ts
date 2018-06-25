@@ -64,4 +64,21 @@ export default class MessageService extends BaseService {
     ).exec();
     return result;
   }
+
+  /**
+   * 加载某用户最新消息日期
+   * @param userid 用户编号
+   */
+  async loadLatestMessageTime(userid) {
+    const Message = this.model;
+    const latestMsg = await Message.find({ to: userid })
+      .sort({ create_at: -1 })
+      .limit(1)
+      .exec();
+    if (latestMsg && latestMsg.length > 0) {
+      return latestMsg[0].create_at;
+    } else {
+      return null;
+    }
+  }
 }
