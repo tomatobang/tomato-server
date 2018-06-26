@@ -20,7 +20,8 @@
     "autod": "egg-bin autod",
     "doc": "apidoc -i app/ -o doc/ ",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublish": "npm run snyk-protect",
+    "prepare": "npm run snyk-protect"
   },
   "egg": {
     "typescript": true
@@ -66,7 +67,7 @@
     "tslib": "^1.8.1",
     "typescript": "^2.8.0",
     "uuid": "^3.2.1",
-    "snyk": "^1.82.1"
+    "snyk": "^1.85.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",
