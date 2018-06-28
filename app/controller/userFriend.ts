@@ -19,7 +19,6 @@ export default class User_friendController extends BaseController {
     const { ctx } = this;
     const query = ctx.request.query;
     const state = query.state;
-    console.log('getUserFriends:state:', state);
     const userid = ctx.request['currentUser']._id;
     if (userid) {
       if (state && (state === '1' || state === '2' || state === '3')) {

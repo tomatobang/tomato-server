@@ -56,7 +56,7 @@ export default (app: Application) => {
   router.del('/api/user/:id', controller.user.deleteById);
   router.post('/email_username/verify', controller.user.emailUserNameVerify);
   router.post('/api/login', controller.user.login);
-  router.post('/api/logout', controller.user.logout);
+  router.get('/api/logout', controller.user.logout);
   router.post('/api/user/headimg', controller.user.updateHeadImg);
   router.post('/api/user/sex', controller.user.updateSex);
   router.post('/api/user/displayname', controller.user.updateDisplayName);
