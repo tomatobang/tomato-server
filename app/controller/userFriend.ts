@@ -17,11 +17,18 @@ export default class User_friendController extends BaseController {
    */
   async getUserFriends() {
     const { ctx } = this;
+    const query = ctx.request.query;
+    const state = query.state;
     const userid = ctx.request['currentUser']._id;
     if (userid) {
-      const result = await this.service.getUserFriends(userid);
-      ctx.body = result;
-      ctx.status = 200;
+      if (state && (state === '1' || state === '2' || state === '3')) {
+        const result = await this.service.getUserFriends(userid, state);
+        ctx.body = result;
+        ctx.status = 200;
+      } else {
+        ctx.body = '请求不合法！';
+        ctx.status = 403;
+      }
     } else {
       ctx.body = '请求不合法！';
       ctx.status = 403;

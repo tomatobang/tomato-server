@@ -15,6 +15,9 @@ export default class UserController extends BaseController {
     this.validateRule = userValidationRule;
   }
 
+  /**
+   * 查找用户
+   */
   async searchUsers() {
     const { ctx } = this;
     const query = ctx.request.query;
@@ -32,6 +35,20 @@ export default class UserController extends BaseController {
       }
     );
     ctx.body = users;
+  }
+
+  async auth() {
+    const { ctx } = this;
+    if (ctx.request['currentUser']) {
+      ctx.body = {
+        status: true,
+      };
+    } else {
+      ctx.body = {
+        status: false,
+        description: 'toekn expiration!',
+      };
+    }
   }
   /**
    * 登录
@@ -80,7 +97,7 @@ export default class UserController extends BaseController {
         status: 'success',
         token,
         userinfo: {
-          userid: users[0]._id,
+          _id: users[0]._id,
           username: users[0].username,
           displayName: users[0].displayName,
           bio: users[0].bio,

@@ -42,14 +42,14 @@ module.exports = (app: Application) => {
             state: 2,
           }
         );
-        if (friends && friends.lenth > 0) {
+        if (friends && friends.length > 0) {
           for (let index = 0; index < friends.length; index++) {
             const element = friends[index];
             let friendid;
-            if (element.from !== userid) {
-              friendid = element.from;
+            if (element.from.toString() !== userid) {
+              friendid = element.from.toString();
             } else {
-              friendid = element.to;
+              friendid = element.to.toString();
             }
             const fsockets = await app.redis.smembers(
               'chat:user:socket:' + friendid
@@ -61,7 +61,7 @@ module.exports = (app: Application) => {
                 userid
               );
               // 置用户在线标识
-              if (score === 0) {
+              if (score === '0') {
                 await app.redis.zincrby(
                   'chat:user:friends:' + friendid,
                   1,
@@ -94,8 +94,15 @@ module.exports = (app: Application) => {
         message = message.slice(0, 500) + '...(输入太长，系统自动截断)';
       }
       if (message) {
-        // 向各个终端推送离线消息
-        this.notify(to, 'message_received', { from, message });
+        let newMsg = await this.ctx.service.message.create({
+          type: 1,
+          from: from,
+          to: to,
+          content: message,
+        });
+        // console.log('newMsg', newMsg);
+        // 向各个终端推送消息
+        this.notify(to, 'message_received', newMsg);
       }
     }
 
@@ -179,7 +186,7 @@ module.exports = (app: Application) => {
         request_time: new Date().valueOf(),
         state: 1,
       };
-
+      // TODO: 不能重复发送好友请求
       await ctx.service.userFriend.create(user_friend);
 
       this.notify(to, 'receive_friend_request', from);
@@ -242,46 +249,66 @@ module.exports = (app: Application) => {
     async disconnect() {
       const { ctx, app } = this;
       const socket = ctx.socket;
-      app.redis.get(socket.id).then(async function(userid) {
-        ctx.logger.info('userid!', userid);
-        if (userid) {
-          // 查询所有好友在线列表
-          const friends = await app.redis.zrange(
-            'chat:user:friends:' + userid,
-            0,
-            -1,
-            'WITHSCORES'
-          );
-
-          for (const end of friends) {
-            // 好友在线
-            // TODO: 格式需要做验证
-            if (end[1] === 1) {
-              const score = await app.redis.zscore(
-                'chat:user:friends:' + end[0],
-                userid
-              );
-              if (score !== 0) {
-                await app.redis.zincrby(
-                  'chat:user:friends:' + end[0],
-                  -1,
-                  userid
-                );
-              }
-              // 向好友终端推送离线消息
-              this.notify(end[0], 'friend_offline', { userid });
-            }
-          }
-
-          await app.redis.del('chat:user:friends:' + userid);
-          await app.redis.srem('chat:user:socket:', userid);
-          await app.redis.del('chat:socket:user:' + socket.id);
-        }
+      app.redis.get('chat:socket:user:' + socket.id).then(async userid => {
+        this.clearUserInfo(ctx, socket, userid);
       });
     }
 
     /**
-     * 辅助方法
+     * 登出
+     */
+    async logout() {
+      const { ctx, app } = this;
+      const socket = ctx.socket;
+      const obj = ctx.args[0];
+      const { userid } = obj;
+      this.clearUserInfo(ctx, socket, userid);
+    }
+
+    /**
+     * 辅助方法:清除用户信息
+     * @param {string} ctx 上下文
+     * @param {string} socket 当前socket
+     * @param {string} userid 用户编号
+     */
+    async clearUserInfo(ctx, socket, userid) {
+      ctx.logger.info('userid!', userid);
+      if (userid) {
+        // 查询所有好友在线列表
+        const friends = await app.redis.zrange(
+          'chat:user:friends:' + userid,
+          0,
+          -1,
+          'WITHSCORES'
+        );
+        let fid = '';
+        for (const end of friends) {
+          // TODO: 格式需要做验证
+          if (end.length > 10) {
+            fid = end;
+          }
+          // 好友在线
+          if (end === '1') {
+            const score = await app.redis.zscore(
+              'chat:user:friends:' + fid,
+              userid
+            );
+            if (score !== 0) {
+              await app.redis.zincrby('chat:user:friends:' + fid, -1, userid);
+            }
+            // 向好友终端推送离线消息
+            this.notify(fid, 'friend_offline', { userid });
+          }
+        }
+
+        await app.redis.del('chat:user:friends:' + userid);
+        await app.redis.srem('chat:user:socket:' + userid, socket.id);
+        await app.redis.del('chat:socket:user:' + socket.id);
+      }
+    }
+
+    /**
+     * 辅助方法:发送通知
      * @param {string} userid 用户编号
      * @param {string} evtName 事件名称
      * @param {string} message 消息
@@ -312,11 +339,6 @@ module.exports = (app: Application) => {
         .to(socketid)
         .emit('fail', message);
     }
-
-    /**
-     * TODO:获取用户信息
-     */
-    getUserInfo() {}
   }
   return ChatController;
 };

@@ -123,4 +123,3 @@ export default class UserService extends BaseService {
     return result;
   }
 }
-

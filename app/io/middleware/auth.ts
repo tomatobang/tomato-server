@@ -9,13 +9,5 @@ module.exports = (app: Application) => {
     ctx.logger.info('auth!');
     await next;
     ctx.logger.info('disconnect!');
-    const socket = ctx.socket;
-    app.redis.get(socket.id).then(userid => {
-      ctx.logger.info('userid!', userid);
-      if (userid) {
-        app.redis.srem(userid + ':socket', socket.id).then(() => {});
-        app.redis.del(socket.id).then(() => {});
-      }
-    });
   };
 };

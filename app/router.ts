@@ -1,7 +1,7 @@
 'use strict';
 import { Application } from 'egg';
 // app/router.js
-export default (app: Application) =>  {
+export default (app: Application) => {
   const { router, controller } = app;
   // for test
   router.get('/', controller.home.index);
@@ -16,9 +16,15 @@ export default (app: Application) =>  {
   app.io
     .of('/tomatobang')
     .route('break_tomato', app.io.controller.tomatobang.breakTomato);
+  app.io
+    .of('/tomatobang')
+    .route('disconnect', app.io.controller.tomatobang.disconnect);
+  app.io.of('/tomatobang').route('logout', app.io.controller.tomatobang.logout);
 
   // socket.io: 聊天同步
   app.io.of('/chat').route('login', app.io.controller.chat.login);
+  app.io.of('/chat').route('logout', app.io.controller.chat.logout);
+
   app.io.of('/chat').route('send_message', app.io.controller.chat.sendMessage);
   app.io
     .of('/chat')
@@ -31,10 +37,8 @@ export default (app: Application) =>  {
     .route('request_add_request', app.io.controller.chat.requestAddFriend);
   app.io
     .of('/chat')
-    .route(
-      'response_friend_request',
-      app.io.controller.chat.responseAddFriend
-    );
+    .route('response_friend_request', app.io.controller.chat.responseAddFriend);
+  app.io.of('/chat').route('disconnect', app.io.controller.chat.disconnect);
 
   // 版本管理
   router.get('/api/version', controller.version.findLatestVersion);
@@ -45,12 +49,14 @@ export default (app: Application) =>  {
    * 用户类
    */
   router.get('/api/user', controller.user.list);
+  router.get('/api/user/auth', controller.user.auth);
+  router.get('/api/user/searchUsers', controller.user.searchUsers);
   router.get('/api/user/:id', controller.user.findById);
   router.post('/api/user', controller.user.create);
   router.del('/api/user/:id', controller.user.deleteById);
   router.post('/email_username/verify', controller.user.emailUserNameVerify);
   router.post('/api/login', controller.user.login);
-  router.post('/api/logout', controller.user.logout);
+  router.get('/api/logout', controller.user.logout);
   router.post('/api/user/headimg', controller.user.updateHeadImg);
   router.post('/api/user/sex', controller.user.updateSex);
   router.post('/api/user/displayname', controller.user.updateDisplayName);
@@ -101,6 +107,15 @@ export default (app: Application) =>  {
     '/api/user_friend/response_add_friend',
     controller.userFriend.responseAddFriend
   );
+
+  /**
+   * 消息类
+   */
+  router.post(
+    '/api/message/updateReadState',
+    controller.message.updateMessageState
+  );
+  router.get('/api/message', controller.message.loadUnreadMessages);
 
   /**
    * 其它

@@ -7,11 +7,15 @@ export default class User_friendService extends BaseService {
     this.model = this.ctx.model.UserFriend;
   }
 
-  async getUserFriends(userid) {
+  /**
+   * 获取好友列表
+   * @param { String } userid 用户编号
+   */
+  async getUserFriends(userid, state) {
     const model = this.ctx.model.UserFriend;
 
     const result = await model
-      .find({ $or: [{ from: userid }, { to: userid }] })
+      .find({ $or: [{ from: userid }, { to: userid }], state: state })
       .populate({ path: 'from', select: 'username bio img email sex location' })
       .populate({ path: 'to', select: 'username bio img email sex location' })
       .sort('-response_time')
