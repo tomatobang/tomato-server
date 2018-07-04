@@ -186,7 +186,7 @@ module.exports = (app: Application) => {
         request_time: new Date().valueOf(),
         state: 1,
       };
-      // TODO: 不能重复发送好友请求
+      // TODO: 不能重复发送好友请求( 目前使用逐渐验证 )
       await ctx.service.userFriend.create(user_friend);
 
       this.notify(to, 'receive_friend_request', from);
