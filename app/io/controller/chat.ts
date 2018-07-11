@@ -253,16 +253,17 @@ module.exports = (app: Application) => {
     async disconnect() {
       const { ctx, app } = this;
       const socket = ctx.socket;
-      app.redis.get('chat:socket:user:' + socket.id).then(async userid => {
+      const userid = await app.redis.get('chat:socket:user:' + socket.id);
+      if (userid) {
         this.clearUserInfo(ctx, socket, userid);
-      });
+      }
     }
 
     /**
      * user logout
      */
     async logout() {
-      const { ctx, app } = this;
+      const { ctx } = this;
       const socket = ctx.socket;
       const obj = ctx.args[0];
       const { userid } = obj;
