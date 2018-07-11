@@ -1,9 +1,25 @@
+import { RedisChatService } from '../app/util/redis';
+import tokenService from '../app/util/jwt';
+
 declare module 'egg' {
-  // 扩展 app
   interface Application {
     redis: any;
-    mongoose:any;
+    mongoose: any;
     validator: any;
-    util: any;
+    util: {
+      redis: {
+        redisChatService: RedisChatService;
+      };
+      jpush: {
+        pushMessage(alias, alert, title): any;
+      };
+      jwt: {
+        tokenService: {
+          createToken(userinfo): any;
+          verifyToken(token): any;
+          expiresIn;
+        };
+      };
+    };
   }
 }
