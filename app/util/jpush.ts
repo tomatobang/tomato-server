@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * 极光推送服务
+ * jpush util
  */
 const JPush = require('jpush-sdk');
 const jpushClient = JPush.buildClient(
   'f240850b36aea20535b81df8',
   '189cbc42a1044b1ac2f2ddb1'
 );
-exports.pushMessage = (alias, alert, title) => {
+export function pushMessage(alias, alert, title) {
   jpushClient
     .push()
     .setPlatform(JPush.ALL)
@@ -25,4 +25,4 @@ exports.pushMessage = (alias, alert, title) => {
         console.log('Msg_id: ' + res.msg_id);
       }
     });
-};
+}
