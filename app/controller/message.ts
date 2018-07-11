@@ -7,7 +7,7 @@ export default class MessageController extends BaseController {
   }
 
   /**
-   * 加载用户未读消息
+   * load user unread messages
    */
   async loadUnreadMessages() {
     const { ctx, app } = this;
@@ -47,7 +47,7 @@ export default class MessageController extends BaseController {
   }
 
   /**
-   * 更新消息已读状态
+   * update user messages state by message id
    */
   async updateMessageState() {
     const { ctx } = this;

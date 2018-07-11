@@ -2,7 +2,7 @@
 import { Controller } from 'egg';
 export default class OtherController extends Controller {
   /**
-   * 获取七牛客户端上传 token
+   * load qi-niu upload token
    */
   async getQiniuUploadToken() {
     const { ctx, app } = this;

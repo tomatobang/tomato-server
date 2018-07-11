@@ -11,6 +11,5 @@ module.exports = (app: Application) => {
     } else {
       ctx.socket.emit('verify_failed', {});
     }
-    ctx.logger.info('disconnect!');
   };
 };

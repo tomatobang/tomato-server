@@ -1,15 +1,11 @@
 'use strict';
 
-/**
- * TODO:
- * 错误处理
- */
-
+// TODO: TIME_OUT_PAIRS may not support mutil-server deploy
 const TIME_OUT_PAIRS = {};
 import { Application, Controller } from 'egg';
 module.exports = (app: Application) => {
   /**
-   * 消息订阅测试
+   * TEST: redis message quene
    */
   app.redis.on('message', (channel, message) => {
     console.log('Receive message %s from channel %s', message, channel);
@@ -17,7 +13,7 @@ module.exports = (app: Application) => {
 
   class TBController extends Controller {
     /**
-     * 加载已有番茄钟
+     * load current tomato list
      */
     async loadTomato() {
       const obj = this.ctx.args[0];
@@ -25,7 +21,7 @@ module.exports = (app: Application) => {
       const { userid } = obj;
 
       const tomato = await app.redis.get(userid + ':tomato');
-      // 需要事先移除关联的用户, 用户切换时有必要
+      // remove old-user info as it may switch user at client end
       const old_userid = await app.redis.get(socket.id);
       await app.redis.srem(old_userid + ':socket', socket.id);
       await app.redis.sadd(userid + ':socket', socket.id);
@@ -39,7 +35,7 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 开启番茄钟
+     * start tomato
      */
     async startTomato() {
       const obj = this.ctx.args[0];
@@ -48,7 +44,7 @@ module.exports = (app: Application) => {
       const { userid, tomato, countdown } = obj;
       tomato.startTime = new Date();
 
-      // 添加过期处理机制, 过期后自动清空, 10s 用来确保番茄钟被保存
+      // save toamto info. 10s after it finished
       await app.redis.set(
         userid + ':tomato',
         JSON.stringify(tomato),
@@ -100,7 +96,7 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 中断番茄钟
+     * tomato breaked
      */
     async breakTomato() {
       const obj = this.ctx.args[0];
@@ -120,7 +116,6 @@ module.exports = (app: Application) => {
       const TIME_OUT_ID = TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'];
       clearTimeout(TIME_OUT_ID);
       const result = await this.service.tomato.create(tomato_doing);
-      this.ctx.logger.info('创建一个TOMATO: UNFINISHED!');
       await app.redis.del(userid + ':tomato');
       if (result) {
         const socketList = await app.redis.smembers(userid + ':socket');
@@ -135,6 +130,9 @@ module.exports = (app: Application) => {
       }
     }
 
+    /**
+     * user disconnect
+     */
     async disconnect() {
       const socket = this.ctx.socket;
       app.redis.get(socket.id).then(async userid => {
@@ -147,7 +145,7 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 登出
+     * user logout
      */
     async logout() {
       const { ctx, app } = this;

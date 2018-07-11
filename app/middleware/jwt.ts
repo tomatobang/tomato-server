@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 接口请求前验证
+ * verify
  */
 import { Context, Application } from 'egg';
 
@@ -44,7 +44,7 @@ export default function jwtMiddleware(option, app: Application) {
 
     console.log('当前用户:', reply);
     if (reply) {
-      // 若有登录则过期时间延长
+      // prolong token
       app['redis'].expire(token, 3 * 24 * 60 * 60);
       const currentUser = JSON.parse(reply);
       ctx.request['currentUser'] = currentUser;

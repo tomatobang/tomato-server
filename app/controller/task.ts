@@ -10,6 +10,9 @@ export default class TaskController extends BaseController {
     this.validateRule = taskValidationRule;
   }
 
+  /**
+   * update task voice media url
+   */
   async updateVoiceUrl() {
     const { ctx, app } = this;
     const invalid = app['validator'].validate(
@@ -19,14 +22,13 @@ export default class TaskController extends BaseController {
     if (invalid) {
       ctx.body = {
         status: 'fail',
-        description: '请求参数错误！',
+        description: 'request parame(s) error！',
       };
       return;
     }
     const taskid = ctx.request.body.taskid;
     const relateUrl = ctx.request.body.relateUrl;
     await ctx.service.task.updateVoiceUrl(taskid, relateUrl);
-    // 此处写法待重构
     ctx.status = 200;
     ctx.body = {
       success: true,

@@ -7,7 +7,7 @@ export default class VersionController extends BaseController {
   }
 
   /**
-   * 查找最新版本信息
+   * find latest version info
    */
   async findLatestVersion() {
     const { ctx } = this;
