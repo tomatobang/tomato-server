@@ -25,17 +25,34 @@ module.exports = (app: Application) => {
       if (!userid) {
         this.failRes(socket.id, '用户编号不合法！');
       }
-      const userLoginEnds = await app.redis.smembers(
-        'chat:user:socket:' + userid
+      const userLoginEnds = await app.util.redis.redisChatService.findUserSocket(
+        app,
+        userid
       );
       // save login info
       if (userLoginEnds && userLoginEnds.length > 0) {
         // TODO: support multi client login
-        await app.redis.sadd('chat:user:socket:' + userid, socket.id);
-        await app.redis.set('chat:socket:user:' + socket.id, userid);
+        await app.util.redis.redisChatService.addUserSocket(
+          app,
+          userid,
+          socket
+        );
+        await app.util.redis.redisChatService.addSocketUser(
+          app,
+          socket,
+          userid
+        );
       } else {
-        await app.redis.sadd('chat:user:socket:' + userid, socket.id);
-        await app.redis.set('chat:socket:user:' + socket.id, userid);
+        await app.util.redis.redisChatService.addUserSocket(
+          app,
+          userid,
+          socket
+        );
+        await app.util.redis.redisChatService.addSocketUser(
+          app,
+          socket,
+          userid
+        );
         // load friend list and set online state
         const friends = await this.ctx.service.userFriend.findAll(
           { sort: '{"response_time": -1 }' },
@@ -54,27 +71,40 @@ module.exports = (app: Application) => {
             } else {
               friendid = element.to.toString();
             }
-            const fsockets = await app.redis.smembers(
-              'chat:user:socket:' + friendid
+            const fsockets = await app.util.redis.redisChatService.findUserSocket(
+              app,
+              friendid
             );
             if (fsockets && fsockets.length > 0) {
-              await app.redis.zadd('chat:user:friends:' + userid, 1, friendid);
-              const score = await app.redis.zscore(
-                'chat:user:friends:' + friendid,
+              await app.util.redis.redisChatService.addUserFriend(
+                app,
+                userid,
+                1,
+                friendid
+              );
+              const score = await app.util.redis.redisChatService.getUserFriendScore(
+                app,
+                friendid,
                 userid
               );
               // update friend online list
               if (score === '0') {
-                await app.redis.zincrby(
-                  'chat:user:friends:' + friendid,
-                  1,
-                  userid
+                await app.util.redis.redisChatService.updateUserFriendScore(
+                  app,
+                  friendid,
+                  userid,
+                  1
                 );
                 // push message to friend
                 this.notify(friendid, 'friend_online', { userid });
               }
             } else {
-              await app.redis.zadd('chat:user:friends:' + userid, 0, friendid);
+              await app.util.redis.redisChatService.addUserFriend(
+                app,
+                userid,
+                0,
+                friendid
+              );
             }
           }
         }
@@ -121,11 +151,9 @@ module.exports = (app: Application) => {
         this.failRes(socket.id, '用户编号不合法！');
       }
       // load friend online states
-      const friends = await app.redis.zrange(
-        'chat:user:friends:' + userid,
-        0,
-        -1,
-        'WITHSCORES'
+      const friends = await app.util.redis.redisChatService.getUserFriends(
+        app,
+        userid
       );
       if (userid) {
         await app.io
@@ -219,12 +247,13 @@ module.exports = (app: Application) => {
       }
       await ctx.service.userFriend.updateState(recordId, state);
       if (state === 2) {
-        const userLoginEnds = await app.redis.smembers(
-          'chat:user:socket:' + to
+        const userLoginEnds = await app.util.redis.redisChatService.findUserSocket(
+          app,
+          to
         );
         if (userLoginEnds && userLoginEnds.length > 0) {
-          await app.redis.zadd('chat:user:friends:' + from, 1, to);
-          await app.redis.zadd('chat:user:friends:' + to, 1, from);
+          await app.util.redis.redisChatService.addUserFriend(app, from, 1, to);
+          await app.util.redis.redisChatService.addUserFriend(app, to, 1, from);
           this.notify(to, 'new_added_friend', {
             friendid: from,
             state: 'online',
@@ -234,7 +263,7 @@ module.exports = (app: Application) => {
             state: 'online',
           });
         } else {
-          await app.redis.zadd('chat:user:friends:' + from, 0, to);
+          await app.util.redis.redisChatService.addUserFriend(app, from, 0, to);
           this.notify(from, 'new_added_friend', {
             friendid: to,
             state: 'offline',
@@ -253,7 +282,10 @@ module.exports = (app: Application) => {
     async disconnect() {
       const { ctx, app } = this;
       const socket = ctx.socket;
-      const userid = await app.redis.get('chat:socket:user:' + socket.id);
+      const userid = await app.util.redis.redisChatService.findSocketUser(
+        app,
+        socket
+      );
       if (userid) {
         this.clearUserInfo(ctx, socket, userid);
       }
@@ -279,11 +311,9 @@ module.exports = (app: Application) => {
     async clearUserInfo(ctx, socket, userid) {
       ctx.logger.info('userid!', userid);
       if (userid) {
-        const friends = await app.redis.zrange(
-          'chat:user:friends:' + userid,
-          0,
-          -1,
-          'WITHSCORES'
+        const friends = await app.util.redis.redisChatService.getUserFriends(
+          app,
+          userid
         );
         let fid = '';
         // update user online list
@@ -293,20 +323,29 @@ module.exports = (app: Application) => {
           }
           // user online
           if (end === '1') {
-            const score = await app.redis.zscore(
-              'chat:user:friends:' + fid,
+            const score = await app.util.redis.redisChatService.getUserFriendScore(
+              app,
+              fid,
               userid
             );
             if (score !== 0) {
-              await app.redis.zincrby('chat:user:friends:' + fid, -1, userid);
+              await app.util.redis.redisChatService.updateUserFriendScore(
+                app,
+                fid,
+                userid,
+                -1
+              );
             }
             this.notify(fid, 'friend_offline', { userid });
           }
         }
-
-        await app.redis.del('chat:user:friends:' + userid);
-        await app.redis.srem('chat:user:socket:' + userid, socket.id);
-        await app.redis.del('chat:socket:user:' + socket.id);
+        await app.util.redis.redisChatService.deleteSocketUser(app, socket);
+        await app.util.redis.redisChatService.deleteUserSocket(
+          app,
+          userid,
+          socket
+        );
+        await app.util.redis.redisChatService.deleteUserFriend(app, userid);
       }
     }
 
@@ -317,7 +356,10 @@ module.exports = (app: Application) => {
      * @param {string} message message
      */
     async notify(userid, evtName, message) {
-      const loginEnds = await app.redis.smembers('chat:user:socket:' + userid);
+      const loginEnds = await app.util.redis.redisChatService.findUserSocket(
+        app,
+        userid
+      );
       if (loginEnds && loginEnds.length > 0) {
         for (const end of loginEnds) {
           if (end) {
