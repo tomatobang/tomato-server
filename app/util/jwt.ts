@@ -7,7 +7,8 @@ import * as jwt from 'jsonwebtoken';
 import config from '../../config/config.default';
 const secret = config().token.tokenSecret;
 const expiresIn = config().token.tokenExpiresIn;
-export default {
+
+export const tokenService = {
   createToken(userinfo) {
     const token = jwt.sign(userinfo, secret, {
       expiresIn,
@@ -26,5 +27,5 @@ export default {
       return false;
     }
   },
-  expiresIn
-}
+  expiresIn,
+};
