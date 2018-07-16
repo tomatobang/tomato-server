@@ -79,6 +79,56 @@ export class RedisChatService {
 
 export const redisChatService = new RedisChatService();
 
-export class RedisTomatoService {}
+
+const TB_USER_SOCKET_KEY_PREFIX = 'tb:user:socket:';
+const TB_SOCKET_USER_KEY_PREFIX = 'tb:socket:user:';
+const TB_USER_TOMATO_KEY_PREFIX = 'tb:user:tomato:';
+export class RedisTomatoService {
+  async addUserSocket(app: Application, userid, socket) {
+    await app.redis.sadd(TB_USER_SOCKET_KEY_PREFIX + userid, socket.id);
+  }
+
+  async findUserSocket(app: Application, userid) {
+    const userLoginEnds = await app.redis.smembers(
+      TB_USER_SOCKET_KEY_PREFIX + userid
+    );
+    return userLoginEnds;
+  }
+
+  async deleteUserSocket(app: Application, userid, socket) {
+    await app.redis.srem(TB_USER_SOCKET_KEY_PREFIX + userid, socket.id);
+  }
+
+  async addSocketUser(app: Application, socket, userid) {
+    await app.redis.set(TB_SOCKET_USER_KEY_PREFIX + socket.id, userid);
+  }
+
+  async findSocketUser(app: Application, socket) {
+    const userid = await app.redis.get(TB_SOCKET_USER_KEY_PREFIX + socket.id);
+    return userid;
+  }
+
+  async deleteSocketUser(app: Application, socket) {
+    await app.redis.del(TB_SOCKET_USER_KEY_PREFIX + socket.id);
+  }
+
+  async addUserTomato(app: Application, userid, tomato, EX) {
+    await app.redis.set(
+      TB_USER_TOMATO_KEY_PREFIX + userid,
+      tomato,
+      'EX',
+      EX
+    );
+  }
+
+  async findUserTomato(app: Application, userid) {
+    const tomato = await app.redis.get(TB_USER_TOMATO_KEY_PREFIX + userid);
+    return tomato;
+  }
+
+  async deleteUserTomato(app: Application, userid) {
+    await app.redis.del(TB_USER_TOMATO_KEY_PREFIX + userid);
+  }
+}
 
 export const redisTomatoService = new RedisTomatoService();

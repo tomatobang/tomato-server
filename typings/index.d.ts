@@ -1,4 +1,4 @@
-import { RedisChatService } from '../app/util/redis';
+import { RedisChatService, RedisTomatoService } from '../app/util/redis';
 import tokenService from '../app/util/jwt';
 
 declare module 'egg' {
@@ -9,6 +9,7 @@ declare module 'egg' {
     util: {
       redis: {
         redisChatService: RedisChatService;
+        redisTomatoService: RedisTomatoService;
       };
       jpush: {
         pushMessage(alias, alert, title): any;

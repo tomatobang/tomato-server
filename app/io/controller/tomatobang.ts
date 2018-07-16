@@ -19,13 +19,13 @@ module.exports = (app: Application) => {
       const obj = this.ctx.args[0];
       const socket = this.ctx.socket;
       const { userid } = obj;
-
-      const tomato = await app.redis.get(userid + ':tomato');
+      const redisTomatoService = app.util.redis.redisTomatoService;
+      const tomato = await redisTomatoService.findUserTomato(app, userid);
       // remove old-user info as it may switch user at client end
-      const old_userid = await app.redis.get(socket.id);
-      await app.redis.srem(old_userid + ':socket', socket.id);
-      await app.redis.sadd(userid + ':socket', socket.id);
-      await app.redis.set(socket.id, userid);
+      const old_userid = await redisTomatoService.findSocketUser(app, socket);
+      await redisTomatoService.deleteUserSocket(app, old_userid, socket);
+      await redisTomatoService.addUserSocket(app, userid, socket);
+      await redisTomatoService.addSocketUser(app, socket, userid);
 
       console.log('send load tomato', tomato);
       await app.io
@@ -39,40 +39,30 @@ module.exports = (app: Application) => {
      */
     async startTomato() {
       const obj = this.ctx.args[0];
-      const socket = this.ctx.socket;
       this.ctx.logger.info('start_tomato', obj);
       const { userid, tomato, countdown } = obj;
       tomato.startTime = new Date();
 
-      // save toamto info. 10s after it finished
-      await app.redis.set(
-        userid + ':tomato',
+      // save toamto info until it finished +10s
+      const redisTomatoService = app.util.redis.redisTomatoService;
+      await redisTomatoService.addUserTomato(
+        app,
+        userid,
         JSON.stringify(tomato),
-        'EX',
         countdown * 60 + 10
       );
-
-      let TIME_OUT_ID = TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'];
-      if (TIME_OUT_ID) {
-        clearTimeout(TIME_OUT_ID);
-      }
-      TIME_OUT_ID = setTimeout(
+      this.clearTomatoTimeout(userid);
+      const TIME_OUT_ID = setTimeout(
         async userid => {
-          let tomato = await app.redis.get(userid + ':tomato');
+          let tomato = await redisTomatoService.findUserTomato(app, userid);
           if (tomato) {
             tomato = JSON.parse(tomato);
           }
           tomato.endTime = new Date();
           tomato.succeed = 1;
           await this.service.tomato.create(tomato);
-          await app.redis.del(userid + ':tomato');
-          const socketList = await app.redis.smembers(userid + ':socket');
-          for (const item of socketList) {
-            await app.io
-              .of('/tomatobang')
-              .to(item)
-              .emit('new_tomate_added', tomato);
-          }
+          await redisTomatoService.deleteUserTomato(app, userid);
+          this.notify(userid, 'new_tomate_added', tomato);
           app.util.jpush.pushMessage(
             userid,
             '你完成了一个番茄钟',
@@ -83,16 +73,7 @@ module.exports = (app: Application) => {
         userid
       );
       TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'] = TIME_OUT_ID;
-
-      const socketList = await app.redis.smembers(userid + ':socket');
-      for (const so of socketList) {
-        if (so !== socket.id) {
-          await app.io
-            .of('/tomatobang')
-            .to(so)
-            .emit('other_end_start_tomato', tomato);
-        }
-      }
+      this.notify(userid, 'other_end_start_tomato', tomato);
     }
 
     /**
@@ -100,33 +81,24 @@ module.exports = (app: Application) => {
      */
     async breakTomato() {
       const obj = this.ctx.args[0];
-      const socket = this.ctx.socket;
       const { userid, tomato } = obj;
-
-      let tomato_doing = await app.redis.get(userid + ':tomato');
-      if (!tomato_doing) {
+      const redisTomatoService = app.util.redis.redisTomatoService;
+      let tomato_ongoing = await redisTomatoService.findUserTomato(app, userid);
+      if (!tomato_ongoing) {
         return;
       }
 
-      tomato_doing = JSON.parse(tomato_doing);
-      tomato_doing.endTime = new Date();
-      tomato_doing.succeed = 0;
-      tomato_doing.breakReason = tomato.breakReason;
+      tomato_ongoing = JSON.parse(tomato_ongoing);
+      tomato_ongoing.endTime = new Date();
+      tomato_ongoing.succeed = 0;
+      tomato_ongoing.breakReason = tomato.breakReason;
 
       const TIME_OUT_ID = TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'];
       clearTimeout(TIME_OUT_ID);
-      const result = await this.service.tomato.create(tomato_doing);
-      await app.redis.del(userid + ':tomato');
+      const result = await this.service.tomato.create(tomato_ongoing);
+      await redisTomatoService.deleteUserTomato(app, userid);
       if (result) {
-        const socketList = await app.redis.smembers(userid + ':socket');
-        for (const so of socketList) {
-          if (so !== socket.id) {
-            await app.io
-              .of('/tomatobang')
-              .to(so)
-              .emit('other_end_break_tomato', tomato_doing);
-          }
-        }
+        this.notify(userid, 'other_end_break_tomato', tomato_ongoing);
       }
     }
 
@@ -135,13 +107,14 @@ module.exports = (app: Application) => {
      */
     async disconnect() {
       const socket = this.ctx.socket;
-      app.redis.get(socket.id).then(async userid => {
-        this.ctx.logger.info('userid!', userid);
-        if (userid) {
-          await app.redis.srem(userid + ':socket', socket.id);
-          await app.redis.del(socket.id);
-        }
-      });
+      const redisTomatoService = app.util.redis.redisTomatoService;
+      const userid = await redisTomatoService.findSocketUser(app, socket);
+      this.ctx.logger.info('userid!', userid);
+      if (userid) {
+        await redisTomatoService.deleteUserSocket(app, userid, socket);
+        await redisTomatoService.deleteSocketUser(app, socket);
+        this.clearTomatoTimeout(userid);
+      }
     }
 
     /**
@@ -150,16 +123,54 @@ module.exports = (app: Application) => {
     async logout() {
       const { ctx, app } = this;
       const socket = ctx.socket;
+      const redisTomatoService = app.util.redis.redisTomatoService;
       // TODO: username to userid
-      // const obj = ctx.args[0];
-      // const { userid } = obj;
-      app.redis.get(socket.id).then(async userid => {
-        this.ctx.logger.info('userid!', userid);
-        if (userid) {
-          await app.redis.srem(userid + ':socket', socket.id);
-          await app.redis.del(socket.id);
+      const userid = await redisTomatoService.findSocketUser(app, socket);
+      this.ctx.logger.info('userid!', userid);
+      if (userid) {
+        await redisTomatoService.deleteUserSocket(app, userid, socket);
+        await redisTomatoService.deleteSocketUser(app, socket);
+        this.clearTomatoTimeout(userid);
+      }
+    }
+
+    /**
+     * send message
+     * @param {string} userid userid
+     * @param {string} evtName socket.io event name
+     * @param {string} message message
+     */
+    async notify(userid, evtName, message) {
+      const loginEnds = await this.findUserSocket(userid);
+      if (loginEnds && loginEnds.length > 0) {
+        for (const end of loginEnds) {
+          if (end) {
+            await app.io
+              .of('/tomatobang')
+              .to(end)
+              .emit(evtName, message);
+          }
         }
-      });
+      }
+    }
+
+    /**
+     * util: find user sockets
+     * @param userid user id
+     */
+    async findUserSocket(userid) {
+      const socketList = await app.util.redis.redisTomatoService.findUserSocket(
+        app,
+        userid
+      );
+      return socketList;
+    }
+
+    clearTomatoTimeout(userid) {
+      let TIME_OUT_ID = TIME_OUT_PAIRS[userid + ':TIME_OUT_ID'];
+      if (TIME_OUT_ID) {
+        clearTimeout(TIME_OUT_ID);
+      }
     }
   }
   return TBController;
