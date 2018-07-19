@@ -13,7 +13,7 @@ export default class User_friendController extends BaseController {
   }
 
   /**
-   * @api {getFriendReqList} /api/user_friend [获取好友列表]
+   * @api {getFriendReqList} /api/user_friend [load user friend list]
    */
   async getUserFriends() {
     const { ctx } = this;
@@ -36,7 +36,7 @@ export default class User_friendController extends BaseController {
   }
 
   /**
-   * @api {getFriendReqList} /api/user_friend/request_add_friend [请求添加为好友]
+   * @api {getFriendReqList} /api/user_friend/request_add_friend [request friend list]
    */
   async getFriendReqList() {
     const { ctx } = this;
@@ -55,7 +55,7 @@ export default class User_friendController extends BaseController {
   }
 
   /**
-   * @api {requestAddFriend} /api/user_friend/request_add_friend [请求添加为好友]
+   * @api {requestAddFriend} /api/user_friend/request_add_friend [request add friend]
    */
   async requestAddFriend() {
     const { ctx, app } = this;
@@ -105,7 +105,7 @@ export default class User_friendController extends BaseController {
   }
 
   /**
-   * @api {responseAddFriend} /api/user_friend/response_add_friend [回复添加好友请求]
+   * @api {responseAddFriend} /api/user_friend/response_add_friend [response friend request]
    */
   async responseAddFriend() {
     const { ctx, app } = this;

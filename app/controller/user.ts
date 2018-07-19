@@ -16,7 +16,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 查找用户
+   * search user by keyword
    */
   async searchUsers() {
     const { ctx } = this;
@@ -37,6 +37,9 @@ export default class UserController extends BaseController {
     ctx.body = users;
   }
 
+  /**
+   * to see is user has login
+   */
   async auth() {
     const { ctx } = this;
     if (ctx.request['currentUser']) {
@@ -50,8 +53,9 @@ export default class UserController extends BaseController {
       };
     }
   }
+
   /**
-   * 登录
+   * login
    */
   async login() {
     const { ctx, app } = this;
@@ -117,7 +121,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 登出
+   * logout
    */
   async logout() {
     const { ctx, app } = this;
@@ -131,7 +135,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 邮箱验证
+   * validate username and email
    */
   async emailUserNameVerify() {
     const { ctx, app } = this;
@@ -176,7 +180,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 更新头像路径
+   * update head image( file url )
    */
   async updateHeadImg() {
     const { ctx } = this;
@@ -191,7 +195,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 更新性别
+   * update sex info
    */
   async updateSex() {
     const { ctx, app } = this;
@@ -213,7 +217,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 更新昵称
+   * update nick name
    */
   async updateDisplayName() {
     const { ctx } = this;
@@ -224,7 +228,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 更新邮箱
+   * update email
    */
   async updateEmail() {
     const { ctx, app } = this;
@@ -247,7 +251,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 更新位置
+   * update position
    */
   async updateLocation() {
     const { ctx } = this;
@@ -258,7 +262,7 @@ export default class UserController extends BaseController {
   }
 
   /**
-   * 更新签名
+   * update bio
    */
   async updateBio() {
     const { ctx } = this;

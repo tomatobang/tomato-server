@@ -8,7 +8,7 @@ export default function errorhandlerMiddleware(option, app: Application) {
     } catch (err) {
       app.emit('error', err, this);
       const status = err.status || 500;
-      // 生产环境时 500 错误的详细错误内容不返回给客户端
+      // error in production env should not show to users
       const error =
         status === 500 && app.env === 'prod'
           ? 'Internal Server Error'

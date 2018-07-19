@@ -4,7 +4,7 @@ import * as moment from 'moment';
 exports.relativeTime = time => moment(new Date(time * 1000)).fromNow();
 
 /**
- * 日期处理 Util
+ * date Util
  */
 exports.dateHelper = {
   getCurrentMonthFirst(date) {
@@ -28,16 +28,16 @@ exports.dateHelper = {
     const nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
     return this.format(new Date(nextMonthFirstDay), 'yyyy-MM-dd');
   },
-  // 参考: https://www.cnblogs.com/tugenhua0707/p/3776808.html
+  // refer: https://www.cnblogs.com/tugenhua0707/p/3776808.html
   format(datetime, fmt) {
     const o = {
-      'M+': datetime.getMonth() + 1, // 月份
-      'd+': datetime.getDate(), // 日
-      'h+': datetime.getHours(), // 小时
-      'm+': datetime.getMinutes(), // 分
-      's+': datetime.getSeconds(), // 秒
-      'q+': Math.floor((datetime.getMonth() + 3) / 3), // 季度
-      S: datetime.getMilliseconds(), // 毫秒
+      'M+': datetime.getMonth() + 1,
+      'd+': datetime.getDate(),
+      'h+': datetime.getHours(),
+      'm+': datetime.getMinutes(),
+      's+': datetime.getSeconds(),
+      'q+': Math.floor((datetime.getMonth() + 3) / 3), // quarter
+      S: datetime.getMilliseconds(),
     };
     if (/(y+)/.test(fmt)) {
       fmt = fmt.replace(

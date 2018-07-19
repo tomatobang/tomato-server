@@ -23,9 +23,7 @@ export default class TomatoController extends BaseController {
       ctx.status = 200;
       ctx.body = [];
     }
-    // 获取本月的第一天
     const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
-    // 获取本月的最后一天
     const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
     const ret = await ctx.service.tomato.statistics(
       userid,
@@ -43,7 +41,7 @@ export default class TomatoController extends BaseController {
   }
 
   /**
-   * 筛选今日番茄钟
+   * load today tomatoes
    */
   async tomatoToday() {
     const { ctx } = this;
@@ -73,13 +71,12 @@ export default class TomatoController extends BaseController {
   }
 
   /**
-   * 关键词查找
+   * search by keyword
    */
   async search() {
     const { ctx } = this;
     let keywords = ctx.request.body.keywords;
     keywords = ctx.helper.escape(keywords);
-    ctx.logger.info('keywords2', keywords);
     const ret = await ctx.service.tomato.findAll(
       {},
       {

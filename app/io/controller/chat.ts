@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- *  消息服务
+ *  chat message service
  */
 import {
   user_friendValidationRule,
@@ -15,6 +15,9 @@ module.exports = (app: Application) => {
       return;
     }
 
+    /**
+     * user login
+     */
     async login() {
       const obj = this.ctx.args[0];
       const socket = this.ctx.socket;
@@ -22,18 +25,17 @@ module.exports = (app: Application) => {
       if (!userid) {
         this.failRes(socket.id, '用户编号不合法！');
       }
-      // 存储登录信息
-      const userLoginEnds = await app.redis.smembers(
-        'chat:user:socket:' + userid
-      );
+      const redisChatService = app.util.redis.redisChatService;
+      const userLoginEnds = await redisChatService.findUserSocket(app, userid);
+      // save login info
       if (userLoginEnds && userLoginEnds.length > 0) {
-        // TODO:多终端登录或重复登录
-        await app.redis.sadd('chat:user:socket:' + userid, socket.id);
-        await app.redis.set('chat:socket:user:' + socket.id, userid);
+        // TODO: support multi client login
+        await redisChatService.addUserSocket(app, userid, socket);
+        await redisChatService.addSocketUser(app, socket, userid);
       } else {
-        await app.redis.sadd('chat:user:socket:' + userid, socket.id);
-        await app.redis.set('chat:socket:user:' + socket.id, userid);
-        // 加载好友列表并置状态
+        await redisChatService.addUserSocket(app, userid, socket);
+        await redisChatService.addSocketUser(app, socket, userid);
+        // load friend list and set online state
         const friends = await this.ctx.service.userFriend.findAll(
           { sort: '{"response_time": -1 }' },
           {
@@ -51,27 +53,30 @@ module.exports = (app: Application) => {
             } else {
               friendid = element.to.toString();
             }
-            const fsockets = await app.redis.smembers(
-              'chat:user:socket:' + friendid
+            const fsockets = await redisChatService.findUserSocket(
+              app,
+              friendid
             );
             if (fsockets && fsockets.length > 0) {
-              await app.redis.zadd('chat:user:friends:' + userid, 1, friendid);
-              const score = await app.redis.zscore(
-                'chat:user:friends:' + friendid,
+              await redisChatService.addUserFriend(app, userid, 1, friendid);
+              const score = await redisChatService.getUserFriendScore(
+                app,
+                friendid,
                 userid
               );
-              // 置用户在线标识
+              // update friend online list
               if (score === '0') {
-                await app.redis.zincrby(
-                  'chat:user:friends:' + friendid,
-                  1,
-                  userid
+                await redisChatService.updateUserFriendScore(
+                  app,
+                  friendid,
+                  userid,
+                  1
                 );
-                // 向好友终端推送离线消息
+                // push message to friend
                 this.notify(friendid, 'friend_online', { userid });
               }
             } else {
-              await app.redis.zadd('chat:user:friends:' + userid, 0, friendid);
+              await redisChatService.addUserFriend(app, userid, 0, friendid);
             }
           }
         }
@@ -79,7 +84,7 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 发送消息
+     * send message api
      */
     async sendMessage() {
       const obj = this.ctx.args[0];
@@ -100,14 +105,12 @@ module.exports = (app: Application) => {
           to: to,
           content: message,
         });
-        // console.log('newMsg', newMsg);
-        // 向各个终端推送消息
         this.notify(to, 'message_received', newMsg);
       }
     }
 
     /**
-     * 加载好友列表
+     * load user online friend list
      */
     async loadOnlineFriendList() {
       const obj = this.ctx.args[0];
@@ -119,13 +122,9 @@ module.exports = (app: Application) => {
       if (!userid) {
         this.failRes(socket.id, '用户编号不合法！');
       }
-      // 查询所有好友在线列表
-      const friends = await app.redis.zrange(
-        'chat:user:friends:' + userid,
-        0,
-        -1,
-        'WITHSCORES'
-      );
+      // load friend online states
+      const redisChatService = app.util.redis.redisChatService;
+      const friends = await redisChatService.getUserFriends(app, userid);
       if (userid) {
         await app.io
           .of('/chat')
@@ -137,7 +136,7 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 发送好友请求
+     * send friend request
      */
     async requestAddFriend() {
       /**
@@ -186,7 +185,7 @@ module.exports = (app: Application) => {
         request_time: new Date().valueOf(),
         state: 1,
       };
-      // TODO: 不能重复发送好友请求( 目前使用逐渐验证 )
+      // TODO: filter repeat request. now we are using db primary key
       await ctx.service.userFriend.create(user_friend);
 
       this.notify(to, 'receive_friend_request', from);
@@ -197,6 +196,9 @@ module.exports = (app: Application) => {
         .emit('requestAddFriend_success', {});
     }
 
+    /**
+     * response friend request
+     */
     async responseAddFriend() {
       const { ctx, app } = this;
       const socket = this.ctx.socket;
@@ -215,12 +217,11 @@ module.exports = (app: Application) => {
       }
       await ctx.service.userFriend.updateState(recordId, state);
       if (state === 2) {
-        const userLoginEnds = await app.redis.smembers(
-          'chat:user:socket:' + to
-        );
+        const redisChatService = app.util.redis.redisChatService;
+        const userLoginEnds = await redisChatService.findUserSocket(app, to);
         if (userLoginEnds && userLoginEnds.length > 0) {
-          await app.redis.zadd('chat:user:friends:' + from, 1, to);
-          await app.redis.zadd('chat:user:friends:' + to, 1, from);
+          await redisChatService.addUserFriend(app, from, 1, to);
+          await redisChatService.addUserFriend(app, to, 1, from);
           this.notify(to, 'new_added_friend', {
             friendid: from,
             state: 'online',
@@ -230,7 +231,7 @@ module.exports = (app: Application) => {
             state: 'online',
           });
         } else {
-          await app.redis.zadd('chat:user:friends:' + from, 0, to);
+          await redisChatService.addUserFriend(app, from, 0, to);
           this.notify(from, 'new_added_friend', {
             friendid: to,
             state: 'offline',
@@ -244,21 +245,23 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 断开连接
+     * user disconnect
      */
     async disconnect() {
       const { ctx, app } = this;
       const socket = ctx.socket;
-      app.redis.get('chat:socket:user:' + socket.id).then(async userid => {
+      const redisChatService = app.util.redis.redisChatService;
+      const userid = await redisChatService.findSocketUser(app, socket);
+      if (userid) {
         this.clearUserInfo(ctx, socket, userid);
-      });
+      }
     }
 
     /**
-     * 登出
+     * user logout
      */
     async logout() {
-      const { ctx, app } = this;
+      const { ctx } = this;
       const socket = ctx.socket;
       const obj = ctx.args[0];
       const { userid } = obj;
@@ -266,56 +269,55 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 辅助方法:清除用户信息
-     * @param {string} ctx 上下文
-     * @param {string} socket 当前socket
-     * @param {string} userid 用户编号
+     * clear userinfo in redis and cache
+     * @param {string} ctx app context
+     * @param {string} socket current socket
+     * @param {string} userid userid
      */
     async clearUserInfo(ctx, socket, userid) {
       ctx.logger.info('userid!', userid);
+      const redisChatService = app.util.redis.redisChatService;
       if (userid) {
-        // 查询所有好友在线列表
-        const friends = await app.redis.zrange(
-          'chat:user:friends:' + userid,
-          0,
-          -1,
-          'WITHSCORES'
-        );
+        const friends = await redisChatService.getUserFriends(app, userid);
         let fid = '';
+        // update user online list
         for (const end of friends) {
-          // TODO: 格式需要做验证
           if (end.length > 10) {
             fid = end;
           }
-          // 好友在线
+          // user online
           if (end === '1') {
-            const score = await app.redis.zscore(
-              'chat:user:friends:' + fid,
+            const score = await redisChatService.getUserFriendScore(
+              app,
+              fid,
               userid
             );
             if (score !== 0) {
-              await app.redis.zincrby('chat:user:friends:' + fid, -1, userid);
+              await redisChatService.updateUserFriendScore(
+                app,
+                fid,
+                userid,
+                -1
+              );
             }
-            // 向好友终端推送离线消息
             this.notify(fid, 'friend_offline', { userid });
           }
         }
-
-        await app.redis.del('chat:user:friends:' + userid);
-        await app.redis.srem('chat:user:socket:' + userid, socket.id);
-        await app.redis.del('chat:socket:user:' + socket.id);
+        await redisChatService.deleteSocketUser(app, socket);
+        await redisChatService.deleteUserSocket(app, userid, socket);
+        await redisChatService.deleteUserFriend(app, userid);
       }
     }
 
     /**
-     * 辅助方法:发送通知
-     * @param {string} userid 用户编号
-     * @param {string} evtName 事件名称
-     * @param {string} message 消息
+     * send message
+     * @param {string} userid userid
+     * @param {string} evtName socket.io event name
+     * @param {string} message message
      */
     async notify(userid, evtName, message) {
-      // 向好友终端推送离线消息
-      const loginEnds = await app.redis.smembers('chat:user:socket:' + userid);
+      const redisChatService = app.util.redis.redisChatService;
+      const loginEnds = await redisChatService.findUserSocket(app, userid);
       if (loginEnds && loginEnds.length > 0) {
         for (const end of loginEnds) {
           if (end) {
@@ -329,9 +331,9 @@ module.exports = (app: Application) => {
     }
 
     /**
-     * 失败返回
-     * @param {string} socketid 套接字编号
-     * @param {string} message 消息
+     * fail response
+     * @param {string} socketid socket id
+     * @param {string} message message
      */
     async failRes(socketid, message) {
       await app.io

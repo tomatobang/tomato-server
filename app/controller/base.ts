@@ -4,30 +4,30 @@ import { Controller } from 'egg';
 export default class BaseController extends Controller {
   select_field;
   validateRule;
+
   /**
-   * 按条件查找
+   * search with conditions
    */
   async list() {
     const { ctx } = this;
-    let conditions:any;
+    let conditions: any;
     conditions = {};
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
-    // 按用户筛选
+    // filter with logged userinfo
     if (ctx.request['currentUser']) {
-      conditions.userid =ctx.request['currentUser'].username;
+      conditions.userid = ctx.request['currentUser'].username;
     }
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
     }
     const result = await this.service.findAll(query, conditions);
-    // ctx.logger.info('message', result);
     ctx.body = result;
     ctx.status = 200;
   }
 
   /**
-   * 按 id 查找
+   * search by id
    */
   async findById() {
     const { ctx } = this;
@@ -38,13 +38,13 @@ export default class BaseController extends Controller {
   }
 
   /**
-   * 创建
+   * create record
    */
   async create() {
     const { ctx, app } = this;
-    // 存储用户编号/username
+    // filter with logged userinfo
     if (ctx.request['currentUser']) {
-      ctx.request.body.userid =ctx.request['currentUser'].username;
+      ctx.request.body.userid = ctx.request['currentUser'].username;
     }
     if (this.validateRule) {
       const invalid = app['validator'].validate(
@@ -61,7 +61,7 @@ export default class BaseController extends Controller {
   }
 
   /**
-   * 删除
+   * delete record by id
    */
   async deleteById() {
     const { ctx } = this;
@@ -71,7 +71,7 @@ export default class BaseController extends Controller {
   }
 
   /**
-   * 按 id 更新
+   * update record by id
    */
   async updateById() {
     const { ctx } = this;
@@ -82,7 +82,7 @@ export default class BaseController extends Controller {
   }
 
   /**
-   * 按 id 替换
+   * replace record by id
    */
   async replaceById() {
     const { ctx } = this;
@@ -94,14 +94,14 @@ export default class BaseController extends Controller {
   }
 
   /**
-   * 关键词查找
+   * load record by pagination
    */
   async pagination() {
     const { ctx } = this;
     const current = ctx.request.body.current;
     let userid = '';
     if (ctx.request['currentUser']) {
-      userid =ctx.request['currentUser'].username;
+      userid = ctx.request['currentUser'].username;
     }
     if (!this.select_field) {
       ctx.status = 403;
@@ -133,16 +133,16 @@ export default class BaseController extends Controller {
   }
 
   /**
-   * 统一错误处理
-   * @param {*} type 错误类型
-   * @param {*} message 错误消息
+   * error util function
+   * @param {*} type error type
+   * @param {*} message error message
    */
   async throwBizError(type, message) {
     if (type === 'DB:ERR') {
-      throw new Error('发生了数据库错误');
+      throw new Error('DB:ERR');
     }
     if (type === 'FILE:ERR') {
-      throw new Error('发生了文件类型错误');
+      throw new Error('FILE:ERR');
     } else {
       throw new Error(message);
     }
