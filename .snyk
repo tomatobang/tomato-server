@@ -12,3 +12,6 @@ patch:
         patched: '2018-06-12T08:53:54.525Z'
     - egg-sequelize > sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
         patched: '2018-06-12T08:53:54.525Z'
+  'npm:tunnel-agent:20170305':
+    - jpush-sdk > request > tunnel-agent:
+        patched: '2018-10-23T08:52:21.433Z'
