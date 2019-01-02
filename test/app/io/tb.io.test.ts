@@ -18,8 +18,8 @@ describe('test/io/tb.io.test.js', () => {
 
   it('io controller should works ok', done => {
     const app = mm.cluster({
-      workers: 1,
-      sticky: false,
+      // workers: 1,
+      // sticky: false,
     });
     app.ready().then(() => {
       console.log('process.env', app['port']);

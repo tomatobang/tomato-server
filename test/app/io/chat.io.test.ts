@@ -36,8 +36,8 @@ describe('test/io/chat.io.test.js', () => {
 
   it('chat io controller should works ok', done => {
     const app = mm.cluster({
-      workers: 1,
-      sticky: false,
+      // workers: 1,
+      // sticky: false,
     });
 
     app.ready().then(() => {
