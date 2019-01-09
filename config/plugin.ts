@@ -38,8 +38,9 @@ const plugin: EggPlugin = {
     enable: true,
     path: path.join(__dirname, '../lib/plugin/egg-qiniu'),
   },
-
-    // alinode : {
+  
+  // TODO:
+  // alinode : {
   //   enable: true,
   //   package: 'egg-alinode'
   // },

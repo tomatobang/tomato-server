@@ -19,6 +19,7 @@ export interface BizConfig {
     ua: any;
   };
 }
+
 // appInfo: EggAppInfo
 export default () => {
   const config = {} as PowerPartial<EggAppConfig> & BizConfig;
@@ -43,7 +44,7 @@ export default () => {
     consoleLevel: 'INFO',
     dir: '../app',
     encoding: 'utf-8',
-    // 应用启动后，也能看日志( 文档中没说明:不建议使用 )
+    // 应用启动后，也能看日志( 文档中没说明, 且不建议使用 )
     // disableConsoleAfterReady: false,
   };
 
@@ -75,15 +76,12 @@ export default () => {
   };
 
   config.mongoose = {
-    url:
-      'mongodb://' +
-      (env.DATABASE_HOST ? env.DATABASE_HOST : '127.0.0.1') +
-      ':27017/tomatobang',
+    url: 'mongodb://127.0.0.1:27017/tomatobang',
     options: {},
   };
   // 另一种可行的配置方式
   // config.mongoose = {
-  //   url: 'mongodb://localhost/db',
+  //   url: 'mongodb://your_host:your_port/db',
   //   options: {
   //     auth: { authSource: "username" },
   //     user: 'username',
@@ -93,9 +91,9 @@ export default () => {
 
   config.redis = {
     client: {
-      port: env.redisPort || 6379,
-      host: env.mongoHost || '127.0.0.1',
-      password: env.redisPassword || '',
+      port: 6379,
+      host: '127.0.0.1',
+      password: '',
       db: 0,
     },
   };
@@ -103,7 +101,7 @@ export default () => {
   config.ratelimit = {
     duration: 60000,
     throw: true,
-    errorMessage: '请求频率过快！',
+    errorMessage: 'request too fast！',
     max: 2000,
   };
 
@@ -123,11 +121,6 @@ export default () => {
     tokenExpiresIn: env.tokenExpiresIn || '3d',
   };
 
-  config.rongyun = {
-    rongyun_key: 'lmxuhwagxgt9d',
-    rongyun_secret: 'NpbRLWPxB79',
-  };
-
   config.admin = {
     defaultAdminName: env.defaultAdminName || 'admin',
     defaultAdminPassword: env.defaultAdminPassword || '123456',
@@ -145,8 +138,8 @@ export default () => {
 
   config.alinode = {
     server: 'wss://agentserver.node.aliyun.com:8080',
-    appid: '182',
-    secret: '',
+    appid: 'YOUR_APP_ID',
+    secret: 'YOUR_APP_SECRET',
   };
 
   config.cors = {
@@ -156,8 +149,8 @@ export default () => {
   };
 
   config.qiniu = {
-    ACCESS_KEY: 'Y44Z8xMcoLUS2fVVQvRJQnWz388t5kjhpqCOaJz8',
-    SECRET_KEY: 'm3AnlOvO28Ok25Xg75tvyhNIWW2Ao7Yet7Q8G4sD',
+    ACCESS_KEY: env.QINIU_DEV_ACCESS_KEY,
+    SECRET_KEY: env.QINIU_DEV_SECRET_KEY,
     expires: 7200,
     scope: 'yipeng-images',
     insertOnly: 0,
