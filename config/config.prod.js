@@ -38,7 +38,7 @@ exports.io = {
 };
 
 exports.mongoose = {
-  url: 'mongodb://' + DATABASE_MONGODB_USERNAME_PASSWORD + '@' + env.DATABASE_MONGODB_HOST_PORT + '/tomatobang',
+  url: 'mongodb://' + env.DATABASE_MONGODB_USERNAME_PASSWORD + '@' + env.DATABASE_MONGODB_HOST_PORT + '/tomatobang',
   options: {},
 };
 
@@ -91,5 +91,5 @@ exports.qiniu = {
   ACCESS_KEY:env.QINIU_PROD_SECRET_KEY,
   SECRET_KEY: env.QINIU_PROD_SECRET_KEY,
   expires: 7200,
-  scope: 'yipeng-images',
+  scope: 'tomatobang',
 };

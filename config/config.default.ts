@@ -152,7 +152,7 @@ export default () => {
     ACCESS_KEY: env.QINIU_DEV_ACCESS_KEY,
     SECRET_KEY: env.QINIU_DEV_SECRET_KEY,
     expires: 7200,
-    scope: 'yipeng-images',
+    scope: 'tomatobang',
     insertOnly: 0,
   };
 
