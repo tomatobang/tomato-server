@@ -1,12 +1,13 @@
 'use strict';
-
+const env = process.env;
 /**
  * jpush util
  */
+
 const JPush = require('jpush-sdk');
 const jpushClient = JPush.buildClient(
-  'f240850b36aea20535b81df8',
-  '189cbc42a1044b1ac2f2ddb1'
+  env.JPUSH_APP_kEY,
+  env.JPUSH_MASTER_SECRET,
 );
 export function pushMessage(alias, alert, title) {
   jpushClient
