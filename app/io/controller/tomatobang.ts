@@ -63,7 +63,7 @@ module.exports = (app: Application) => {
           await this.service.tomato.create(tomato);
           await redisTomatoService.deleteUserTomato(app, userid);
           this.notify(userid, 'new_tomate_added', tomato);
-          app.util.jpush.pushMessage(
+          app.util.push.JPUSH.pushMessage(
             userid,
             '你完成了一个番茄钟',
             tomato.title

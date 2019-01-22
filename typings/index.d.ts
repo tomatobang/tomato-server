@@ -11,8 +11,10 @@ declare module 'egg' {
         redisChatService: RedisChatService;
         redisTomatoService: RedisTomatoService;
       };
-      jpush: {
-        pushMessage(alias, alert, title): any;
+      push: {
+        JPUSH:{
+          pushMessage(alias, alert, title): any;
+        }
       };
       jwt: {
         tokenService: {
