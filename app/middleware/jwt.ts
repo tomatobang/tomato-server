@@ -20,6 +20,8 @@ export default function jwtMiddleware(option, app: Application) {
     try {
       token = headers.authorization;
     } catch (err) {
+      ctx.status = 500;
+      ctx.message = 'unknown server error';
       return (ctx.body = {
         status: 'fail',
         description: err,
@@ -27,6 +29,8 @@ export default function jwtMiddleware(option, app: Application) {
     }
 
     if (!token) {
+      ctx.status = 401;
+      ctx.message = 'Token not found';
       return (ctx.body = {
         status: 'fail',
         description: 'Token not found',
@@ -34,6 +38,8 @@ export default function jwtMiddleware(option, app: Application) {
     }
     const result = app['util'].jwt.tokenService.verifyToken(token);
     if (result === false) {
+      ctx.status = 401;
+      ctx.message = 'Token verify failed';
       return (ctx.body = {
         status: 'fail',
         description: 'Token verify failed',
@@ -50,6 +56,8 @@ export default function jwtMiddleware(option, app: Application) {
       ctx.request['currentUser'] = currentUser;
       return next();
     }
+    ctx.status = 401;
+    ctx.message = 'Token invalid';
     return (ctx.body = {
       status: 'fail',
       description: 'Token invalid',
