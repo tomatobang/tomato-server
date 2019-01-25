@@ -1,5 +1,5 @@
  FROM node:alpine
- LABEL name="pengyi" 
+ LABEL name="pengkobe" 
 
  RUN groupadd -r tomatobang \
    && useradd -m -r -g tomatobang tomatobang
