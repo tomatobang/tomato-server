@@ -1,0 +1,23 @@
+'use strict';
+
+module.exports = app => {
+  /**
+   * 标签
+   */
+  const mongoose = app.mongoose;
+  const ObjectId = mongoose.Schema.ObjectId;
+
+  const tag = new mongoose.Schema({
+    // 名称
+    name: String,
+    // 类型[ 账单、足迹、TODO、番茄钟]
+    type: String,
+    // 备注
+    note: String,
+    // 时间 
+    create_at: { type: Date, default: Date.now },
+    // 是否已删除
+    deleted: { type: Boolean, default: false },
+  });
+  return mongoose.model('tag', tag);
+};
