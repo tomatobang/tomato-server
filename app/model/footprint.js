@@ -8,14 +8,16 @@ module.exports = app => {
   const ObjectId = mongoose.Schema.ObjectId;
 
   const footprint = new mongoose.Schema({
+    // 用户编号
+    userid: { type: ObjectId, ref: 'user' },
     // 标签
-    tag: { type: ObjectId },
+    tag: { type: ObjectId, ref: 'tag' },
     // 关联支付记录
-    bill: { type: ObjectId },
+    bill: { type: ObjectId, ref: 'bill' },
     // 心情 (1-5)
     mode: { type: Number, default: 3 },
     // 位置
-    position:{ type: String, default: '' },
+    position: { type: String, default: '' },
     // 备注
     note: String,
     // 时间 

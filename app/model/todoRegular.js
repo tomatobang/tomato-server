@@ -2,26 +2,29 @@
 
 module.exports = app => {
   /**
-   * 账单
+   * TODO 记录
    */
   const mongoose = app.mongoose;
   const ObjectId = mongoose.Schema.ObjectId;
 
-  const bill = new mongoose.Schema({
+  const todo_record = new mongoose.Schema({
     // 用户编号
     userid: { type: ObjectId, ref: 'user' },
-    // 关联 足迹
-    footprint: { type: ObjectId, ref: 'footprint' },
+    // 主题
+    title: { type: String, default: '' },
+    /**
+     * 类型
+     * 1:日、2:周、3:月、4:年 
+     * */
+    type: { type: Number, default: 1 },
     // 标签
     tag: { type: ObjectId, ref: 'tag' },
-    // 数目
-    amount: { type: Number, default: 0 },
     // 备注
-    note: { type: String, default: '' },
-    // 时间 
+    notes: { type: String, default: '' },
+    // 创建时间 
     create_at: { type: Date, default: Date.now },
     // 是否已删除
     deleted: { type: Boolean, default: false },
   });
-  return mongoose.model('bill', bill);
+  return mongoose.model('todo_regular', todo_record);
 };

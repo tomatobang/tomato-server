@@ -8,6 +8,8 @@ module.exports = app => {
   const ObjectId = mongoose.Schema.ObjectId;
 
   const tag = new mongoose.Schema({
+    // 用户编号
+    userid: { type: ObjectId, ref: 'user' },
     // 名称
     name: String,
     // 类型[ 账单、足迹、TODO、番茄钟]

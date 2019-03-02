@@ -89,6 +89,24 @@ export default (app: Application) => {
   router.post('/api/task/:id', controller.task.updateById);
 
   /**
+   * TODORegular
+   */
+  router.get('/api/todoregular', controller.todoRegular.list);
+  router.get('/api/todoregular/:id', controller.todoRegular.findById);
+  router.post('/api/todoregular', controller.todoRegular.create);
+  router.del('/api/todoregular/:id', controller.todoRegular.deleteById);
+  router.post('/api/todoregular/:id', controller.todoRegular.updateById);
+
+  /**
+   * TODO
+   */
+  router.get('/api/todo', controller.todo.list);
+  router.get('/api/todo/:id', controller.todo.findById);
+  router.post('/api/todo', controller.todo.create);
+  router.del('/api/todo/:id', controller.todo.deleteById);
+  router.post('/api/todo/:id', controller.todo.updateById);
+
+  /**
    * 配置类
    */
   router.get('/api/options', controller.options.list);
@@ -96,7 +114,6 @@ export default (app: Application) => {
   /**
    * 社交类
    */
-
   router.get('/api/user_friend', controller.userFriend.getUserFriends);
 
   router.post(
