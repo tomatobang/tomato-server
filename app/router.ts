@@ -103,6 +103,9 @@ export default (app: Application) => {
   router.get('/api/todo', controller.todo.list);
   router.get('/api/todo/:id', controller.todo.findById);
   router.post('/api/todo', controller.todo.create);
+  router.post('/api/todo/toggleall', controller.todo.toggleAllTodo);
+  router.post('/api/todo/deletecomplete', controller.todo.deleteAllCompletedTodo);
+  router.post('/api/todo', controller.todo.create);
   router.del('/api/todo/:id', controller.todo.deleteById);
   router.post('/api/todo/:id', controller.todo.updateById);
 

@@ -57,7 +57,62 @@ export default class TodoController extends BaseController {
       }
     }
     const result = await this.service.create(ctx.request.body);
-    ctx.status = 201;
+    ctx.status = 200;
+    ctx.body = result;
+  }
+
+  /**
+  * toggle All todo record
+  */
+  async toggleAllTodo() {
+    const { ctx } = this;
+    let conditions: any;
+    conditions = {};
+    ctx.logger.info('ctx.request：', ctx.request['currentUser']);
+    const datenow = new Date();
+    const date =
+      datenow.getFullYear() +
+      '-' +
+      (datenow.getMonth() + 1) +
+      '-' +
+      datenow.getDate();
+    conditions = { create_at: { $gte: new Date(date).toISOString() } };
+    if (ctx.request['currentUser']) {
+      conditions.userid = ctx.request['currentUser']._id;
+    }
+    const completeStatu = ctx.request.body.complete;
+
+    console.log(conditions, completeStatu);
+    const result = await this.service.updateByConditions(conditions, completeStatu);
+    ctx.status = 200;
+    ctx.body = result;
+  }
+
+  /**
+* delete All completed todo record
+*/
+  async deleteAllCompletedTodo() {
+    const { ctx } = this;
+    let conditions: any;
+    conditions = {};
+    ctx.logger.info('ctx.request：', ctx.request['currentUser']);
+    const datenow = new Date();
+    const date =
+      datenow.getFullYear() +
+      '-' +
+      (datenow.getMonth() + 1) +
+      '-' +
+      datenow.getDate();
+    if (ctx.request['currentUser']) {
+      conditions.userid = ctx.request['currentUser']._id;
+    }
+    conditions = {
+      create_at: { $gte: new Date(date).toISOString() },
+      completed: true
+    };
+
+    const result = await this.service.deleteAllCompletedTodo(conditions);
+    ctx.status = 200;
     ctx.body = result;
   }
 }
