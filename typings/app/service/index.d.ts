@@ -2,6 +2,7 @@
 // Do not modify this file!!!!!!!!!
 
 import Base from '../../../app/service/base';
+import Footprint from '../../../app/service/footprint';
 import Message from '../../../app/service/message';
 import Options from '../../../app/service/options';
 import Task from '../../../app/service/task';
@@ -15,6 +16,7 @@ import Version from '../../../app/service/version';
 declare module 'egg' {
   interface IService {
     base: Base;
+    footprint: Footprint;
     message: Message;
     options: Options;
     task: Task;

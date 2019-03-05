@@ -21,7 +21,7 @@ module.exports = app => {
     // 位置
     position: { type: String, default: '' },
     // 备注
-    note: String,
+    notes: String,
     // 时间 
     create_at: { type: Date, default: Date.now },
     // 是否已删除
