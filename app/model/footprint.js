@@ -11,9 +11,11 @@ module.exports = app => {
     // 用户编号
     userid: { type: ObjectId, ref: 'user' },
     // 标签
-    tag: { type: ObjectId, ref: 'tag' },
+    tag: { type: String, default: '' },
+    // tag: { type: ObjectId, ref: 'tag' },
     // 关联支付记录
-    bill: { type: ObjectId, ref: 'bill' },
+    bill: { type: String, default: '' },
+    // bill: { type: ObjectId, ref: 'bill' },
     // 心情 (1-5)
     mode: { type: Number, default: 3 },
     // 位置

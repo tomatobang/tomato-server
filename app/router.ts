@@ -89,6 +89,15 @@ export default (app: Application) => {
   router.post('/api/task/:id', controller.task.updateById);
 
   /**
+   * 足迹
+   */
+  router.get('/api/footprint', controller.footprint.list);
+  router.get('/api/footprint/:id', controller.footprint.findById);
+  router.post('/api/footprint', controller.footprint.create);
+  router.del('/api/footprint/:id', controller.footprint.deleteById);
+  router.post('/api/footprint/:id', controller.footprint.updateById);
+
+  /**
    * TODORegular
    */
   router.get('/api/todoregular', controller.todoRegular.list);
