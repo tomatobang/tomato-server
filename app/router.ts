@@ -89,6 +89,36 @@ export default (app: Application) => {
   router.post('/api/task/:id', controller.task.updateById);
 
   /**
+   * 足迹
+   */
+  router.get('/api/footprint', controller.footprint.list);
+  router.get('/api/footprint/:id', controller.footprint.findById);
+  router.post('/api/footprint', controller.footprint.create);
+  router.del('/api/footprint/:id', controller.footprint.deleteById);
+  router.post('/api/footprint/:id', controller.footprint.updateById);
+
+  /**
+   * TODORegular
+   */
+  router.get('/api/todoregular', controller.todoRegular.list);
+  router.get('/api/todoregular/:id', controller.todoRegular.findById);
+  router.post('/api/todoregular', controller.todoRegular.create);
+  router.del('/api/todoregular/:id', controller.todoRegular.deleteById);
+  router.post('/api/todoregular/:id', controller.todoRegular.updateById);
+
+  /**
+   * TODO
+   */
+  router.get('/api/todo', controller.todo.list);
+  router.get('/api/todo/:id', controller.todo.findById);
+  router.post('/api/todo', controller.todo.create);
+  router.post('/api/todo/toggleall', controller.todo.toggleAllTodo);
+  router.post('/api/todo/deletecomplete', controller.todo.deleteAllCompletedTodo);
+  router.post('/api/todo', controller.todo.create);
+  router.del('/api/todo/:id', controller.todo.deleteById);
+  router.post('/api/todo/:id', controller.todo.updateById);
+
+  /**
    * 配置类
    */
   router.get('/api/options', controller.options.list);
@@ -96,7 +126,6 @@ export default (app: Application) => {
   /**
    * 社交类
    */
-
   router.get('/api/user_friend', controller.userFriend.getUserFriends);
 
   router.post(
