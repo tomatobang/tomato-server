@@ -1,7 +1,9 @@
 // This file was auto created by egg-ts-helper
 // Do not modify this file!!!!!!!!!
 
+import Asset from '../../../app/controller/asset';
 import Base from '../../../app/controller/base';
+import Bill from '../../../app/controller/bill';
 import Footprint from '../../../app/controller/footprint';
 import Home from '../../../app/controller/home';
 import Message from '../../../app/controller/message';
@@ -17,7 +19,9 @@ import Version from '../../../app/controller/version';
 
 declare module 'egg' {
   interface IController {
+    asset: Asset;
     base: Base;
+    bill: Bill;
     footprint: Footprint;
     home: Home;
     message: Message;
