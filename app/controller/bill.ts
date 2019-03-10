@@ -11,8 +11,8 @@ export default class BillController extends BaseController {
   }
 
   /**
-* search with conditions
-*/
+  * search with conditions
+  */
   async list() {
     const { ctx } = this;
     let conditions: any;
@@ -26,7 +26,7 @@ export default class BillController extends BaseController {
       (datenow.getMonth() + 1) +
       '-' +
       datenow.getDate();
-    conditions = { create_at: { $gte: new Date(date).toISOString() } };
+    conditions = { create_at: { $gte: new Date(date).toISOString() }, deleted: false };
     if (ctx.request['currentUser']) {
       conditions.userid = ctx.request['currentUser']._id;
     }
@@ -57,7 +57,39 @@ export default class BillController extends BaseController {
       }
     }
     const result = await this.service.create(ctx.request.body);
+
+    const asset = await ctx.service.asset.findById({}, ctx.request.body.asset);
+    let oldAmount = asset.amount;
+    let newAmount;
+    if (ctx.request.body.type === '支出') {
+      newAmount = oldAmount - ctx.request.body.amount;
+    } else {
+      newAmount = oldAmount + ctx.request.body.amount;
+    }
+    asset.amount = newAmount;
+    await ctx.service.asset.updateById(asset._id, asset);
     ctx.status = 200;
+    ctx.body = result;
+  }
+
+  /**
+ * delete record by id
+ */
+  async deleteById() {
+    const { ctx } = this;
+    const id = ctx.params.id;
+    const bill = await ctx.service.bill.findById({}, id);
+    const asset = await ctx.service.asset.findById({}, bill.asset);
+    let oldAmount = asset.amount;
+    let newAmount;
+    if (bill.type === '支出') {
+      newAmount = oldAmount + bill.amount;
+    } else {
+      newAmount = oldAmount - bill.amount;
+    }
+    asset.amount = newAmount;
+    await ctx.service.asset.updateById(asset._id, asset);
+    const result = await ctx.service.bill.delete(bill._id);
     ctx.body = result;
   }
 }

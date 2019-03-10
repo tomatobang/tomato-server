@@ -18,6 +18,8 @@ module.exports = app => {
     tag: { type: String, default: '' },
     // 数目
     amount: { type: Number, default: 0 },
+    // 类别 [收入/支出]
+    type: { type: String, default: '' },
     // 备注
     note: { type: String, default: '' },
     // 时间 

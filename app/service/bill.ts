@@ -16,7 +16,7 @@ export default class BillService extends BaseService {
             .find(conditions)
             .populate({ path: 'asset', select: 'name' })
             .sort('-create_at')
-            .select('_id create_at note asset tag amount');
+            .select('_id create_at note asset tag amount type');
 
         return result;
     }

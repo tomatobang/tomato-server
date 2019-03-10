@@ -5,6 +5,11 @@ const billValidationRule = {
         required: true,
         allowEmpty: false,
     },
+    type: {
+        type: 'enum',
+        values: ['支出', '收入'],
+        required: true,
+    },
     amount: {
         type: 'number',
         required: true,
