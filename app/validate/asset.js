@@ -5,7 +5,7 @@ const assetValidationRule = {
         required: true,
         allowEmpty: false,
     },
-    position: {
+    name: {
         type: 'string',
         required: true,
         allowEmpty: false,

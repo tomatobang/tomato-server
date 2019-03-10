@@ -13,7 +13,7 @@ module.exports = app => {
     // 关联足迹
     footprint: { type: String, default: '' },
     // 关联资产
-    asset: { type: String, default: '' },
+    asset: { type: ObjectId, ref: 'asset' },
     // 标签
     tag: { type: String, default: '' },
     // 数目

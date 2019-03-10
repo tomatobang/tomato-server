@@ -5,12 +5,10 @@ const billValidationRule = {
         required: true,
         allowEmpty: false,
     },
-    position: {
-        type: 'string',
+    amount: {
+        type: 'number',
         required: true,
         allowEmpty: false,
-        min: 1,
-        max: 50,
     },
 };
 

@@ -4,15 +4,15 @@ import BaseController from './base';
 import { billValidationRule } from '../validate/bill';
 
 export default class BillController extends BaseController {
-    constructor(ctx) {
-        super(ctx);
-        this.service = ctx.service.bill;
-        this.validateRule = billValidationRule;
-    }
+  constructor(ctx) {
+    super(ctx);
+    this.service = ctx.service.bill;
+    this.validateRule = billValidationRule;
+  }
 
-     /**
- * search with conditions
- */
+  /**
+* search with conditions
+*/
   async list() {
     const { ctx } = this;
     let conditions: any;
@@ -33,7 +33,7 @@ export default class BillController extends BaseController {
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
     }
-    const result = await this.service.findAll(query, conditions);
+    const result = await this.service.getBillList(conditions);
     ctx.body = result;
     ctx.status = 200;
   }
