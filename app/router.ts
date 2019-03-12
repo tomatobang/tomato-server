@@ -122,11 +122,11 @@ export default (app: Application) => {
   * 账单
   */
   router.get('/api/bill', controller.bill.list);
+  router.post('/api/bill/statistics', controller.bill.statistics);
   router.get('/api/bill/:id', controller.bill.findById);
   router.post('/api/bill', controller.bill.create);
   router.del('/api/bill/:id', controller.bill.deleteById);
   router.post('/api/bill/:id', controller.bill.updateById);
-
 
   /**
   * 资产

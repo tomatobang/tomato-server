@@ -11,7 +11,7 @@ export default class BillController extends BaseController {
   }
 
   /**
-  * search with conditions
+  * search with conditions. such as date
   */
   async list() {
     const { ctx } = this;
@@ -19,7 +19,10 @@ export default class BillController extends BaseController {
     conditions = {};
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
-    const datenow = new Date();
+    let datenow = new Date();
+    if (query.date) {
+      datenow = new Date(query.date);
+    }
     const date =
       datenow.getFullYear() +
       '-' +
@@ -91,5 +94,40 @@ export default class BillController extends BaseController {
     await ctx.service.asset.updateById(asset._id, asset);
     const result = await ctx.service.bill.delete(bill._id);
     ctx.body = result;
+  }
+
+  /**
+   * 统计每日收入与支出
+   */
+  async statistics() {
+    const { ctx, app } = this;
+    const date = ctx.request.body.date;
+    let userid = '';
+    if (ctx.request['currentUser'] || !date) {
+      userid = ctx.request['currentUser']._id;
+    } else {
+      ctx.status = 200;
+      ctx.body = [];
+    }
+    const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
+    const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
+    const income = await ctx.service.bill.statistics(
+      app.mongoose.Types.ObjectId(userid),
+      starDate,
+      endDate,
+      '收入'
+    );
+    const pay = await ctx.service.bill.statistics(
+      app.mongoose.Types.ObjectId(userid),
+      starDate,
+      endDate,
+      '支出'
+    );
+    ctx.status = 200;
+    ctx.body = {
+      income: income,
+      pay: pay
+    };
+
   }
 }
