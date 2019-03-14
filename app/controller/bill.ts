@@ -20,16 +20,26 @@ export default class BillController extends BaseController {
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
+    let nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     if (query.date) {
       datenow = new Date(query.date);
+      nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     }
-    const date =
+    ctx.logger.info('query.date：', query.date);
+    const dateStr =
       datenow.getFullYear() +
       '-' +
       (datenow.getMonth() + 1) +
       '-' +
       datenow.getDate();
-    conditions = { create_at: { $gte: new Date(date).toISOString() }, deleted: false };
+    const dateNextStr =
+      nextday.getFullYear() +
+      '-' +
+      (nextday.getMonth() + 1) +
+      '-' +
+      nextday.getDate();
+
+    conditions = { create_at: { $gte: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
     if (ctx.request['currentUser']) {
       conditions.userid = ctx.request['currentUser']._id;
     }
