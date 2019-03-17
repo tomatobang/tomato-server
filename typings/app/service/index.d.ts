@@ -1,7 +1,9 @@
 // This file was auto created by egg-ts-helper
 // Do not modify this file!!!!!!!!!
 
+import Asset from '../../../app/service/asset';
 import Base from '../../../app/service/base';
+import Bill from '../../../app/service/bill';
 import Footprint from '../../../app/service/footprint';
 import Message from '../../../app/service/message';
 import Options from '../../../app/service/options';
@@ -15,7 +17,9 @@ import Version from '../../../app/service/version';
 
 declare module 'egg' {
   interface IService {
+    asset: Asset;
     base: Base;
+    bill: Bill;
     footprint: Footprint;
     message: Message;
     options: Options;

@@ -1,6 +1,7 @@
 // This file was auto created by egg-ts-helper
 // Do not modify this file!!!!!!!!!
 
+import Asset from '../../../app/model/asset';
 import Bill from '../../../app/model/bill';
 import Footprint from '../../../app/model/footprint';
 import Message from '../../../app/model/message';
@@ -18,6 +19,7 @@ import Version from '../../../app/model/version';
 
 declare module 'sequelize' {
   interface Sequelize {
+    Asset: ReturnType<typeof Asset>;
     Bill: ReturnType<typeof Bill>;
     Footprint: ReturnType<typeof Footprint>;
     Message: ReturnType<typeof Message>;

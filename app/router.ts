@@ -119,6 +119,25 @@ export default (app: Application) => {
   router.post('/api/todo/:id', controller.todo.updateById);
 
   /**
+  * 账单
+  */
+  router.get('/api/bill', controller.bill.list);
+  router.post('/api/bill/statistics', controller.bill.statistics);
+  router.get('/api/bill/:id', controller.bill.findById);
+  router.post('/api/bill', controller.bill.create);
+  router.del('/api/bill/:id', controller.bill.deleteById);
+  router.post('/api/bill/:id', controller.bill.updateById);
+
+  /**
+  * 资产
+  */
+  router.get('/api/asset', controller.asset.list);
+  router.get('/api/asset/:id', controller.asset.findById);
+  router.post('/api/asset', controller.asset.create);
+  router.del('/api/asset/:id', controller.asset.deleteById);
+  router.post('/api/asset/:id', controller.asset.updateById);
+
+  /**
    * 配置类
    */
   router.get('/api/options', controller.options.list);

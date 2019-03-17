@@ -10,12 +10,16 @@ module.exports = app => {
   const bill = new mongoose.Schema({
     // 用户编号
     userid: { type: ObjectId, ref: 'user' },
-    // 关联 足迹
-    footprint: { type: ObjectId, ref: 'footprint' },
+    // 关联足迹
+    footprint: { type: String, default: '' },
+    // 关联资产
+    asset: { type: ObjectId, ref: 'asset' },
     // 标签
-    tag: { type: ObjectId, ref: 'tag' },
+    tag: { type: String, default: '' },
     // 数目
     amount: { type: Number, default: 0 },
+    // 类别 [收入/支出]
+    type: { type: String, default: '' },
     // 备注
     note: { type: String, default: '' },
     // 时间 
