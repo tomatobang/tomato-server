@@ -107,7 +107,7 @@ export default class BillController extends BaseController {
   }
 
   /**
-   * 统计每日收入与支出
+   * daily income and expenditure statistics
    */
   async statistics() {
     const { ctx, app } = this;

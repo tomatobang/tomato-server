@@ -6,8 +6,9 @@ export default class TomatoService extends BaseService {
         super(ctx);
         this.model = this.ctx.model.Tomato;
     }
+
     /**
-     * 日历统计数据
+     * daily statistics
      * @param { Number } userid 用户编号
      * @param { Date } startTime 开始时间
      * @param { Date } endTime 结束时间
@@ -28,7 +29,7 @@ export default class TomatoService extends BaseService {
             {
                 $project: {
                     // 校准日期并格式化
-                    startTime: { $substr: [{ $add: [ '$startTime', 28800000 ] }, 0, 10 ] },
+                    startTime: { $substr: [{ $add: ['$startTime', 28800000] }, 0, 10] },
                     succeed: 1,
                 },
             },

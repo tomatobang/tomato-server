@@ -92,6 +92,7 @@ export default (app: Application) => {
    * 足迹
    */
   router.get('/api/footprint', controller.footprint.list);
+  router.post('/api/footprint/statistics', controller.footprint.statistics);
   router.get('/api/footprint/:id', controller.footprint.findById);
   router.post('/api/footprint', controller.footprint.create);
   router.del('/api/footprint/:id', controller.footprint.deleteById);
