@@ -11,22 +11,35 @@ export default class TodoController extends BaseController {
   }
 
   /**
- * search with conditions
- */
+   * search with conditions
+   */
   async list() {
     const { ctx } = this;
     let conditions: any;
     conditions = {};
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
-    const datenow = new Date();
-    const date =
+    let datenow = new Date();
+    let nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
+    if (query.date) {
+      datenow = new Date(query.date);
+      nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
+    }
+    ctx.logger.info('query.date：', query.date);
+    const dateStr =
       datenow.getFullYear() +
       '-' +
       (datenow.getMonth() + 1) +
       '-' +
       datenow.getDate();
-    conditions = { create_at: { $gte: new Date(date).toISOString() } };
+    const dateNextStr =
+      nextday.getFullYear() +
+      '-' +
+      (nextday.getMonth() + 1) +
+      '-' +
+      nextday.getDate();
+
+    conditions = { create_at: { $gte: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
     if (ctx.request['currentUser']) {
       conditions.userid = ctx.request['currentUser']._id;
     }
@@ -89,8 +102,8 @@ export default class TodoController extends BaseController {
   }
 
   /**
-* delete All completed todo record
-*/
+  * delete All completed todo record
+  */
   async deleteAllCompletedTodo() {
     const { ctx } = this;
     let conditions: any;
@@ -114,5 +127,40 @@ export default class TodoController extends BaseController {
     const result = await this.service.deleteAllCompletedTodo(conditions);
     ctx.status = 200;
     ctx.body = result;
+  }
+
+  /**
+  * daily income and expenditure statistics
+  */
+  async statistics() {
+    const { ctx, app } = this;
+    const date = ctx.request.body.date;
+    let userid = '';
+    if (ctx.request['currentUser'] || !date) {
+      userid = ctx.request['currentUser']._id;
+    } else {
+      ctx.status = 200;
+      ctx.body = [];
+    }
+    const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
+    const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
+    const completed = await this.service.statistics(
+      app.mongoose.Types.ObjectId(userid),
+      starDate,
+      endDate,
+      true
+    );
+    const imcompleted = await this.service.statistics(
+      app.mongoose.Types.ObjectId(userid),
+      starDate,
+      endDate,
+      false
+    );
+    ctx.status = 200;
+    ctx.body = {
+      completed: completed,
+      imcompleted: imcompleted
+    };
+
   }
 }

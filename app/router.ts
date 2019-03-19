@@ -111,6 +111,7 @@ export default (app: Application) => {
    * TODO
    */
   router.get('/api/todo', controller.todo.list);
+  router.post('/api/todo/statistics', controller.todo.statistics);
   router.get('/api/todo/:id', controller.todo.findById);
   router.post('/api/todo', controller.todo.create);
   router.post('/api/todo/toggleall', controller.todo.toggleAllTodo);
