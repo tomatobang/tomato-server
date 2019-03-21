@@ -86,6 +86,57 @@ export default class BillController extends BaseController {
   }
 
   /**
+ * update record by id
+ */
+  async updateById() {
+    const { ctx } = this;
+    const id = ctx.params.id;
+
+    const newBillRecord = ctx.request.body;
+    const oldBillRecord = await this.service.findById({}, id);
+    const oldBillAsset = await ctx.service.asset.findById({}, newBillRecord.asset);
+
+    // 资产有变更
+    if (oldBillRecord.asset !== newBillRecord.asset) {
+      let newAmount_delete;
+      if (oldBillRecord.type === '支出') {
+        newAmount_delete = oldBillAsset.amount + oldBillRecord.amount;
+      } else {
+        newAmount_delete = oldBillAsset.amount - oldBillRecord.amount;
+      }
+      oldBillAsset.amount = newAmount_delete;
+      await ctx.service.asset.updateById(oldBillAsset._id, oldBillAsset);
+
+      const newBillAsset = await ctx.service.asset.findById({}, newBillRecord.asset);
+      let newAmount;
+      if (newBillRecord.type === '支出') {
+        newAmount = newBillAsset.amount - ctx.request.body.amount;
+      } else {
+        newAmount = newBillAsset.amount + ctx.request.body.amount;
+      }
+      newBillAsset.amount = newAmount;
+      await ctx.service.asset.updateById(newBillAsset._id, newBillAsset);
+    } else { // 资产无变更
+      let newAmount;
+      if (oldBillRecord.type === '支出') {
+        newAmount = oldBillAsset.amount + oldBillRecord.amount;
+      } else {
+        newAmount = oldBillAsset.amount - oldBillRecord.amount;
+      }
+      if (newBillRecord.type === '支出') {
+        newAmount = oldBillAsset.amount - ctx.request.body.amount;
+      } else {
+        newAmount = oldBillAsset.amount + ctx.request.body.amount;
+      }
+      oldBillAsset.amount = newAmount;
+      await ctx.service.asset.updateById(oldBillAsset._id, oldBillAsset);
+    }
+
+    const result = await this.service.updateById(id, newBillRecord);
+    ctx.body = result;
+  }
+
+  /**
  * delete record by id
  */
   async deleteById() {
