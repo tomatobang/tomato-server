@@ -28,9 +28,10 @@ export default class BillService extends BaseService {
      * @param { Date } endTime 结束时间
      * @param { type } type 记录类型
      * @param { type } range 范围
+     * @param { type } excludeTag 需要排除的标签
      * @return { Object } 查询结果
      */
-    async statistics(userid, startTime, endTime, type, range?) {
+    async statistics(userid, startTime, endTime, type, range?, excludeTag?) {
         const Bill = this.model;
         let rangeType = range || 'day';
         let $projectObj;
@@ -58,14 +59,20 @@ export default class BillService extends BaseService {
             }
         }
 
+        let conditions;
+        conditions = {
+            userid: userid,
+            deleted: false,
+            type: type,
+            create_at: { $gte: new Date(startTime), $lte: new Date(endTime) },
+        };
+        if (excludeTag) {
+            conditions.tag = { $ne: excludeTag };
+        }
+
         const res = await Bill.aggregate([
             {
-                $match: {
-                    userid: userid,
-                    deleted: false,
-                    type: type,
-                    create_at: { $gte: new Date(startTime), $lte: new Date(endTime) },
-                },
+                $match: conditions,
             },
             {
                 $project: $projectObj,
