@@ -92,6 +92,7 @@ export default (app: Application) => {
    * 足迹
    */
   router.get('/api/footprint', controller.footprint.list);
+  router.post('/api/footprint/statistics', controller.footprint.statistics);
   router.get('/api/footprint/:id', controller.footprint.findById);
   router.post('/api/footprint', controller.footprint.create);
   router.del('/api/footprint/:id', controller.footprint.deleteById);
@@ -110,6 +111,7 @@ export default (app: Application) => {
    * TODO
    */
   router.get('/api/todo', controller.todo.list);
+  router.post('/api/todo/statistics', controller.todo.statistics);
   router.get('/api/todo/:id', controller.todo.findById);
   router.post('/api/todo', controller.todo.create);
   router.post('/api/todo/toggleall', controller.todo.toggleAllTodo);
