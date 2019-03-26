@@ -14,6 +14,8 @@ module.exports = app => {
     footprint: { type: String, default: '' },
     // 关联资产
     asset: { type: ObjectId, ref: 'asset' },
+    // 资产余额
+    asset_balance: { type: Number, default: 0 },
     // 标签
     tag: { type: String, default: '' },
     // 数目

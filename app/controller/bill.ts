@@ -69,7 +69,7 @@ export default class BillController extends BaseController {
         ctx.throw(400);
       }
     }
-    const result = await this.service.create(ctx.request.body);
+
 
     const asset = await ctx.service.asset.findById({}, ctx.request.body.asset);
     let oldAmount = asset.amount;
@@ -80,6 +80,8 @@ export default class BillController extends BaseController {
       newAmount = oldAmount + ctx.request.body.amount;
     }
     asset.amount = newAmount;
+    ctx.request.body.asset_balance = newAmount;
+    const result = await this.service.create(ctx.request.body);
     await ctx.service.asset.updateById(asset._id, asset);
     ctx.status = 200;
     ctx.body = result;
@@ -123,6 +125,7 @@ export default class BillController extends BaseController {
           newAmount = newBillAsset.amount + ctx.request.body.amount;
         }
         newBillAsset.amount = newAmount;
+        newBillRecord.asset_balance = newAmount;
         await ctx.service.asset.updateById(newBillAsset._id, newBillAsset);
       } else { // asset not changed
         let newAmount;
@@ -137,6 +140,7 @@ export default class BillController extends BaseController {
           newAmount = oldBillAsset.amount + ctx.request.body.amount;
         }
         oldBillAsset.amount = newAmount;
+        newBillRecord.asset_balance = newAmount;
         await ctx.service.asset.updateById(oldBillAsset._id, oldBillAsset);
       }
     }
