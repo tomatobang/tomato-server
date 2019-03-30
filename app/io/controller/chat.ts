@@ -106,6 +106,11 @@ module.exports = (app: Application) => {
           content: message,
         });
         this.notify(to, 'message_received', newMsg);
+        app.util.push.JPUSH.pushMessage(
+          to,
+          '你的朋友发来一条消息',
+          message
+        );
       }
     }
 
