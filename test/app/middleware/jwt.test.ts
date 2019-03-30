@@ -13,7 +13,7 @@ describe('test/app/middleware/jwt.test.js', () => {
     return app
       .httpRequest()
       .get('/')
-      .expect(200)
+      .expect(401)
       .expect('{"status":"fail","description":"Token not found"}');
   });
 
@@ -22,7 +22,7 @@ describe('test/app/middleware/jwt.test.js', () => {
       .httpRequest()
       .get('/')
       .set('Authorization', 'invalidtoken')
-      .expect(200)
+      .expect(401)
       .expect({ status: 'fail', description: 'Token verify failed' });
   });
 });

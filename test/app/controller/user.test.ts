@@ -199,7 +199,7 @@ describe('test/controller/user.test.js', () => {
   it('should logout succeed', async () => {
     await app
       .httpRequest()
-      .post('/api/logout')
+      .get('/api/logout')
       .set('Authorization', token)
       .expect(200);
   });

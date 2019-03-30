@@ -75,6 +75,7 @@ describe('test/controller/tomato.test.js', () => {
     const res = await app
       .httpRequest()
       .post('/api/tomato')
+      .set('Authorization', token)
       .type('form')
       .send({
         userid: 'test123',
