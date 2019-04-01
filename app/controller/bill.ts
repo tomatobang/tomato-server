@@ -99,12 +99,12 @@ export default class BillController extends BaseController {
 
     // if (type and asset and amount) not changed. then we not need update asset
     if (
-      oldBillRecord.type === oldBillRecord.type
-      && oldBillRecord.amount === oldBillRecord.amount
+      oldBillRecord.type === newBillRecord.type
+      && oldBillRecord.amount === newBillRecord.amount
       && oldBillRecord.asset === newBillRecord.asset) {
 
     } else {
-      const oldBillAsset = await ctx.service.asset.findById({}, newBillRecord.asset);
+      const oldBillAsset = await ctx.service.asset.findById({}, oldBillRecord.asset);
 
       // asset changed
       if (oldBillRecord.asset !== newBillRecord.asset) {
