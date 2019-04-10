@@ -181,6 +181,7 @@ export default class BillController extends BaseController {
     } else {
       ctx.status = 200;
       ctx.body = [];
+      return;
     }
 
     const type = ctx.request.body.type;
@@ -207,6 +208,68 @@ export default class BillController extends BaseController {
     ctx.body = {
       income: income,
       pay: pay
+    };
+
+  }
+
+  /**
+   * asset to asset
+   */
+  async billExchange() {
+    const { ctx } = this;
+    const requestBody = ctx.request.body;
+    const date = requestBody.date;
+    const note = requestBody.note;
+    let userid = '';
+    if (ctx.request['currentUser'] || !date) {
+      userid = ctx.request['currentUser']._id;
+    } else {
+      ctx.status = 200;
+      ctx.body = [];
+      return;
+    }
+
+    const amount = parseFloat(requestBody.amount);
+    const fromAsset = requestBody.fromAsset;
+
+    const fromAssetModel = await ctx.service.asset.findById({}, fromAsset);
+    if (fromAssetModel) {
+      fromAssetModel.amount = fromAssetModel.amount - amount;
+      await this.service.create({
+        userid: userid,
+        asset: fromAsset,
+        amount: amount,
+        asset_balance: fromAssetModel.amount,
+        tag: '资产互转',
+        type: '支出',
+        create_at: date,
+        note: note
+      });
+      await ctx.service.asset.updateById(fromAsset, fromAssetModel);
+    }
+
+    const toAsset = requestBody.toAsset;
+    const toAssetModel = await ctx.service.asset.findById({}, toAsset);
+    if (toAssetModel) {
+      console.log(toAssetModel.amount, amount);
+      toAssetModel.amount = toAssetModel.amount + amount;
+      console.log(toAssetModel.amount, amount);
+      await this.service.create({
+        userid: userid,
+        asset: toAsset,
+        amount: amount,
+        asset_balance: toAssetModel.amount,
+        tag: '资产互转',
+        type: '收入',
+        create_at: date,
+        note: note
+      });
+      await ctx.service.asset.updateById(toAsset, toAssetModel);
+    }
+
+    ctx.status = 200;
+    ctx.body = {
+      success: true,
     };
 
   }

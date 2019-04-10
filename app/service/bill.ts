@@ -64,10 +64,11 @@ export default class BillService extends BaseService {
             userid: userid,
             deleted: false,
             type: type,
+            tag: { $ne: '资产互转' },
             create_at: { $gte: new Date(startTime), $lte: new Date(endTime) },
         };
         if (excludeTag) {
-            conditions.tag = { $ne: excludeTag };
+            conditions.tag = { $nin: [excludeTag, '资产互转'] };
         }
 
         const res = await Bill.aggregate([
