@@ -16,8 +16,8 @@ export default class User_friendService extends BaseService {
 
     const result = await model
       .find({ $or: [{ from: userid }, { to: userid }], state: state })
-      .populate({ path: 'from', select: 'username bio img email sex location' })
-      .populate({ path: 'to', select: 'username bio img email sex location' })
+      .populate({ path: 'from', select: 'username displayName bio img email sex location' })
+      .populate({ path: 'to', select: 'username displayName bio img email sex location' })
       .sort('-response_time')
       .select('response_time from to state');
 
