@@ -3,6 +3,15 @@ import { Controller } from 'egg';
 
 export default class HomeController extends Controller {
   async index() {
-    this.ctx.body = 'Hello, this is TomatoBang Index Page';
+    this.ctx.status = 200;
+    this.ctx.body = 'hi, ' + this.app.plugins.consul.name;
+    //this.ctx.body = 'Hello, this is TomatoBang Index Page';
+  }
+
+  unregister() {
+    const { app, ctx } = this;
+    ctx.status = 200;
+    app.consul.agent.service.deregister('tomato-server');
+    app.logger.info('服务关闭解除注册');
   }
 }

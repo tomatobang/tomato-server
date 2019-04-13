@@ -30,6 +30,11 @@ const plugin: EggPlugin = {
     package: 'egg-socket.io',
   },
 
+  consul: {
+    enable: true,
+    path: path.join(__dirname, '../lib/plugin/egg-consul'),
+  },
+
   validate: {
     package: 'egg-validate',
   },
@@ -38,7 +43,7 @@ const plugin: EggPlugin = {
     enable: true,
     path: path.join(__dirname, '../lib/plugin/egg-qiniu'),
   },
-  
+
   // TODO:
   // alinode : {
   //   enable: true,

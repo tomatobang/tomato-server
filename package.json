@@ -39,7 +39,9 @@
   "homepage": "https://github.com/tomatobang/tomato-server#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.4",
     "co": "^4.6.0",
+    "consul": "^0.34.1",
     "egg": "^2.8.1",
     "egg-alinode": "^2.0.1",
     "egg-cors": "^2.0.0",

@@ -33,6 +33,32 @@ export default () => {
   config.keys = 'com.server.tomatobang';
   config.middleware = ['ratelimit', 'errorhandler', 'robot', 'jwt'];
 
+  config.consul = {
+    client: {
+      host: {
+         // register center ip , default 127.0.0.1
+        ip: '120.78.70.176',
+        // register center port, default 8500
+        port: '8500', 
+        // optional
+        defaults: { 
+          // token: 'acl token'
+        }
+      },
+      server: {
+        name: 'tomato-server', // project name, default project name
+        // service ip, default extranet ip
+        // address: '', 
+        // service port, default service port
+        // port: '', 
+        check: {
+          path: '/api/ping' // health check http path
+        },
+        tags: ['tomato'] // service tags
+      }
+    }
+  };
+
   config.security = {
     csrf: {
       enable: false,
@@ -74,6 +100,8 @@ export default () => {
       port: 6379,
     },
   };
+
+
 
   config.mongoose = {
     url: 'mongodb://127.0.0.1:27017/tomatobang',
