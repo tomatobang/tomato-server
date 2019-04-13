@@ -1,38 +1,39 @@
-// This file was auto created by egg-ts-helper
+// This file is created by egg-ts-helper@1.25.2
 // Do not modify this file!!!!!!!!!
 
-import Asset from '../../../app/model/asset';
-import Bill from '../../../app/model/bill';
-import Footprint from '../../../app/model/footprint';
-import Message from '../../../app/model/message';
-import Option from '../../../app/model/option';
-import Pub from '../../../app/model/pub';
-import PubReply from '../../../app/model/pubReply';
-import Tag from '../../../app/model/tag';
-import Task from '../../../app/model/task';
-import Todo from '../../../app/model/todo';
-import TodoRegular from '../../../app/model/todoRegular';
-import Tomato from '../../../app/model/tomato';
-import User from '../../../app/model/user';
-import UserFriend from '../../../app/model/userFriend';
-import Version from '../../../app/model/version';
+import 'egg';
+import ExportAsset = require('../../../app/model/asset');
+import ExportBill = require('../../../app/model/bill');
+import ExportFootprint = require('../../../app/model/footprint');
+import ExportMessage = require('../../../app/model/message');
+import ExportOption = require('../../../app/model/option');
+import ExportPub = require('../../../app/model/pub');
+import ExportPubReply = require('../../../app/model/pubReply');
+import ExportTag = require('../../../app/model/tag');
+import ExportTask = require('../../../app/model/task');
+import ExportTodo = require('../../../app/model/todo');
+import ExportTodoRegular = require('../../../app/model/todoRegular');
+import ExportTomato = require('../../../app/model/tomato');
+import ExportUser = require('../../../app/model/user');
+import ExportUserFriend = require('../../../app/model/userFriend');
+import ExportVersion = require('../../../app/model/version');
 
-declare module 'sequelize' {
-  interface Sequelize {
-    Asset: ReturnType<typeof Asset>;
-    Bill: ReturnType<typeof Bill>;
-    Footprint: ReturnType<typeof Footprint>;
-    Message: ReturnType<typeof Message>;
-    Option: ReturnType<typeof Option>;
-    Pub: ReturnType<typeof Pub>;
-    PubReply: ReturnType<typeof PubReply>;
-    Tag: ReturnType<typeof Tag>;
-    Task: ReturnType<typeof Task>;
-    Todo: ReturnType<typeof Todo>;
-    TodoRegular: ReturnType<typeof TodoRegular>;
-    Tomato: ReturnType<typeof Tomato>;
-    User: ReturnType<typeof User>;
-    UserFriend: ReturnType<typeof UserFriend>;
-    Version: ReturnType<typeof Version>;
+declare module 'egg' {
+  interface IModel {
+    Asset: ReturnType<typeof ExportAsset>;
+    Bill: ReturnType<typeof ExportBill>;
+    Footprint: ReturnType<typeof ExportFootprint>;
+    Message: ReturnType<typeof ExportMessage>;
+    Option: ReturnType<typeof ExportOption>;
+    Pub: ReturnType<typeof ExportPub>;
+    PubReply: ReturnType<typeof ExportPubReply>;
+    Tag: ReturnType<typeof ExportTag>;
+    Task: ReturnType<typeof ExportTask>;
+    Todo: ReturnType<typeof ExportTodo>;
+    TodoRegular: ReturnType<typeof ExportTodoRegular>;
+    Tomato: ReturnType<typeof ExportTomato>;
+    User: ReturnType<typeof ExportUser>;
+    UserFriend: ReturnType<typeof ExportUserFriend>;
+    Version: ReturnType<typeof ExportVersion>;
   }
 }

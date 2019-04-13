@@ -1,16 +1,17 @@
-// This file was auto created by egg-ts-helper
+// This file is created by egg-ts-helper@1.25.2
 // Do not modify this file!!!!!!!!!
 
-import Errorhandler from '../../../app/middleware/errorhandler';
-import Jwt from '../../../app/middleware/jwt';
-import Ratelimit from '../../../app/middleware/ratelimit';
-import Robot from '../../../app/middleware/robot';
+import 'egg';
+import ExportErrorhandler from '../../../app/middleware/errorhandler';
+import ExportJwt from '../../../app/middleware/jwt';
+import ExportRatelimit from '../../../app/middleware/ratelimit';
+import ExportRobot from '../../../app/middleware/robot';
 
 declare module 'egg' {
   interface IMiddleware {
-    errorhandler: typeof Errorhandler;
-    jwt: typeof Jwt;
-    ratelimit: typeof Ratelimit;
-    robot: typeof Robot;
+    errorhandler: typeof ExportErrorhandler;
+    jwt: typeof ExportJwt;
+    ratelimit: typeof ExportRatelimit;
+    robot: typeof ExportRobot;
   }
 }

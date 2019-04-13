@@ -3,6 +3,7 @@ import tokenService from '../app/util/jwt';
 
 declare module 'egg' {
   interface Application {
+    io:any;
     redis: any;
     mongoose: any;
     validator: any;

@@ -1,34 +1,35 @@
-// This file was auto created by egg-ts-helper
+// This file is created by egg-ts-helper@1.25.2
 // Do not modify this file!!!!!!!!!
 
-import Asset from '../../../app/service/asset';
-import Base from '../../../app/service/base';
-import Bill from '../../../app/service/bill';
-import Footprint from '../../../app/service/footprint';
-import Message from '../../../app/service/message';
-import Options from '../../../app/service/options';
-import Task from '../../../app/service/task';
-import Todo from '../../../app/service/todo';
-import TodoRegular from '../../../app/service/todoRegular';
-import Tomato from '../../../app/service/tomato';
-import User from '../../../app/service/user';
-import UserFriend from '../../../app/service/userFriend';
-import Version from '../../../app/service/version';
+import 'egg';
+import ExportAsset from '../../../app/service/asset';
+import ExportBase from '../../../app/service/base';
+import ExportBill from '../../../app/service/bill';
+import ExportFootprint from '../../../app/service/footprint';
+import ExportMessage from '../../../app/service/message';
+import ExportOptions from '../../../app/service/options';
+import ExportTask from '../../../app/service/task';
+import ExportTodo from '../../../app/service/todo';
+import ExportTodoRegular from '../../../app/service/todoRegular';
+import ExportTomato from '../../../app/service/tomato';
+import ExportUser from '../../../app/service/user';
+import ExportUserFriend from '../../../app/service/userFriend';
+import ExportVersion from '../../../app/service/version';
 
 declare module 'egg' {
   interface IService {
-    asset: Asset;
-    base: Base;
-    bill: Bill;
-    footprint: Footprint;
-    message: Message;
-    options: Options;
-    task: Task;
-    todo: Todo;
-    todoRegular: TodoRegular;
-    tomato: Tomato;
-    user: User;
-    userFriend: UserFriend;
-    version: Version;
+    asset: ExportAsset;
+    base: ExportBase;
+    bill: ExportBill;
+    footprint: ExportFootprint;
+    message: ExportMessage;
+    options: ExportOptions;
+    task: ExportTask;
+    todo: ExportTodo;
+    todoRegular: ExportTodoRegular;
+    tomato: ExportTomato;
+    user: ExportUser;
+    userFriend: ExportUserFriend;
+    version: ExportVersion;
   }
 }

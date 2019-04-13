@@ -8,11 +8,11 @@ export default function cacheControl(controlStr?: string) {
   ): void {
     const method: () => Promise<void> = descriptor.value;
     function setNoCache() {
-      (this as Controller).ctx.set('cache-control', 'no-cache');
+      this.ctx.set('cache-control', 'no-cache');
       return method.call(this);
     }
     async function setCache() {
-      const ctx = (this as Controller).ctx;
+      const ctx = this.ctx;
       ctx.set('cache-control', controlStr);
       await method.call(this);
       if (
