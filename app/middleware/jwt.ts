@@ -7,6 +7,7 @@ import { Context, Application } from 'egg';
 export default function jwtMiddleware(option, app: Application) {
   return async (ctx: Context, next) => {
     const apiNoAuth =
+      ctx.url.startsWith('/api/ping') ||  ctx.url.startsWith('/api/unregister') ||
       ctx.url.startsWith('/api/login') ||
       ctx.url.endsWith('/api/user') ||
       ctx.url.endsWith('/api/version') ||

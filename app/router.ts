@@ -6,8 +6,8 @@ export default (app: Application) => {
   // for test
   router.get('/', controller.home.index);
   router.get('/api/ping', controller.home.index);
-  router.get('/api/unregister', controller.home.unregister);
-
+  /** TEST: unregister consul */
+  // router.get('/api/unregister', controller.home.unregister);
 
   // socket.io: 番茄钟同步
   app.io
