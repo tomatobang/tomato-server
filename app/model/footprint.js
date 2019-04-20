@@ -22,10 +22,15 @@ module.exports = app => {
     position: { type: String, default: '' },
     // 备注
     notes: String,
+    // 音频
+    voices: { type: mongoose.Schema.Types.Mixed, default: [] },
+    // 图片
+    pictures: { type: mongoose.Schema.Types.Mixed, default: [] },
     // 时间 
     create_at: { type: Date, default: Date.now },
     // 是否已删除
     deleted: { type: Boolean, default: false },
+
   });
   return mongoose.model('footprint', footprint);
 };
