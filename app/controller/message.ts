@@ -7,6 +7,45 @@ export default class MessageController extends BaseController {
   }
 
   /**
+   * load history messages
+   */
+  async loadHistoryMsg() {
+    const { ctx } = this;
+    const current = ctx.request.body.current || 1;
+    const startTime = ctx.request.body.startTime;
+    const friendid = ctx.request.body.friendid;
+
+    let userid = '';
+    if (ctx.request['currentUser']) {
+      userid = ctx.request['currentUser']._id;
+    }
+    if (!current || current < 1) {
+      ctx.status = 403;
+      ctx.body = {
+        error_msg: '参数格式不正确!',
+      };
+      return;
+    }
+    const ret = await this.service.loadByPagination(
+      {
+        create_at: { $lte: new Date(startTime) },
+        current,
+        $or: [
+          { from: userid, to: friendid },
+          { from: friendid, to: userid },
+        ],
+        pageSize: 6,
+        sorter: {
+          create_at: -1,
+        },
+      },
+      '_id type from to content create_at has_read'
+    );
+    ctx.status = 200;
+    ctx.body = ret;
+  }
+
+  /**
    * load user unread messages
    */
   async loadUnreadMessages() {

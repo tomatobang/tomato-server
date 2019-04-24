@@ -101,7 +101,7 @@ export default class BaseController extends Controller {
     const current = ctx.request.body.current;
     let userid = '';
     if (ctx.request['currentUser']) {
-      userid = ctx.request['currentUser'].username;
+      userid = ctx.request['currentUser']._id;
     }
     if (!this.select_field) {
       ctx.status = 403;
@@ -117,7 +117,7 @@ export default class BaseController extends Controller {
       };
       return;
     }
-    const ret = await ctx.service.tomato.loadByPagination(
+    const ret = await this.service.loadByPagination(
       {
         current,
         userid,

@@ -39,7 +39,7 @@ export default class MessageService extends BaseService {
         },
       },
       {
-        $sort: { create_at: -1 },
+        $sort: { create_at: 1 },
       },
     ]);
     return res;

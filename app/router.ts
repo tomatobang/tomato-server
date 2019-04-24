@@ -171,6 +171,7 @@ export default (app: Application) => {
     controller.message.updateMessageState
   );
   router.get('/api/message', controller.message.loadUnreadMessages);
+  router.post('/api/loadHistoryMsg', controller.message.loadHistoryMsg);
 
   /**
    * 其它
