@@ -10,11 +10,11 @@ module.exports = app => {
         // 内容
         content: { type: String },
         // 动态编号
-        pub_id: { type: ObjectId },
+        pub_id: { type: ObjectId, ref: 'pub' },
         // 发布者
-        author_id: { type: ObjectId },
+        author_id: { type: ObjectId, ref: 'user' },
         // 回复者
-        reply_id: { type: ObjectId },
+        reply_id: { type: ObjectId, ref: 'user' },
         // 回复时间
         create_at: { type: Date, default: Date.now },
         // 更新时间

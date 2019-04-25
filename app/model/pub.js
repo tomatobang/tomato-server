@@ -8,13 +8,13 @@ module.exports = app => {
     const ObjectId = mongoose.Schema.ObjectId;
     const pub = new mongoose.Schema({
         // 内容
-        content: { type: String },
+        content: { type: ObjectId },
+        // 类型 [足迹/番茄钟/...]
+        type: { type: String },
         // 发布用户
-        author_id: { type: ObjectId },
-        // 标签
-        tag: { type: String },
+        userid: { type: ObjectId, ref: 'user' },
         // 点赞者
-        ups: [ mongoose.Schema.Types.ObjectId ],
+        ups: [mongoose.Schema.Types.ObjectId],
         // 是否置顶
         top: { type: Boolean, default: false },
         // 是否禁止回复
@@ -39,7 +39,7 @@ module.exports = app => {
         deleted: { type: Boolean, default: false },
     });
 
-    pub.index({ userid: 1 }, { unique: true });
+    pub.index({ userid: 1 });
 
     return mongoose.model('pub', pub);
 };
