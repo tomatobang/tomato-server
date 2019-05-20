@@ -24,8 +24,10 @@ module.exports = app => {
     type: { type: String, default: '' },
     // 备注
     note: { type: String, default: '' },
-    // 时间 
+    // 账单发生时间 
     create_at: { type: Date, default: Date.now },
+    // 记录时间 
+    record_at: { type: Date, default: Date.now },
     // 是否已删除
     deleted: { type: Boolean, default: false },
   });
