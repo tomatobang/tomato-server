@@ -2,6 +2,7 @@
 
 // app/middleware/ratelimit.js
 // refer:https://github.com/koajs/ratelimit
+
 import * as koaRatelimit from 'koa-ratelimit';
 import { Application, Context } from 'egg';
 import { BizConfig } from '../../config/config.default';

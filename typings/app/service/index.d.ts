@@ -8,6 +8,7 @@ import ExportBill from '../../../app/service/bill';
 import ExportFootprint from '../../../app/service/footprint';
 import ExportMessage from '../../../app/service/message';
 import ExportOptions from '../../../app/service/options';
+import ExportTag from '../../../app/service/tag';
 import ExportTask from '../../../app/service/task';
 import ExportTodo from '../../../app/service/todo';
 import ExportTodoRegular from '../../../app/service/todoRegular';
@@ -24,6 +25,7 @@ declare module 'egg' {
     footprint: ExportFootprint;
     message: ExportMessage;
     options: ExportOptions;
+    tag: ExportTag;
     task: ExportTask;
     todo: ExportTodo;
     todoRegular: ExportTodoRegular;

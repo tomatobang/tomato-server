@@ -49,7 +49,6 @@ export default function jwtMiddleware(option, app: Application) {
 
     const reply = await app['redis'].get(token);
 
-    console.log('当前用户:', reply);
     if (reply) {
       // prolong token
       app['redis'].expire(token, 3 * 24 * 60 * 60);

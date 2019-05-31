@@ -10,6 +10,7 @@ import ExportHome from '../../../app/controller/home';
 import ExportMessage from '../../../app/controller/message';
 import ExportOptions from '../../../app/controller/options';
 import ExportOther from '../../../app/controller/other';
+import ExportTag from '../../../app/controller/tag';
 import ExportTask from '../../../app/controller/task';
 import ExportTodo from '../../../app/controller/todo';
 import ExportTodoRegular from '../../../app/controller/todoRegular';
@@ -28,6 +29,7 @@ declare module 'egg' {
     message: ExportMessage;
     options: ExportOptions;
     other: ExportOther;
+    tag: ExportTag;
     task: ExportTask;
     todo: ExportTodo;
     todoRegular: ExportTodoRegular;
