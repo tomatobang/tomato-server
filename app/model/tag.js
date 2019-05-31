@@ -12,10 +12,14 @@ module.exports = app => {
     userid: { type: ObjectId, ref: 'user' },
     // 名称
     name: String,
+    // 图标
+    icon: String,
     // 类型[ 账单、足迹、TODO、番茄钟]
     type: String,
     // 备注
     note: String,
+    // 排序
+    sort: { type: Number, default: 0 },
     // 时间 
     create_at: { type: Date, default: Date.now },
     // 是否已删除
