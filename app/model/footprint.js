@@ -26,6 +26,8 @@ module.exports = app => {
     voices: { type: mongoose.Schema.Types.Mixed, default: [] },
     // 图片
     pictures: { type: mongoose.Schema.Types.Mixed, default: [] },
+    // 视频
+    videos: { type: mongoose.Schema.Types.Mixed, default: [] },
     // 时间 
     create_at: { type: Date, default: Date.now },
     // 是否已删除
