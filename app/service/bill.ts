@@ -15,7 +15,7 @@ export default class BillService extends BaseService {
     async updateBillByCondition(conditions, D_value) {
         conditions.deleted = false;
         const result = await this.model.find(conditions);
-        
+
         result.forEach(
             async (item) => {
                 await this.model.update({ "_id": item._id }, { "$set": { "asset_balance": item.asset_balance + D_value } }, {})
@@ -30,19 +30,23 @@ export default class BillService extends BaseService {
      */
     async getSumOfAmount(conditions) {
         conditions.deleted = false;
+        let ret = {
+            total: 0
+        };
         const res = await this.model.aggregate([
             {
-               $match: conditions,
+                $match: conditions,
             },
             {
                 $project: {
                     userid: 1,
+                    type: 1,
                     amount: 1,
                 },
             },
             {
                 $group: {
-                    _id: '$userid',
+                    _id: '$type',
                     count: { $sum: 1 },
                     total: { $sum: "$amount" }
                 },
@@ -51,7 +55,16 @@ export default class BillService extends BaseService {
                 $sort: { _id: 1 },
             },
         ]);
-        return res;
+        for (let index = 0; index < res.length; index++) {
+            const element = res[index];
+            if (element._id === "支出") {
+                ret.total += element.total;
+            } else {
+                ret.total -= element.total;
+            }
+
+        }
+        return ret;
     }
 
     /**
