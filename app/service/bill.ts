@@ -8,6 +8,53 @@ export default class BillService extends BaseService {
     }
 
     /**
+     * 更新相关账单余额
+     * @param conditions 查询条件
+     * @param D_value 差值
+     */
+    async updateBillByCondition(conditions, D_value) {
+        conditions.deleted = false;
+        const result = await this.model.find(conditions);
+        
+        result.forEach(
+            async (item) => {
+                await this.model.update({ "_id": item._id }, { "$set": { "asset_balance": item.asset_balance + D_value } }, {})
+            }
+        );
+        return result;
+    }
+
+    /**
+     * 获取累计值
+     * @param conditions 查询条件
+     */
+    async getSumOfAmount(conditions) {
+        conditions.deleted = false;
+        const res = await this.model.aggregate([
+            {
+               $match: conditions,
+            },
+            {
+                $project: {
+                    userid: 1,
+                    amount: 1,
+                },
+            },
+            {
+                $group: {
+                    _id: '$userid',
+                    count: { $sum: 1 },
+                    total: { $sum: "$amount" }
+                },
+            },
+            {
+                $sort: { _id: 1 },
+            },
+        ]);
+        return res;
+    }
+
+    /**
      * 获取账单列表
      * @param { String } conditions 条件
      */

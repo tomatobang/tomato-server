@@ -39,7 +39,7 @@ export default class BillController extends BaseController {
       '-' +
       nextday.getDate();
 
-    conditions = { create_at: { $gte: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
+    conditions = { create_at: { $gt: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
     if (ctx.request['currentUser']) {
       conditions.userid = ctx.request['currentUser']._id;
     }
@@ -60,44 +60,70 @@ export default class BillController extends BaseController {
     if (ctx.request['currentUser']) {
       ctx.request.body.userid = ctx.request['currentUser']._id;
     }
-    if (this.validateRule) {
-      const invalid = app['validator'].validate(
-        this.validateRule,
-        ctx.request.body
-      );
-      if (invalid) {
-        ctx.throw(400);
-      }
-    }
-
 
     const asset = await ctx.service.asset.findById({}, ctx.request.body.asset);
+    const newBillRecord = ctx.request.body;
     let oldAmount = asset.amount;
     let newAmount;
-    if (ctx.request.body.type === '支出') {
-      newAmount = oldAmount - ctx.request.body.amount;
+    let D_value = 0;
+    if (newBillRecord.type === '支出') {
+      newAmount = oldAmount - newBillRecord.amount;
+      D_value = 0 - newBillRecord.amount;
     } else {
-      newAmount = oldAmount + ctx.request.body.amount;
+      newAmount = oldAmount + newBillRecord.amount;
+      D_value = newBillRecord.amount;
     }
     asset.amount = newAmount;
-    ctx.request.body.asset_balance = newAmount;
-    const result = await this.service.create(ctx.request.body);
+    let sum = await this.getRelatedRecordAmountSum(app, {
+      userid: newBillRecord.userid,
+      asset: newBillRecord.asset,
+      create_at: newBillRecord.create_at,
+    });
+    newBillRecord.asset_balance = newAmount + sum;
+    const result = await this.service.create(newBillRecord);
     await ctx.service.asset.updateById(asset._id, asset);
+    // update related bill balance
+    await this.updateRelatedRecord(D_value, {
+      userid: newBillRecord.userid,
+      asset: newBillRecord.asset,
+      create_at: newBillRecord.create_at,
+    });
     ctx.status = 200;
     ctx.body = result;
+  }
+
+  async updateRelatedRecord(D_value, options: { userid, asset, create_at }) {
+    await this.service.updateBillByCondition({
+      userid: options.userid,
+      asset: options.asset,
+      create_at: { $gt: new Date(options.create_at) },
+    }, D_value);
+  }
+
+  async getRelatedRecordAmountSum(app, options: { userid, asset, create_at }) {
+    let res = await this.service.getSumOfAmount({
+      userid: app.mongoose.Types.ObjectId(options.userid),
+      asset: app.mongoose.Types.ObjectId(options.asset),
+      create_at: { $gt: new Date(options.create_at) },
+    });
+    if (res.length > 0) {
+      return res[0].total;
+    } else {
+      return 0;
+    }
   }
 
   /**
    * update record by id
    */
   async updateById() {
-    const { ctx } = this;
+    const { app, ctx } = this;
     const id = ctx.params.id;
-
     const newBillRecord = ctx.request.body;
+    newBillRecord.userid = ctx.request['currentUser']._id;
     const oldBillRecord = await this.service.findById({}, id);
-
-    // if (type and asset and amount) not changed. then we not need update asset
+    let D_value = 0;
+    // if type/asset/amount not changed. we not need update asset
     if (
       oldBillRecord.type === newBillRecord.type
       && oldBillRecord.amount === newBillRecord.amount
@@ -110,37 +136,74 @@ export default class BillController extends BaseController {
       if (oldBillRecord.asset !== newBillRecord.asset) {
         let newAmount_delete;
         if (oldBillRecord.type === '支出') {
+          D_value = oldBillRecord.amount;
           newAmount_delete = oldBillAsset.amount + oldBillRecord.amount;
         } else {
+          D_value = - oldBillRecord.amount;
           newAmount_delete = oldBillAsset.amount - oldBillRecord.amount;
         }
         oldBillAsset.amount = newAmount_delete;
+        // update related bill balance
+        await this.updateRelatedRecord(D_value, {
+          userid: newBillRecord.userid,
+          create_at: oldBillRecord.create_at,
+          asset: oldBillRecord.asset,
+        });
         await ctx.service.asset.updateById(oldBillAsset._id, oldBillAsset);
 
+        D_value = 0;
         const newBillAsset = await ctx.service.asset.findById({}, newBillRecord.asset);
         let newAmount;
         if (newBillRecord.type === '支出') {
-          newAmount = newBillAsset.amount - ctx.request.body.amount;
+          newAmount = newBillAsset.amount - newBillRecord.amount;
+          D_value = 0 - newBillRecord.amount;
         } else {
-          newAmount = newBillAsset.amount + ctx.request.body.amount;
+          newAmount = newBillAsset.amount + newBillRecord.amount;
+          D_value = newBillRecord.amount;
         }
         newBillAsset.amount = newAmount;
-        newBillRecord.asset_balance = newAmount;
+        let sum = await this.getRelatedRecordAmountSum(app, {
+          userid: newBillRecord.userid,
+          asset: newBillRecord.asset,
+          create_at: newBillRecord.create_at,
+        });
+        newBillRecord.asset_balance = newAmount + sum;
+        // update related bill balance
+        await this.updateRelatedRecord(D_value, {
+          userid: newBillRecord.userid,
+          create_at: newBillRecord.create_at,
+          asset: newBillRecord.asset,
+        });
         await ctx.service.asset.updateById(newBillAsset._id, newBillAsset);
       } else { // asset not changed
         let newAmount;
         if (oldBillRecord.type === '支出') {
+          D_value = oldBillRecord.amount;
           newAmount = oldBillAsset.amount + oldBillRecord.amount;
         } else {
+          D_value = 0 - oldBillRecord.amount;
           newAmount = oldBillAsset.amount - oldBillRecord.amount;
         }
         if (newBillRecord.type === '支出') {
-          newAmount = oldBillAsset.amount - ctx.request.body.amount;
+          D_value = D_value - newBillRecord.amount;
+          newAmount = newAmount - newBillRecord.amount;
         } else {
-          newAmount = oldBillAsset.amount + ctx.request.body.amount;
+          D_value = D_value + newBillRecord.amount;
+          newAmount = newAmount + newBillRecord.amount;
         }
         oldBillAsset.amount = newAmount;
-        newBillRecord.asset_balance = newAmount;
+        let sum = await this.getRelatedRecordAmountSum(app, {
+          userid: newBillRecord.userid,
+          asset: newBillRecord.asset,
+          create_at: newBillRecord.create_at,
+        });
+        newBillRecord.asset_balance = newAmount + sum;
+        // update related bill balance
+        await this.updateRelatedRecord(D_value, {
+          userid: newBillRecord.userid,
+          create_at: newBillRecord.create_at,
+          asset: newBillRecord.asset,
+        });
         await ctx.service.asset.updateById(oldBillAsset._id, oldBillAsset);
       }
     }
@@ -158,12 +221,21 @@ export default class BillController extends BaseController {
     const asset = await ctx.service.asset.findById({}, bill.asset);
     let oldAmount = asset.amount;
     let newAmount;
+    let D_value = 0;
     if (bill.type === '支出') {
       newAmount = oldAmount + bill.amount;
+      D_value = bill.amount;
     } else {
       newAmount = oldAmount - bill.amount;
+      D_value = 0 - bill.amount;
     }
     asset.amount = newAmount;
+    // update related bill balance
+    await this.updateRelatedRecord(D_value, {
+      userid: bill.userid,
+      asset: bill.asset,
+      create_at: bill.create_at,
+    });
     await ctx.service.asset.updateById(asset._id, asset);
     const result = await ctx.service.bill.delete(bill._id);
     ctx.body = result;
