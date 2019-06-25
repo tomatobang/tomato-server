@@ -40,9 +40,7 @@ export default class FootprintController extends BaseController {
       nextday.getDate();
 
     conditions = { create_at: { $gte: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
-    if (ctx.request['currentUser']) {
-      conditions.userid = ctx.request['currentUser']._id;
-    }
+    conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
     }
@@ -57,9 +55,7 @@ export default class FootprintController extends BaseController {
   async create() {
     const { ctx, app } = this;
     // filter with logged userinfo
-    if (ctx.request['currentUser']) {
-      ctx.request.body.userid = ctx.request['currentUser']._id;
-    }
+    ctx.request.body.userid = ctx.request['currentUser']._id;
     if (this.validateRule) {
       const invalid = app['validator'].validate(
         this.validateRule,
@@ -81,12 +77,7 @@ export default class FootprintController extends BaseController {
     const { ctx, app } = this;
     const date = ctx.request.body.date;
     let userid = '';
-    if (ctx.request['currentUser']) {
-      userid = ctx.request['currentUser']._id;
-    } else {
-      ctx.status = 200;
-      ctx.body = [];
-    }
+    userid = ctx.request['currentUser']._id;
     const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
     const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
     const ret = await ctx.service.footprint.statistics(

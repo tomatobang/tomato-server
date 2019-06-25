@@ -15,10 +15,7 @@ export default class MessageController extends BaseController {
     const startTime = ctx.request.body.startTime;
     const friendid = ctx.request.body.friendid;
 
-    let userid = '';
-    if (ctx.request['currentUser']) {
-      userid = ctx.request['currentUser']._id;
-    }
+    let userid = ctx.request['currentUser']._id;
     if (!current || current < 1) {
       ctx.status = 403;
       ctx.body = {
@@ -52,12 +49,7 @@ export default class MessageController extends BaseController {
     const { ctx, app } = this;
     const query = ctx.request.query;
     let userid;
-    if (ctx.request['currentUser']) {
-      userid = ctx.request['currentUser']._id;
-    } else {
-      ctx.status = 403;
-      ctx.body = '请求不合法！';
-    }
+    userid = ctx.request['currentUser']._id;
     let startTime = query.startTime;
     if (startTime) {
       console.log('startTime');

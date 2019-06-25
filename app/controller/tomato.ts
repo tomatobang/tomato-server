@@ -16,13 +16,7 @@ export default class TomatoController extends BaseController {
     const { ctx } = this;
     const isSuccess = ctx.request.body.isSuccess;
     const date = ctx.request.body.date;
-    let userid = '';
-    if (ctx.request['currentUser']) {
-      userid = ctx.request['currentUser'].username;
-    } else {
-      ctx.status = 200;
-      ctx.body = [];
-    }
+    let userid = ctx.request['currentUser'].username;
     const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
     const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
     const ret = await ctx.service.tomato.statistics(
@@ -54,12 +48,7 @@ export default class TomatoController extends BaseController {
       datenow.getDate();
     let conditions: any;
     conditions = { startTime: { $gte: new Date(date).toISOString() } };
-    if (ctx.request['currentUser']) {
-      conditions.userid = ctx.request['currentUser'].username;
-    } else {
-      ctx.status = 200;
-      ctx.body = [];
-    }
+    conditions.userid = ctx.request['currentUser'].username;
     const ret = await ctx.service.tomato.findAll({}, conditions);
     if (ret.length) {
       ctx.status = 200;

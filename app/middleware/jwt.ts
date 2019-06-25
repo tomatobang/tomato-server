@@ -1,13 +1,13 @@
 'use strict';
 /**
- * verify
+ * verify middleware
  */
 import { Context, Application } from 'egg';
 
 export default function jwtMiddleware(option, app: Application) {
   return async (ctx: Context, next) => {
     const apiNoAuth =
-      ctx.url.startsWith('/api/ping') ||  ctx.url.startsWith('/api/unregister') ||
+      ctx.url.startsWith('/api/ping') || ctx.url.startsWith('/api/unregister') ||
       ctx.url.startsWith('/api/login') ||
       ctx.url.endsWith('/api/user') ||
       ctx.url.endsWith('/api/version') ||
@@ -53,8 +53,13 @@ export default function jwtMiddleware(option, app: Application) {
       // prolong token
       app['redis'].expire(token, 3 * 24 * 60 * 60);
       const currentUser = JSON.parse(reply);
-      ctx.request['currentUser'] = currentUser;
-      return next();
+      if (currentUser) {
+        ctx.request['currentUser'] = currentUser;
+        return next();
+      } else {
+        ctx.status = 500;
+        ctx.message = 'Token Verify Error';
+      }
     }
     ctx.status = 401;
     ctx.message = 'Token invalid';

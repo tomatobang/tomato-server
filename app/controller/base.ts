@@ -15,9 +15,7 @@ export default class BaseController extends Controller {
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     // filter with logged userinfo
-    if (ctx.request['currentUser']) {
-      conditions.userid = ctx.request['currentUser'].username;
-    }
+    conditions.userid = ctx.request['currentUser'].username;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
     }
@@ -43,9 +41,7 @@ export default class BaseController extends Controller {
   async create() {
     const { ctx, app } = this;
     // filter with logged userinfo
-    if (ctx.request['currentUser']) {
-      ctx.request.body.userid = ctx.request['currentUser'].username;
-    }
+    ctx.request.body.userid = ctx.request['currentUser'].username;
     if (this.validateRule) {
       const invalid = app['validator'].validate(
         this.validateRule,
@@ -100,9 +96,7 @@ export default class BaseController extends Controller {
     const { ctx } = this;
     const current = ctx.request.body.current;
     let userid = '';
-    if (ctx.request['currentUser']) {
-      userid = ctx.request['currentUser']._id;
-    }
+    userid = ctx.request['currentUser']._id;
     if (!this.select_field) {
       ctx.status = 403;
       ctx.body = {

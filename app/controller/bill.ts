@@ -40,9 +40,7 @@ export default class BillController extends BaseController {
       nextday.getDate();
 
     conditions = { create_at: { $gt: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
-    if (ctx.request['currentUser']) {
-      conditions.userid = ctx.request['currentUser']._id;
-    }
+    conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
     }
@@ -57,9 +55,7 @@ export default class BillController extends BaseController {
   async create() {
     const { ctx, app } = this;
     // filter with logged userinfo
-    if (ctx.request['currentUser']) {
-      ctx.request.body.userid = ctx.request['currentUser']._id;
-    }
+    ctx.request.body.userid = ctx.request['currentUser']._id;
 
     const asset = await ctx.service.asset.findById({}, ctx.request.body.asset);
     const newBillRecord = ctx.request.body;

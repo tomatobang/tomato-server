@@ -40,9 +40,7 @@ export default class TodoController extends BaseController {
       nextday.getDate();
 
     conditions = { create_at: { $gte: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
-    if (ctx.request['currentUser']) {
-      conditions.userid = ctx.request['currentUser']._id;
-    }
+    conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
     }
@@ -57,9 +55,7 @@ export default class TodoController extends BaseController {
   async create() {
     const { ctx, app } = this;
     // filter with logged userinfo
-    if (ctx.request['currentUser']) {
-      ctx.request.body.userid = ctx.request['currentUser']._id;
-    }
+    ctx.request.body.userid = ctx.request['currentUser']._id;
     if (this.validateRule) {
       const invalid = app['validator'].validate(
         this.validateRule,
@@ -90,9 +86,7 @@ export default class TodoController extends BaseController {
       '-' +
       datenow.getDate();
     conditions = { create_at: { $gte: new Date(date).toISOString() } };
-    if (ctx.request['currentUser']) {
-      conditions.userid = ctx.request['currentUser']._id;
-    }
+    conditions.userid = ctx.request['currentUser']._id;
     const completeStatu = ctx.request.body.complete;
 
     console.log(conditions, completeStatu);
@@ -116,9 +110,7 @@ export default class TodoController extends BaseController {
       (datenow.getMonth() + 1) +
       '-' +
       datenow.getDate();
-    if (ctx.request['currentUser']) {
-      conditions.userid = ctx.request['currentUser']._id;
-    }
+    conditions.userid = ctx.request['currentUser']._id;
     conditions = {
       create_at: { $gte: new Date(date).toISOString() },
       completed: true

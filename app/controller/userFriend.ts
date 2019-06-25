@@ -43,9 +43,7 @@ export default class User_friendController extends BaseController {
     let conditions: any;
     conditions = {};
     const query = ctx.request.query;
-    if (ctx.request['currentUser']) {
-      conditions.to = ctx.request['currentUser']._id;
-    }
+    conditions.to = ctx.request['currentUser']._id;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
     }

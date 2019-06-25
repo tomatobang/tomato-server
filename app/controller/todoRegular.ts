@@ -17,9 +17,7 @@ export default class TodoRegularController extends BaseController {
         const query = ctx.request.query;
         ctx.logger.info('ctx.request：', ctx.request['currentUser']);
         // filter with logged userinfo
-        if (ctx.request['currentUser']) {
-            conditions.userid = ctx.request['currentUser']._id;
-        }
+        conditions.userid = ctx.request['currentUser']._id;
         if (query.conditions) {
             conditions = JSON.parse(query.conditions);
         }
@@ -31,9 +29,7 @@ export default class TodoRegularController extends BaseController {
     async create() {
         const { ctx, app } = this;
         // filter with logged userinfo
-        if (ctx.request['currentUser']) {
-            ctx.request.body.userid = ctx.request['currentUser']._id;
-        }
+        ctx.request.body.userid = ctx.request['currentUser']._id;
         if (this.validateRule) {
             const invalid = app['validator'].validate(
                 this.validateRule,
