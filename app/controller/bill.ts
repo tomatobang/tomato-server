@@ -49,6 +49,42 @@ export default class BillController extends BaseController {
     ctx.status = 200;
   }
 
+
+  async listBillByAsset() {
+    const { ctx, app } = this;
+    let conditions: any;
+    conditions = {};
+    const body = ctx.request.body;
+    if (!body.asset) {
+      ctx.body = '资产编号不能为空';
+      ctx.status = 403;
+      return;
+    }
+    if (body.num && !(/(^[1-9]\d*$)/.test(body.num))) {
+      ctx.body = 'num 必须为整数';
+      ctx.status = 403;
+      return;
+    }
+    ctx.logger.info('ctx.request：', ctx.request['currentUser']);
+    let datenow = new Date();
+    if (body.date) {
+      ctx.logger.info('query.date：', body.date);
+      datenow = new Date(body.date);
+    }
+    conditions.userid = ctx.request['currentUser']._id;
+    conditions.asset = app.mongoose.Types.ObjectId(body.asset),
+      conditions.create_at = { $lt: datenow.toISOString() };
+    console.log('conditions', conditions)
+
+    let requestNum = 10;
+    if (body.num) {
+      requestNum = parseInt(body.num, 10);
+    }
+    const result = await this.service.getBillListByAsset(conditions, requestNum);
+    ctx.body = result;
+    ctx.status = 200;
+  }
+
   /**
   * create record
   */

@@ -82,6 +82,21 @@ export default class BillService extends BaseService {
     }
 
     /**
+     * 获取资产获取账单列表
+     * @param { String } conditions 条件
+     * @param { String } num 显示条数
+     */
+    async getBillListByAsset(conditions, num) {
+        const result = await this.model
+            .find(conditions)
+            .sort('-create_at')
+            .select('_id create_at note asset asset_balance tag amount type')
+            .limit(num);
+
+        return result;
+    }
+
+    /**
      * 日历统计数据
      * @param { Number } userid 用户编号
      * @param { Date } startTime 开始时间
