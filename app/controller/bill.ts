@@ -72,8 +72,10 @@ export default class BillController extends BaseController {
       datenow = new Date(body.date);
     }
     conditions.userid = ctx.request['currentUser']._id;
-    conditions.asset = app.mongoose.Types.ObjectId(body.asset),
-      conditions.create_at = { $lt: datenow.toISOString() };
+    conditions.asset = app.mongoose.Types.ObjectId(body.asset);
+    conditions.create_at = { $lt: datenow.toISOString() };
+    conditions.create_at = { $lt: datenow.toISOString() };
+    conditions.deleted = false;
     console.log('conditions', conditions)
 
     let requestNum = 10;
