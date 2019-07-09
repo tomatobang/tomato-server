@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.12.0
+version: v1.13.5
 ignore: {}
 # patches apply the minimum changes required to fix a vulnerability
 patch:
@@ -15,3 +15,10 @@ patch:
   'npm:tunnel-agent:20170305':
     - jpush-sdk > request > tunnel-agent:
         patched: '2018-10-23T08:52:21.433Z'
+  SNYK-JS-LODASH-450202:
+    - egg-redis > ioredis > lodash:
+        patched: '2019-07-03T21:45:37.554Z'
+    - egg-sequelize > sequelize > lodash:
+        patched: '2019-07-03T21:45:37.554Z'
+    - egg-mongoose > mongoose > async > lodash:
+        patched: '2019-07-03T21:45:37.554Z'
