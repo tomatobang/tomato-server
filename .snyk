@@ -22,3 +22,25 @@ patch:
         patched: '2019-07-03T21:45:37.554Z'
     - egg-mongoose > mongoose > async > lodash:
         patched: '2019-07-03T21:45:37.554Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > inquirer > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > snyk-config > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2019-07-09T21:45:39.619Z'
