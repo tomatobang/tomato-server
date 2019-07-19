@@ -27,6 +27,22 @@ export default class UserService extends BaseService {
     return false;
   }
 
+  async updatePWD(id, new_password) {
+    const model = this.ctx.model.User;
+    const result = await model
+      .findByIdAndUpdate(
+        id,
+        {
+          $set: { password: new_password },
+        },
+        {
+          new: true,
+        }
+      )
+      .exec();
+    return result;
+  }
+
   async updateHeadImg(id, imgurl) {
     const model = this.ctx.model.User;
     const result = await model

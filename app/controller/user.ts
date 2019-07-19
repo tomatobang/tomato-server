@@ -135,6 +135,48 @@ export default class UserController extends BaseController {
   }
 
   /**
+   * change password
+   */
+  async changePWD() {
+    const { ctx, app } = this;
+    const userid = ctx.request.body.userid;
+    const oldPassword = ctx.request.body.oldPassword;
+    const newPassword = ctx.request.body.newPassword;
+    if (oldPassword === newPassword) {
+      ctx.status = 200;
+      ctx.body = {
+        status: 'fail',
+        description: '新旧密码一致!',
+      };
+      return;
+    }
+
+    const users = await ctx.service.user.findAll(
+      {},
+      { _id: app.mongoose.Types.ObjectId(userid) }
+    );
+    if (users.length === 0) {
+      ctx.status = 200;
+      ctx.body = {
+        status: 'fail',
+        description: '用户不存在',
+      };
+      return;
+    }
+
+    const password = users[0].password;
+    const verifyPWD = await users[0].comparePassword(oldPassword);
+    if (password === oldPassword || verifyPWD) {
+      await this.service.updatePWD(users[0]._id, newPassword);
+      ctx.status = 200;
+      ctx.body = {
+        success: true,
+        msg: '密码修改成功',
+      };
+    }
+  }
+
+  /**
    * validate username and email
    */
   async emailUserNameVerify() {
