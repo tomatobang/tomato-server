@@ -1,4 +1,5 @@
 'use strict';
+const bcrypt = require('bcryptjs');
 import BaseController from './base';
 import {
   userValidationRule,
@@ -139,9 +140,10 @@ export default class UserController extends BaseController {
    */
   async changePWD() {
     const { ctx, app } = this;
-    const userid = ctx.request.body.userid;
+    const userid = ctx.request['currentUser']._id;
     const oldPassword = ctx.request.body.oldPassword;
-    const newPassword = ctx.request.body.newPassword;
+    let newPassword = ctx.request.body.newPassword;
+    console.log(ctx.request.body);
     if (oldPassword === newPassword) {
       ctx.status = 200;
       ctx.body = {
@@ -167,11 +169,18 @@ export default class UserController extends BaseController {
     const password = users[0].password;
     const verifyPWD = await users[0].comparePassword(oldPassword);
     if (password === oldPassword || verifyPWD) {
+      newPassword = await bcrypt.hash(newPassword, 10);
       await this.service.updatePWD(users[0]._id, newPassword);
       ctx.status = 200;
       ctx.body = {
         success: true,
         msg: '密码修改成功',
+      };
+    } else {
+      ctx.status = 200;
+      ctx.body = {
+        status: 'fail',
+        description: '旧密码输入错误!',
       };
     }
   }

@@ -55,7 +55,6 @@ export default (app: Application) => {
   router.get('/api/user/auth', controller.user.auth);
   router.get('/api/user/searchUsers', controller.user.searchUsers);
   router.get('/api/user/:id', controller.user.findById);
-  router.post('/api/user/changepwd', controller.user.changePWD);
   router.post('/api/user', controller.user.create);
   router.del('/api/user/:id', controller.user.deleteById);
   router.post('/email_username/verify', controller.user.emailUserNameVerify);
@@ -67,6 +66,7 @@ export default (app: Application) => {
   router.post('/api/user/email', controller.user.updateEmail);
   router.post('/api/user/location', controller.user.updateLocation);
   router.post('/api/user/bio', controller.user.updateBio);
+  router.post('/api/user/changepwd', controller.user.changePWD);
   router.post('/api/user/:id', controller.user.updateById);
 
   /**
