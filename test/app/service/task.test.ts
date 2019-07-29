@@ -20,7 +20,6 @@ describe('test/service/task.test.js', () => {
         const task = await ctx.service.task.create({
             title: 'for test',
             target: 'target for test',
-            voiceUrl: '',
             isActive: true,
             num: 1,
             description: 'description for test',

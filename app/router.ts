@@ -89,7 +89,6 @@ export default (app: Application) => {
   router.get('/api/task/:id', controller.task.findById);
   router.post('/api/task', controller.task.create);
   router.del('/api/task/:id', controller.task.deleteById);
-  router.post('/api/task/updateVoiceUrl', controller.task.updateVoiceUrl);
   router.post('/api/task/:id', controller.task.updateById);
 
   /**

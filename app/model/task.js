@@ -18,9 +18,6 @@ module.exports = app => {
         num: { type: Number, default: 0 },
         // 是否激活
         isActive: { type: Boolean, default: false },
-        // 语音路径
-        voiceUrl: { type: String, default: '' },
-
         // 是否已完成
         finished: { type: Boolean, default: false },
         // 是否已删除

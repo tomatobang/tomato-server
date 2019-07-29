@@ -9,7 +9,7 @@ export default class TomatoController extends BaseController {
     this.service = ctx.service.tomato;
     this.validateRule = tomatoValidationRule;
     this.select_field =
-      '_id title target description startTime endTime succeed breakReason voiceUrl userid ';
+      '_id title target description startTime endTime succeed breakReason userid ';
   }
 
   async statistics() {

@@ -24,9 +24,6 @@ module.exports = app => {
         succeed: { type: Number, default: 1 },
         // 中断原因
         breakReason: { type: String, default: '' },
-        // 语音路径
-        voiceUrl: { type: String, default: '' },
-
         // 是否已删除
         deleted: { type: Boolean, default: false },
     });

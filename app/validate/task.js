@@ -14,21 +14,6 @@ const taskValidationRule = {
   },
 };
 
-const relateUrlValidationRule = {
-  taskid: {
-    type: 'string',
-    required: true,
-    allowEmpty: false,
-  },
-  relateUrl: {
-    type: 'string',
-    required: true,
-    allowEmpty: false,
-    min: 1,
-  },
-};
-
 module.exports = {
   taskValidationRule,
-  relateUrlValidationRule,
 };
