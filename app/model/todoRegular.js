@@ -21,6 +21,8 @@ module.exports = app => {
     tag: { type: ObjectId, ref: 'tag' },
     // 备注
     notes: { type: String, default: '' },
+    // 是否自动添加
+    auto_add: { type: Boolean, default: false },
     // 创建时间 
     create_at: { type: Date, default: Date.now },
     // 是否已删除
