@@ -20,11 +20,11 @@ export default class TodoController extends BaseController {
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
-    let nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     if (query.date) {
       datenow = new Date(query.date);
-      nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     }
+    datenow = new Date(datenow.getTime());
+    const nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     ctx.logger.info('query.date：', query.date);
     const dateStr =
       datenow.getFullYear() +
@@ -39,7 +39,9 @@ export default class TodoController extends BaseController {
       '-' +
       nextday.getDate();
 
-    conditions = { create_at: { $gte: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
+    const gtDate = new Date(new Date(dateStr).getTime() - 8 * 60 * 60 * 1000);
+    const ltDate = new Date(new Date(dateNextStr).getTime() - 8 * 60 * 60 * 1000);
+    conditions = { create_at: { $gt: gtDate, $lt: ltDate }, deleted: false };
     conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
@@ -78,14 +80,16 @@ export default class TodoController extends BaseController {
     let conditions: any;
     conditions = {};
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
-    const datenow = new Date();
+    let datenow = new Date();
+    datenow = new Date(datenow.getTime());
     const date =
       datenow.getFullYear() +
       '-' +
       (datenow.getMonth() + 1) +
       '-' +
       datenow.getDate();
-    conditions = { create_at: { $gte: new Date(date).toISOString() } };
+    const gteDate = new Date(new Date(date).getTime() - 8 * 60 * 60 * 1000);
+    conditions = { create_at: { $gte: gteDate } };
     conditions.userid = ctx.request['currentUser']._id;
     const completeStatu = ctx.request.body.complete;
 
@@ -103,7 +107,8 @@ export default class TodoController extends BaseController {
     let conditions: any;
     conditions = {};
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
-    const datenow = new Date();
+    let datenow = new Date();
+    datenow = new Date(datenow.getTime());
     const date =
       datenow.getFullYear() +
       '-' +
@@ -111,8 +116,9 @@ export default class TodoController extends BaseController {
       '-' +
       datenow.getDate();
     conditions.userid = ctx.request['currentUser']._id;
+    const gteDate = new Date(new Date(date).getTime() - 8 * 60 * 60 * 1000);
     conditions = {
-      create_at: { $gte: new Date(date).toISOString() },
+      create_at: { $gte: gteDate },
       completed: true
     };
 

@@ -20,11 +20,10 @@ export default class BillController extends BaseController {
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
-    let nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     if (query.date) {
       datenow = new Date(query.date);
-      nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     }
+    const nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     ctx.logger.info('query.date：', query.date);
     const dateStr =
       datenow.getFullYear() +
@@ -38,8 +37,9 @@ export default class BillController extends BaseController {
       (nextday.getMonth() + 1) +
       '-' +
       nextday.getDate();
-
-    conditions = { create_at: { $gt: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
+    const gtDate = new Date(new Date(dateStr).getTime() - 8 * 60 * 60 * 1000);
+    const ltDate = new Date(new Date(dateNextStr).getTime() - 8 * 60 * 60 * 1000);
+    conditions = { create_at: { $gt: gtDate, $lt: ltDate }, deleted: false };
     conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
@@ -67,14 +67,15 @@ export default class BillController extends BaseController {
     }
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
+    datenow = new Date(datenow.getTime());
     if (body.date) {
       ctx.logger.info('query.date：', body.date);
       datenow = new Date(body.date);
     }
     conditions.userid = ctx.request['currentUser']._id;
     conditions.asset = app.mongoose.Types.ObjectId(body.asset);
-    conditions.create_at = { $lt: datenow.toISOString() };
-    conditions.create_at = { $lt: datenow.toISOString() };
+    const ltDate = new Date(new Date(datenow.toISOString()).getTime() - 8 * 60 * 60 * 1000);
+    conditions.create_at = { $lt: ltDate };
     conditions.deleted = false;
     console.log('conditions', conditions)
 
@@ -153,7 +154,7 @@ export default class BillController extends BaseController {
     newBillRecord.userid = ctx.request['currentUser']._id;
     const oldBillRecord = await this.service.findById({}, id);
     let D_value = 0;
-    // if type/asset/amount not changed. we not need update asset
+    // if type/asset/amount not changed. we won't need update asset
     if (
       oldBillRecord.type === newBillRecord.type
       && oldBillRecord.create_at.getTime() === new Date(newBillRecord.create_at).getTime()

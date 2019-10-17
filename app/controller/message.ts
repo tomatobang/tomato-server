@@ -23,9 +23,10 @@ export default class MessageController extends BaseController {
       };
       return;
     }
+    const lteDate = new Date(new Date(startTime).getTime() - 8 * 60 * 60 * 1000);
     const ret = await this.service.loadByPagination(
       {
-        create_at: { $lte: new Date(startTime) },
+        create_at: { $lte: lteDate },
         current,
         $or: [
           { from: userid, to: friendid },
@@ -62,8 +63,9 @@ export default class MessageController extends BaseController {
       deleted: false,
     };
     if (startTime) {
+      const gtDate = new Date(new Date(startTime).getTime() - 8 * 60 * 60 * 1000);
       conditions.create_at = {
-        $gt: new Date(startTime),
+        $gt: gtDate,
       };
     }
     const result = await this.service.loadUnreadMessages(conditions);

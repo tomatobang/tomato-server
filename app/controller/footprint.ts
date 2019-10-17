@@ -20,11 +20,11 @@ export default class FootprintController extends BaseController {
     const query = ctx.request.query;
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
-    let nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     if (query.date) {
       datenow = new Date(query.date);
-      nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     }
+    datenow = new Date(datenow.getTime());
+    const nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     ctx.logger.info('query.date：', query.date);
     const dateStr =
       datenow.getFullYear() +
@@ -39,7 +39,9 @@ export default class FootprintController extends BaseController {
       '-' +
       nextday.getDate();
 
-    conditions = { create_at: { $gte: new Date(dateStr).toISOString(), $lt: new Date(dateNextStr).toISOString() }, deleted: false };
+    const gtDate = new Date(new Date(dateStr).getTime() - 8 * 60 * 60 * 1000);
+    const ltDate = new Date(new Date(dateNextStr).getTime() - 8 * 60 * 60 * 1000);
+    conditions = { create_at: { $gt: gtDate, $lt: ltDate }, deleted: false };
     conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
       conditions = JSON.parse(query.conditions);
