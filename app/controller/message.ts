@@ -23,7 +23,8 @@ export default class MessageController extends BaseController {
       };
       return;
     }
-    const lteDate = new Date(new Date(startTime).getTime() - 8 * 60 * 60 * 1000);
+    // startTime: ISO Date
+    const lteDate = new Date(startTime);
     const ret = await this.service.loadByPagination(
       {
         create_at: { $lte: lteDate },
@@ -63,7 +64,7 @@ export default class MessageController extends BaseController {
       deleted: false,
     };
     if (startTime) {
-      const gtDate = new Date(new Date(startTime).getTime() - 8 * 60 * 60 * 1000);
+      const gtDate = startTime;
       conditions.create_at = {
         $gt: gtDate,
       };

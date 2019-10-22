@@ -26,21 +26,8 @@ export default class TodoController extends BaseController {
     datenow = new Date(datenow.getTime());
     const nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     ctx.logger.info('query.date：', query.date);
-    const dateStr =
-      datenow.getFullYear() +
-      '-' +
-      (datenow.getMonth() + 1) +
-      '-' +
-      datenow.getDate();
-    const dateNextStr =
-      nextday.getFullYear() +
-      '-' +
-      (nextday.getMonth() + 1) +
-      '-' +
-      nextday.getDate();
-
-    const gtDate = new Date(new Date(dateStr).getTime() - 8 * 60 * 60 * 1000);
-    const ltDate = new Date(new Date(dateNextStr).getTime() - 8 * 60 * 60 * 1000);
+    const gtDate = new Date(datenow.setHours(0,0,0,0));
+    const ltDate = new Date(nextday.setHours(0,0,0,0));
     conditions = { create_at: { $gt: gtDate, $lt: ltDate }, deleted: false };
     conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
@@ -81,14 +68,7 @@ export default class TodoController extends BaseController {
     conditions = {};
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
-    datenow = new Date(datenow.getTime());
-    const date =
-      datenow.getFullYear() +
-      '-' +
-      (datenow.getMonth() + 1) +
-      '-' +
-      datenow.getDate();
-    const gteDate = new Date(new Date(date).getTime() - 8 * 60 * 60 * 1000);
+    let gteDate = new Date(datenow.setHours(0,0,0,0));
     conditions = { create_at: { $gte: gteDate } };
     conditions.userid = ctx.request['currentUser']._id;
     const completeStatu = ctx.request.body.complete;
@@ -108,15 +88,8 @@ export default class TodoController extends BaseController {
     conditions = {};
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
-    datenow = new Date(datenow.getTime());
-    const date =
-      datenow.getFullYear() +
-      '-' +
-      (datenow.getMonth() + 1) +
-      '-' +
-      datenow.getDate();
+    const gteDate = new Date(datenow.setHours(0,0,0,0));
     conditions.userid = ctx.request['currentUser']._id;
-    const gteDate = new Date(new Date(date).getTime() - 8 * 60 * 60 * 1000);
     conditions = {
       create_at: { $gte: gteDate },
       completed: true

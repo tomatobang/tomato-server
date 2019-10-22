@@ -40,15 +40,8 @@ export default class TomatoController extends BaseController {
   async tomatoToday() {
     const { ctx } = this;
     let datenow = new Date();
-    datenow = new Date(datenow.getTime() - 8 * 60 * 60 * 1000);
-    const date =
-      datenow.getFullYear() +
-      '-' +
-      (datenow.getMonth() + 1) +
-      '-' +
-      datenow.getDate();
+    const gteDate = new Date(datenow.setHours(0,0,0,0));
     let conditions: any;
-    const gteDate = new Date(new Date(date).getTime() - 8 * 60 * 60 * 1000);
     conditions = { startTime: { $gte: gteDate } };
     conditions.userid = ctx.request['currentUser'].username;
     const ret = await ctx.service.tomato.findAll({}, conditions);

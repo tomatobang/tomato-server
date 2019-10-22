@@ -25,20 +25,8 @@ export default class BillController extends BaseController {
     }
     const nextday = new Date(datenow.getTime() + 24 * 60 * 60 * 1000);
     ctx.logger.info('query.date：', query.date);
-    const dateStr =
-      datenow.getFullYear() +
-      '-' +
-      (datenow.getMonth() + 1) +
-      '-' +
-      datenow.getDate();
-    const dateNextStr =
-      nextday.getFullYear() +
-      '-' +
-      (nextday.getMonth() + 1) +
-      '-' +
-      nextday.getDate();
-    const gtDate = new Date(new Date(dateStr).getTime() - 8 * 60 * 60 * 1000);
-    const ltDate = new Date(new Date(dateNextStr).getTime() - 8 * 60 * 60 * 1000);
+    const gtDate = new Date(datenow.setHours(0, 0, 0, 0));
+    const ltDate = new Date(nextday.setHours(0, 0, 0, 0));
     conditions = { create_at: { $gt: gtDate, $lt: ltDate }, deleted: false };
     conditions.userid = ctx.request['currentUser']._id;
     if (query.conditions) {
@@ -67,14 +55,17 @@ export default class BillController extends BaseController {
     }
     ctx.logger.info('ctx.request：', ctx.request['currentUser']);
     let datenow = new Date();
-    datenow = new Date(datenow.getTime());
+    // ISO 格式
+   
     if (body.date) {
       ctx.logger.info('query.date：', body.date);
       datenow = new Date(body.date);
     }
+    let ltDate = datenow;
     conditions.userid = ctx.request['currentUser']._id;
     conditions.asset = app.mongoose.Types.ObjectId(body.asset);
-    const ltDate = new Date(new Date(datenow.toISOString()).getTime() - 8 * 60 * 60 * 1000);
+    // 需减掉 8 小时
+
     conditions.create_at = { $lt: ltDate };
     conditions.deleted = false;
     console.log('conditions', conditions)
