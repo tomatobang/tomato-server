@@ -62,14 +62,14 @@ export default class TodoService extends BaseService {
             $groupID = '$yearMonth';
             $projectObj = {
                 // 校准日期并格式化
-                yearMonth: { $dateToString: { format: "%Y-%m", date: "$create_at" } },
+                yearMonth: { $dateToString: { format: "%Y-%m", date: { $add: ['$create_at', 28800000] } } },
             }
         }
         if (rangeType === 'year') {
             $groupID = '$year';
             $projectObj = {
                 // 校准日期并格式化
-                year: { $dateToString: { format: "%Y", date: "$create_at" } },
+                year: { $dateToString: { format: "%Y", date: { $add: ['$create_at', 28800000] } } },
             }
         }
 

@@ -122,7 +122,7 @@ export default class BillService extends BaseService {
             $projectObj = {
                 // 校准日期并格式化
                 amount: 1,
-                yearMonth: { $dateToString: { format: "%Y-%m", date: "$create_at" } },
+                yearMonth: { $dateToString: { format: "%Y-%m", date: { $add: ['$create_at', 28800000] }} },
             }
         }
         if (rangeType === 'year') {
@@ -130,7 +130,7 @@ export default class BillService extends BaseService {
             $projectObj = {
                 // 校准日期并格式化
                 amount: 1,
-                year: { $dateToString: { format: "%Y", date: "$create_at" } },
+                year: { $dateToString: { format: "%Y", date: { $add: ['$create_at', 28800000] } } },
             }
         }
 
@@ -140,7 +140,7 @@ export default class BillService extends BaseService {
             deleted: false,
             type: type,
             tag: { $ne: '资产互转' },
-            create_at: { $gte: new Date(startTime), $lte: new Date(endTime) },
+            create_at: { $gte: startTime, $lte: endTime },
         };
         if (excludeTag) {
             conditions.tag = { $nin: [excludeTag, '资产互转'] };
