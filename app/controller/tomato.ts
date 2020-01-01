@@ -17,8 +17,10 @@ export default class TomatoController extends BaseController {
     const isSuccess = ctx.request.body.isSuccess;
     const date = ctx.request.body.date;
     let userid = ctx.request['currentUser'].username;
-    const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
-    const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
+    let starDate = new Date(ctx.helper.dateHelper.getCurrentMonthFirst(date));
+    let endDate = new Date(ctx.helper.dateHelper.getNextMonthFirst(date));
+    starDate = new Date(starDate.setHours(0, 0, 0, 0));
+    endDate = new Date(endDate.setHours(0, 0, 0, 0));
     const ret = await ctx.service.tomato.statistics(
       userid,
       starDate,

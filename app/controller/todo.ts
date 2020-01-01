@@ -113,8 +113,10 @@ export default class TodoController extends BaseController {
       ctx.status = 200;
       ctx.body = [];
     }
-    const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
-    const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
+    let starDate = new Date(ctx.helper.dateHelper.getCurrentMonthFirst(date));
+    let endDate = new Date(ctx.helper.dateHelper.getNextMonthFirst(date));
+    starDate = new Date(starDate.setHours(0, 0, 0, 0));
+    endDate = new Date(endDate.setHours(0, 0, 0, 0));
     const completed = await this.service.statistics(
       app.mongoose.Types.ObjectId(userid),
       starDate,

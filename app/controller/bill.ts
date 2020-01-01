@@ -283,8 +283,10 @@ export default class BillController extends BaseController {
 
     const type = ctx.request.body.type;
     const excludeTag = ctx.request.body.excludeTag;
-    const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
-    const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
+    let starDate = new Date(ctx.helper.dateHelper.getCurrentMonthFirst(date));
+    let endDate = new Date(ctx.helper.dateHelper.getNextMonthFirst(date));
+    starDate = new Date(starDate.setHours(0, 0, 0, 0));
+    endDate = new Date(endDate.setHours(0, 0, 0, 0));
     const income = await ctx.service.bill.statistics(
       app.mongoose.Types.ObjectId(userid),
       starDate,

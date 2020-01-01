@@ -67,8 +67,10 @@ export default class FootprintController extends BaseController {
     const date = ctx.request.body.date;
     let userid = '';
     userid = ctx.request['currentUser']._id;
-    const starDate = ctx.helper.dateHelper.getCurrentMonthFirst(date);
-    const endDate = ctx.helper.dateHelper.getNextMonthFirst(date);
+    let starDate = new Date(ctx.helper.dateHelper.getCurrentMonthFirst(date));
+    let endDate = new Date(ctx.helper.dateHelper.getNextMonthFirst(date));
+    starDate = new Date(starDate.setHours(0, 0, 0, 0));
+    endDate = new Date(endDate.setHours(0, 0, 0, 0));
     const ret = await ctx.service.footprint.statistics(
       app.mongoose.Types.ObjectId(userid),
       starDate,
