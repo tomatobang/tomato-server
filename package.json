@@ -61,7 +61,7 @@
     "jsonwebtoken": "^8.1.0",
     "koa-ratelimit": "^4.0.0",
     "koa-send": "^4.1.2",
-    "moment": "^2.20.1",
+    "moment": "^2.29.4",
     "qiniu": "^7.1.1",
     "socket.io-client": "^2.0.4",
     "source-map-support": "^0.5.0",
