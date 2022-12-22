@@ -58,7 +58,7 @@
     "egg-view-nunjucks": "^2.1.4",
     "formidable": "^1.1.1",
     "jpush-sdk": "^3.4.3",
-    "jsonwebtoken": "^8.1.0",
+    "jsonwebtoken": "^9.0.0",
     "koa-ratelimit": "^4.0.0",
     "koa-send": "^4.1.2",
     "moment": "^2.20.1",
