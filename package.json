@@ -48,7 +48,7 @@
     "egg-alinode": "^2.0.1",
     "egg-cors": "^2.0.0",
     "egg-mock": "^3.14.0",
-    "egg-mongoose": "^2.1.1",
+    "egg-mongoose": "^3.0.0",
     "egg-redis": "^1.0.2",
     "egg-scripts": "^2.5.0",
     "egg-sequelize": "^5.0.0",
@@ -68,7 +68,7 @@
     "tslib": "^1.8.1",
     "typescript": "^2.8.0",
     "uuid": "^3.2.1",
-    "snyk": "^1.192.4"
+    "snyk": "^1.230.7"
   },
   "devDependencies": {
     "autod": "^3.0.1",
