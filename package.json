@@ -55,7 +55,7 @@
     "egg-socket.io": "^4.0.8",
     "egg-static": "^2.0.0",
     "egg-validate": "^1.0.0",
-    "egg-view-nunjucks": "^2.1.4",
+    "egg-view-nunjucks": "^2.3.0",
     "formidable": "^1.1.1",
     "jpush-sdk": "^3.4.3",
     "jsonwebtoken": "^8.1.0",
