@@ -44,3 +44,24 @@ patch:
         patched: '2019-07-09T21:45:39.619Z'
     - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
         patched: '2019-07-09T21:45:39.619Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - snyk > proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - snyk > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg > urllib > proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg-mock > urllib > proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg > urllib > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg-mock > urllib > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg > @types/urllib > urllib > proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg-alinode > commandx > urllib > proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg > @types/urllib > urllib > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
+    - egg-alinode > commandx > urllib > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-03T21:45:37.150Z'
