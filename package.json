@@ -51,7 +51,7 @@
     "egg-mongoose": "^2.1.1",
     "egg-redis": "^1.0.2",
     "egg-scripts": "^2.5.0",
-    "egg-sequelize": "^5.0.0",
+    "egg-sequelize": "^6.0.0",
     "egg-socket.io": "^4.0.8",
     "egg-static": "^2.0.0",
     "egg-validate": "^1.0.0",
